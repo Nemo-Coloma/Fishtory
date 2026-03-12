@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
-import { createClient } from "@supabase/supabase-js"
+import { supabase } from "@/lib/supabase"
 import dynamic from "next/dynamic"
 import { UserProfile } from "@/components/user-profile"
 
@@ -25,10 +25,7 @@ const FishermanRegistry = dynamic(() => import("@/components/fisherman-registry"
     loading: () => <div className="h-[400px] w-full bg-slate-50 animate-pulse flex items-center justify-center">Loading Registry...</div>
 })
 
-// Initialize Supabase
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-const supabase = createClient(supabaseUrl, supabaseAnonKey)
+// Supabase client is imported from @/lib/supabase
 
 export function AdminDashboard() {
     const [reports, setReports] = useState<any[]>([])
