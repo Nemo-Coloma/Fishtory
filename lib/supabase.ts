@@ -4,7 +4,11 @@ const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
 // Stricter check for Vercel/environment variables
-const isValid = (val: any) => val && val !== 'undefined' && val !== 'null' && val !== ''
+const isValid = (val: any) => {
+  if (!val) return false
+  const s = String(val).trim()
+  return s !== 'undefined' && s !== 'null' && s !== ''
+}
 
 export const isSupabaseConfigured = isValid(supabaseUrl) && isValid(supabaseAnonKey)
 
@@ -13,8 +17,16 @@ if (typeof window !== 'undefined') {
   console.log('Timestamp:', new Date().toISOString())
   console.log('Supabase Config Check:', {
     isConfigured: isSupabaseConfigured,
-    NEXT_PUBLIC_SUPABASE_URL: isValid(supabaseUrl) ? 'EXISTS' : 'MISSING',
-    NEXT_PUBLIC_SUPABASE_ANON_KEY: isValid(supabaseAnonKey) ? 'EXISTS' : 'MISSING'
+    url: { 
+      present: isValid(supabaseUrl), 
+      type: typeof supabaseUrl,
+      length: supabaseUrl?.length || 0
+    },
+    key: { 
+      present: isValid(supabaseAnonKey), 
+      type: typeof supabaseAnonKey,
+      length: supabaseAnonKey?.length || 0
+    }
   })
   
   // Log all public env vars keys
