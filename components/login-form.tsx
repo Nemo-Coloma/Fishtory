@@ -28,21 +28,12 @@ export function LoginForm() {
             const email = `${emailId}@fishtory.com`
 
             // Attempt to sign in
-            const { supabase, isSupabaseConfigured } = await import('@/lib/supabase')
+            const { supabase } = await import('@/lib/supabase')
             
-            console.log('Login Attempt:', { 
+            console.log('Login Attempt Trace:', { 
                 email, 
-                isSupabaseConfigured, 
-                hasSupabaseClient: !!supabase 
+                timestamp: new Date().toISOString()
             })
-
-            if (!isSupabaseConfigured || !supabase) {
-                const errorMsg = "Configuration Error: Supabase client is not initialized. Please check your Vercel Environment Variables (NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY)."
-                console.error(errorMsg)
-                alert(errorMsg)
-                setLoading(false)
-                return
-            }
 
             const { data, error } = await supabase.auth.signInWithPassword({
                 email,
@@ -58,7 +49,7 @@ export function LoginForm() {
 
             // Check user role from metadata
             const userRole = data.user?.user_metadata?.role
-            console.log('Login successful, routing user...', { role: userRole })
+            console.log('Login success!', { role: userRole })
 
             // Route based on role
             if (userRole === 'admin' || role === 'admin') {
@@ -67,10 +58,11 @@ export function LoginForm() {
                 router.push('/dashboard')
             }
         } catch (err: any) {
-            console.error('LoginForm catch block caught error:', err)
-            // More detailed error message for better debugging
-            const detailedError = err instanceof Error ? err.message : JSON.stringify(err)
-            alert(`An unexpected error occurred during login: ${detailedError}`)
+            console.error('Critical Login Error:', err)
+            // The proxy in lib/supabase.ts will throw a descriptive error
+            // if the client is not configured. We catch it here.
+            const detailedError = err.message || JSON.stringify(err)
+            alert(`SYSTEM ERROR: ${detailedError}`)
             setLoading(false)
         }
     }
