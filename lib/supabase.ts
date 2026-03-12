@@ -9,11 +9,18 @@ const isValid = (val: any) => val && val !== 'undefined' && val !== 'null' && va
 export const isSupabaseConfigured = isValid(supabaseUrl) && isValid(supabaseAnonKey)
 
 if (typeof window !== 'undefined') {
-  console.log('Fishtory: Supabase Config Check', {
-    configured: isSupabaseConfigured,
-    url: isValid(supabaseUrl) ? 'SET' : 'MISSING',
-    key: isValid(supabaseAnonKey) ? 'SET' : 'MISSING'
+  console.log('--- FISHTORY DIAGNOSTICS ---')
+  console.log('Timestamp:', new Date().toISOString())
+  console.log('Supabase Config Check:', {
+    isConfigured: isSupabaseConfigured,
+    NEXT_PUBLIC_SUPABASE_URL: isValid(supabaseUrl) ? 'EXISTS' : 'MISSING',
+    NEXT_PUBLIC_SUPABASE_ANON_KEY: isValid(supabaseAnonKey) ? 'EXISTS' : 'MISSING'
   })
+  
+  // Log all public env vars keys
+  const publicVars = Object.keys(process.env).filter(k => k.startsWith('NEXT_PUBLIC_'))
+  console.log('Detected Public Env Vars:', publicVars)
+  console.log('---------------------------')
 }
 
 const createResilientClient = () => {
