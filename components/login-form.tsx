@@ -28,14 +28,21 @@ export function LoginForm() {
             const email = `${emailId}@fishtory.com`
 
             // Attempt to sign in
-            const { supabase } = await import('@/lib/supabase')
+            const { supabase, isSupabaseConfigured } = await import('@/lib/supabase')
+
+            if (!isSupabaseConfigured) {
+                alert("Configuration Error: Supabase URL or Anon Key is missing. Please check your Vercel Environment Variables.")
+                setLoading(false)
+                return
+            }
+
             const { data, error } = await supabase.auth.signInWithPassword({
                 email,
                 password
             })
 
             if (error) {
-                alert(`Login failed: ${error.message} | Email generated: ${email}`)
+                alert(`Login failed: ${error.message}`)
                 setLoading(false)
                 return
             }
@@ -49,9 +56,9 @@ export function LoginForm() {
             } else {
                 router.push('/dashboard')
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error('Login error:', error)
-            alert('An unexpected error occurred')
+            alert(`An unexpected error occurred: ${error.message || 'Unknown error'}`)
             setLoading(false)
         }
     }
