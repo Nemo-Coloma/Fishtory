@@ -29,9 +29,17 @@ export function LoginForm() {
 
             // Attempt to sign in
             const { supabase, isSupabaseConfigured } = await import('@/lib/supabase')
+            
+            console.log('Login Attempt:', { 
+                email, 
+                isSupabaseConfigured, 
+                hasSupabaseClient: !!supabase 
+            })
 
-            if (!isSupabaseConfigured) {
-                alert("Configuration Error: Supabase URL or Anon Key is missing. Please check your Vercel Environment Variables.")
+            if (!isSupabaseConfigured || !supabase) {
+                const errorMsg = "Configuration Error: Supabase client is not initialized. Please check your Vercel Environment Variables (NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY)."
+                console.error(errorMsg)
+                alert(errorMsg)
                 setLoading(false)
                 return
             }
@@ -42,6 +50,7 @@ export function LoginForm() {
             })
 
             if (error) {
+                console.error('Supabase Auth Error:', error)
                 alert(`Login failed: ${error.message}`)
                 setLoading(false)
                 return
@@ -49,6 +58,7 @@ export function LoginForm() {
 
             // Check user role from metadata
             const userRole = data.user?.user_metadata?.role
+            console.log('Login successful, routing user...', { role: userRole })
 
             // Route based on role
             if (userRole === 'admin' || role === 'admin') {
@@ -56,9 +66,11 @@ export function LoginForm() {
             } else {
                 router.push('/dashboard')
             }
-        } catch (error: any) {
-            console.error('Login error:', error)
-            alert(`An unexpected error occurred: ${error.message || 'Unknown error'}`)
+        } catch (err: any) {
+            console.error('LoginForm catch block caught error:', err)
+            // More detailed error message for better debugging
+            const detailedError = err instanceof Error ? err.message : JSON.stringify(err)
+            alert(`An unexpected error occurred during login: ${detailedError}`)
             setLoading(false)
         }
     }
