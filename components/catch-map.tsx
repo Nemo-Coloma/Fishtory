@@ -60,59 +60,87 @@ export default function CatchMap({ reports }: { reports: Report[] }) {
 
     return (
         <div className="space-y-4">
-            <div className="h-[500px] w-full rounded-lg overflow-hidden border border-slate-200">
-                <MapContainer 
-                    center={[14.84, 120.27]} 
-                    zoom={13} 
-                    style={{ height: "100%", width: "100%" }}
-                >
-                    <TileLayer
-                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                    />
-                    <MapController target={mapTarget} />
-                    {reports.map((report) => {
-                        const coords = LOCATION_COORDS[report.location]
-                        if (!coords) return null
+            <div className="flex flex-col lg:grid lg:grid-cols-3 gap-4">
+                {/* Map View */}
+                <div className="h-[400px] lg:h-[500px] w-full rounded-lg overflow-hidden border border-slate-200 lg:col-span-2 relative z-0">
+                    <MapContainer 
+                        center={[14.84, 120.27]} 
+                        zoom={13} 
+                        style={{ height: "100%", width: "100%", zIndex: 0 }}
+                    >
+                        <TileLayer
+                            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                        />
+                        <MapController target={mapTarget} />
+                        {reports.map((report) => {
+                            const coords = LOCATION_COORDS[report.location]
+                            if (!coords) return null
 
-                        // Add a tiny random offset to distinguish multiple reports at the same location
-                        const jitter = () => (Math.random() - 0.5) * 0.001
-                        const position: [number, number] = [coords[0] + jitter(), coords[1] + jitter()]
+                            // Add a tiny random offset to distinguish multiple reports at the same location
+                            const jitter = () => (Math.random() - 0.5) * 0.001
+                            const position: [number, number] = [coords[0] + jitter(), coords[1] + jitter()]
 
-                        return (
-                            <Marker key={report.id} position={position} icon={icon}>
-                                <Popup>
-                                    <div className="p-1">
-                                        <h3 className="font-bold text-blue-900 border-b pb-1 mb-1">{report.fisherman_id}</h3>
-                                        <p className="text-sm m-0"><b>Species:</b> <span className="capitalize">{report.species}</span></p>
-                                        <p className="text-sm m-0"><b>Weight:</b> {report.weight_kg} kg</p>
-                                        <p className="text-sm m-0"><b>Status:</b> <span className={`capitalize ${report.status === 'approved' ? 'text-green-600' : 'text-yellow-600'}`}>{report.status}</span></p>
-                                        <p className="text-xs text-slate-500 mt-2">{new Date(report.created_at).toLocaleDateString()}</p>
+                            return (
+                                <Marker key={report.id} position={position} icon={icon} />
+                            )
+                        })}
+                    </MapContainer>
+                </div>
+
+                {/* Side Panel for Notifications */}
+                <div className="bg-slate-50 border border-slate-200 rounded-lg p-4 h-[350px] lg:h-[500px] flex flex-col">
+                    <h3 className="font-bold text-slate-800 mb-3 flex items-center gap-2 text-sm sm:text-base">
+                        <span className="relative flex h-3 w-3">
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                            <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+                        </span>
+                        Live Arrivals
+                    </h3>
+                    <div className="overflow-y-auto flex-1 pr-2 space-y-3">
+                        {reports.length === 0 ? (
+                            <p className="text-sm text-slate-500 text-center py-4">No arrivals recorded yet.</p>
+                        ) : (
+                            reports.map((report) => (
+                                <div key={report.id} className="bg-white border border-slate-200 rounded-md p-3 shadow-sm hover:border-blue-300 transition-colors">
+                                    <div className="flex items-center justify-between mb-1">
+                                        <div className="flex items-center gap-2">
+                                            <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse"></div>
+                                            <h4 className="font-bold text-blue-900 m-0">{report.fisherman_id}</h4>
+                                        </div>
                                     </div>
-                                </Popup>
-                            </Marker>
-                        )
-                    })}
-                </MapContainer>
+                                    <p className="text-xs sm:text-sm font-medium text-slate-600 m-0">Has arrived at:</p>
+                                    <p className="text-base sm:text-lg font-bold text-blue-700 m-0">{report.location}</p>
+                                    <p className="text-xs text-slate-500 mt-2 pt-2 border-t">
+                                        Time: {new Date(report.created_at).toLocaleString('en-US', {
+                                            month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit'
+                                        })}
+                                    </p>
+                                </div>
+                            ))
+                        )}
+                    </div>
+                </div>
             </div>
 
-            <div className="flex flex-wrap gap-3">
-                <span className="text-sm font-medium self-center text-slate-500">Quick Jump:</span>
+            <div className="flex flex-wrap gap-2 sm:gap-3 items-center">
+                <span className="text-xs sm:text-sm font-medium text-slate-500 w-full sm:w-auto">Quick Jump:</span>
                 {Object.entries(JUMP_COORDS).map(([name, coords]) => (
                     <Button 
                         key={name} 
                         variant="outline" 
                         size="sm"
-                        className="flex gap-2"
+                        className="flex gap-1.5 sm:gap-2 text-xs sm:text-sm"
                         onClick={() => setMapTarget(coords)}
                     >
-                        <MapPin className="h-4 w-4" />
+                        <MapPin className="h-3 w-3 sm:h-4 sm:w-4" />
                         {name}
                     </Button>
                 ))}
                 <Button 
                     variant="ghost" 
                     size="sm"
+                    className="text-xs sm:text-sm"
                     onClick={() => setMapTarget({ lat: 14.84, lng: 120.27, zoom: 13 })}
                 >
                     Reset View

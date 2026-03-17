@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button"
 import { supabase } from "@/lib/supabase"
 import dynamic from "next/dynamic"
 import { UserProfile } from "@/components/user-profile"
+import { toast } from "sonner" // Added this import
 
 // Dynamic import for Leaflet map to avoid window undefined error
 const CatchMap = dynamic(() => import("@/components/catch-map"), { 
@@ -45,7 +46,37 @@ export function AdminDashboard() {
     }
 
     useEffect(() => {
+        // Initial fetch
         fetchReports()
+
+        // Set up real-time subscription
+        const channel = supabase
+            .channel('admin-reports-changes')
+            .on(
+                'postgres_changes',
+                { event: 'INSERT', schema: 'public', table: 'reports' },
+                (payload: any) => {
+                    console.log('New report received:', payload)
+                    setReports((current) => [payload.new, ...current])
+                }
+            )
+            .on(
+                'postgres_changes',
+                { event: 'UPDATE', schema: 'public', table: 'reports' },
+                (payload: any) => {
+                    console.log('Report updated:', payload)
+                    setReports((current) =>
+                        current.map((report) =>
+                            report.id === payload.new.id ? payload.new : report
+                        )
+                    )
+                }
+            )
+            .subscribe()
+
+        return () => {
+            supabase.removeChannel(channel)
+        }
     }, [])
 
     const handleUpdateStatus = async (reportId: string, newStatus: string) => {
@@ -55,10 +86,18 @@ export function AdminDashboard() {
             .eq('id', reportId)
 
         if (error) {
-            alert("Error updating status: " + error.message)
+            toast.error("Error updating status", {
+                description: error.message
+            })
         } else {
-            // Update local state
-            setReports(reports.map(r => r.id === reportId ? { ...r, status: newStatus } : r))
+            toast.success(`Report ${newStatus} successfully`)
+            // Update local state is handled by real-time listener normally, 
+            // but we filter locally for faster feedback
+            setReports((current) => 
+                current.map((report) => 
+                    report.id === reportId ? { ...report, status: newStatus } : report
+                )
+            )
         }
     }
 
@@ -71,13 +110,13 @@ export function AdminDashboard() {
     const uniqueFishermen = new Set(reports.map(r => r.fisherman_id)).size
 
     return (
-        <div className="container mx-auto py-10 px-4 max-w-7xl">
-            <div className="flex justify-between items-center mb-8">
-                <h1 className="text-3xl font-bold text-blue-900">Agricultural Office Dashboard</h1>
+        <div className="container mx-auto py-6 sm:py-10 px-4 md:px-6 max-w-7xl">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+                <h1 className="text-2xl sm:text-3xl font-bold text-blue-900 border-b-4 border-blue-500 pb-2 inline-block">Agricultural Office Dashboard</h1>
                 <UserProfile />
             </div>
 
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
                 <Card>
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                         <CardTitle className="text-sm font-medium">Total Catch (Approved)</CardTitle>
@@ -117,11 +156,11 @@ export function AdminDashboard() {
             </div>
 
             <Tabs defaultValue="reports" className="space-y-4">
-                <TabsList>
-                    <TabsTrigger value="reports">Incoming Reports</TabsTrigger>
-                    <TabsTrigger value="map">Map View</TabsTrigger>
-                    <TabsTrigger value="analytics">Analytics</TabsTrigger>
-                    <TabsTrigger value="fishermen">Fishermen Registry</TabsTrigger>
+                <TabsList className="w-full justify-start overflow-x-auto h-auto p-1 flex">
+                    <TabsTrigger value="reports" className="whitespace-nowrap">Incoming Reports</TabsTrigger>
+                    <TabsTrigger value="map" className="whitespace-nowrap">Map View</TabsTrigger>
+                    <TabsTrigger value="analytics" className="whitespace-nowrap">Analytics</TabsTrigger>
+                    <TabsTrigger value="fishermen" className="whitespace-nowrap">Fishermen Registry</TabsTrigger>
                 </TabsList>
                 <TabsContent value="reports" className="space-y-4">
                     <Card>
@@ -130,68 +169,73 @@ export function AdminDashboard() {
                             <CardDescription>Review and approve daily catch submissions.</CardDescription>
                         </CardHeader>
                         <CardContent>
-                            <Table>
-                                <TableHeader>
-                                    <TableRow>
-                                        <TableHead>Date</TableHead>
-                                        <TableHead>Fisherman ID</TableHead>
-                                        <TableHead>Species</TableHead>
-                                        <TableHead>Weight</TableHead>
-                                        <TableHead>Location</TableHead>
-                                        <TableHead>Status</TableHead>
-                                        <TableHead>Action</TableHead>
-                                    </TableRow>
-                                </TableHeader>
-                                <TableBody>
-                                    {loading ? (
+                            <div className="overflow-x-auto w-full">
+                                <Table className="min-w-[800px]">
+                                    <TableHeader>
                                         <TableRow>
-                                            <TableCell colSpan={7} className="text-center py-8">Loading reports...</TableCell>
+                                            <TableHead>Date</TableHead>
+                                            <TableHead>Fisherman ID</TableHead>
+                                            <TableHead>Boat Name</TableHead>
+                                            <TableHead>Species</TableHead>
+                                            <TableHead>Weight</TableHead>
+                                            <TableHead>Location</TableHead>
+                                            <TableHead>Status</TableHead>
+                                            <TableHead>Action</TableHead>
                                         </TableRow>
-                                    ) : reports.length === 0 ? (
-                                        <TableRow>
-                                            <TableCell colSpan={7} className="text-center py-8 text-muted-foreground">No reports found.</TableCell>
-                                        </TableRow>
-                                    ) : (
-                                        reports.map((report) => (
-                                            <TableRow key={report.id}>
-                                                <TableCell>{new Date(report.created_at).toLocaleDateString()}</TableCell>
-                                                <TableCell className="font-medium">{report.fisherman_id}</TableCell>
-                                                <TableCell className="capitalize">{report.species}</TableCell>
-                                                <TableCell>{report.weight_kg} kg</TableCell>
-                                                <TableCell>{report.location}</TableCell>
-                                                <TableCell>
-                                                    <span className={`capitalize font-medium ${
-                                                        report.status === 'approved' ? 'text-green-600' : 
-                                                        report.status === 'rejected' ? 'text-red-600' : 'text-yellow-600'
-                                                    }`}>
-                                                        {report.status}
-                                                    </span>
-                                                </TableCell>
-                                                <TableCell>
-                                                    {report.status === 'pending' && (
-                                                        <div className="flex gap-2">
-                                                            <Button 
-                                                                size="sm" 
-                                                                className="bg-green-600 hover:bg-green-700"
-                                                                onClick={() => handleUpdateStatus(report.id, 'approved')}
-                                                            >
-                                                                Approve
-                                                            </Button>
-                                                            <Button 
-                                                                size="sm" 
-                                                                variant="destructive"
-                                                                onClick={() => handleUpdateStatus(report.id, 'rejected')}
-                                                            >
-                                                                Reject
-                                                            </Button>
-                                                        </div>
-                                                    )}
-                                                </TableCell>
+                                    </TableHeader>
+                                    <TableBody>
+                                        {loading ? (
+                                            <TableRow>
+                                                <TableCell colSpan={8} className="text-center py-8">Loading reports...</TableCell>
                                             </TableRow>
-                                        ))
-                                    )}
-                                </TableBody>
-                            </Table>
+                                        ) : reports.length === 0 ? (
+                                            <TableRow>
+                                                <TableCell colSpan={8} className="text-center py-8 text-muted-foreground">No reports found.</TableCell>
+                                            </TableRow>
+                                        ) : (
+                                            reports.map((report) => (
+                                                <TableRow key={report.id}>
+                                                    <TableCell className="whitespace-nowrap">{new Date(report.created_at).toLocaleDateString()}</TableCell>
+                                                    <TableCell className="font-medium whitespace-nowrap">{report.fisherman_id}</TableCell>
+                                                    <TableCell className="whitespace-nowrap">{report.boat_name || "—"}</TableCell>
+                                                    <TableCell className="capitalize whitespace-nowrap">{report.species}</TableCell>
+                                                    <TableCell className="whitespace-nowrap">{report.weight_kg} kg</TableCell>
+                                                    <TableCell className="whitespace-nowrap">{report.location}</TableCell>
+                                                    <TableCell>
+                                                        <span className={`capitalize font-medium whitespace-nowrap ${
+                                                            report.status === 'approved' ? 'text-green-600' : 
+                                                            report.status === 'rejected' ? 'text-red-600' : 'text-yellow-600'
+                                                        }`}>
+                                                            {report.status}
+                                                        </span>
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        {report.status === 'pending' && (
+                                                            <div className="flex gap-2">
+                                                                <Button 
+                                                                    size="sm" 
+                                                                    className="bg-green-600 hover:bg-green-700 h-8 text-xs px-2 sm:px-3"
+                                                                    onClick={() => handleUpdateStatus(report.id, 'approved')}
+                                                                >
+                                                                    Approve
+                                                                </Button>
+                                                                <Button 
+                                                                    size="sm" 
+                                                                    variant="destructive"
+                                                                    className="h-8 text-xs px-2 sm:px-3"
+                                                                    onClick={() => handleUpdateStatus(report.id, 'rejected')}
+                                                                >
+                                                                    Reject
+                                                                </Button>
+                                                            </div>
+                                                        )}
+                                                    </TableCell>
+                                                </TableRow>
+                                            ))
+                                        )}
+                                    </TableBody>
+                                </Table>
+                            </div>
                         </CardContent>
                     </Card>
                 </TabsContent>

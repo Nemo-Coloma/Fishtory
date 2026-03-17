@@ -62,7 +62,7 @@ export function FishermanRegistry() {
   const fetchFishermen = async () => {
     setLoading(true)
     const { data, error } = await supabase
-      .from('fishermen')
+      .from('fishermen_profiles')
       .select('*')
       .order('created_at', { ascending: false })
 
@@ -80,7 +80,7 @@ export function FishermanRegistry() {
       if (editingFisherman) {
         // Update
         const { error } = await supabase
-          .from('fishermen')
+          .from('fishermen_profiles')
           .update({
             full_name: formState.full_name,
             boat_name: formState.boat_name,
@@ -94,7 +94,7 @@ export function FishermanRegistry() {
       } else {
         // Create
         const { error } = await supabase
-          .from('fishermen')
+          .from('fishermen_profiles')
           .insert([
             {
               fisherman_id: formState.fisherman_id,
@@ -124,7 +124,7 @@ export function FishermanRegistry() {
     
     setLoading(true)
     const { error } = await supabase
-      .from('fishermen')
+      .from('fishermen_profiles')
       .delete()
       .eq('id', id)
 
@@ -155,26 +155,27 @@ export function FishermanRegistry() {
   }
 
   const filteredFishermen = fishermen.filter(f => 
-    f.full_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    f.fisherman_id.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    (f.boat_name && f.boat_name.toLowerCase().includes(searchQuery.toLowerCase()))
+    (f.full_name && f.full_name.toLowerCase().includes(searchQuery.toLowerCase())) ||
+    (f.fisherman_id && f.fisherman_id.toLowerCase().includes(searchQuery.toLowerCase())) ||
+    (f.boat_name && f.boat_name.toLowerCase().includes(searchQuery.toLowerCase())) ||
+    (f.location && f.location.toLowerCase().includes(searchQuery.toLowerCase()))
   )
 
   return (
     <div className="space-y-4">
-      <div className="flex justify-between items-center gap-4">
-        <div className="relative flex-1 max-w-sm">
+      <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
+        <div className="relative w-full sm:flex-1 sm:max-w-sm">
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-slate-400" />
           <Input
             placeholder="Search by name, ID or boat..."
-            className="pl-9"
+            className="pl-9 w-full"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
-            <Button onClick={openAddDialog} className="bg-blue-700 hover:bg-blue-800 flex gap-2">
+            <Button onClick={openAddDialog} className="w-full sm:w-auto bg-blue-700 hover:bg-blue-800 flex gap-2">
               <Plus className="h-4 w-4" />
               Add Fisherman
             </Button>
@@ -188,7 +189,7 @@ export function FishermanRegistry() {
             </DialogHeader>
             <div className="grid gap-4 py-4">
               <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="fid" className="text-right">ID</Label>
+                <Label htmlFor="fid" className="text-right text-xs sm:text-sm">ID</Label>
                 <Input
                   id="fid"
                   placeholder="FM-2024-XXX"
@@ -198,7 +199,7 @@ export function FishermanRegistry() {
                 />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="name" className="text-right">Name</Label>
+                <Label htmlFor="name" className="text-right text-xs sm:text-sm">Name</Label>
                 <Input
                   id="name"
                   placeholder="Full Name"
@@ -208,7 +209,7 @@ export function FishermanRegistry() {
                 />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="boat" className="text-right">Boat</Label>
+                <Label htmlFor="boat" className="text-right text-xs sm:text-sm">Boat</Label>
                 <Input
                   id="boat"
                   placeholder="Vessel Name"
@@ -218,7 +219,7 @@ export function FishermanRegistry() {
                 />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="location" className="text-right">Location</Label>
+                <Label htmlFor="location" className="text-right text-xs sm:text-sm">Location</Label>
                 <Input
                   id="location"
                   placeholder="Home Port"
@@ -228,7 +229,7 @@ export function FishermanRegistry() {
                 />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="contact" className="text-right">Contact</Label>
+                <Label htmlFor="contact" className="text-right text-xs sm:text-sm">Contact</Label>
                 <Input
                   id="contact"
                   placeholder="Mobile Number"
@@ -239,17 +240,17 @@ export function FishermanRegistry() {
               </div>
             </div>
             <DialogFooter>
-              <Button onClick={handleCreateOrUpdate} disabled={loading} className="bg-blue-700 hover:bg-blue-800">
+              <Button onClick={handleCreateOrUpdate} disabled={loading} className="w-full sm:w-auto bg-blue-700 hover:bg-blue-800">
                 {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4 mr-2" />}
-                {editingFisherman ? 'Update Fisherman' : 'Register Fisherman'}
+                {editingFisherman ? 'Update' : 'Register'}
               </Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
       </div>
 
-      <div className="rounded-md border bg-white">
-        <Table>
+      <div className="rounded-md border bg-white overflow-x-auto w-full">
+        <Table className="min-w-[600px]">
           <TableHeader>
             <TableRow>
               <TableHead>Fisherman ID</TableHead>
