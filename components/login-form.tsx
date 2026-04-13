@@ -7,8 +7,9 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { CheckCircle2, Anchor } from "lucide-react"
+import { CheckCircle2, Anchor, AlertCircle, ExternalLink } from "lucide-react"
 import { toast } from "sonner"
+import { isSupabaseConfigured } from "@/lib/supabase"
 
 export function LoginForm() {
     const router = useRouter()
@@ -162,10 +163,29 @@ export function LoginForm() {
                             <div className="mx-auto bg-blue-100 p-3 rounded-full w-14 h-14 flex items-center justify-center mb-2">
                                 <Anchor className="h-6 w-6 text-blue-700" />
                             </div>
-                            <CardTitle className="text-2xl text-blue-900">Staff Portal</CardTitle>
-                            <CardDescription>Enter your Staff Code securely.</CardDescription>
-                        </CardHeader>
-                        <form onSubmit={handleLogin}>
+                             <CardTitle className="text-2xl text-blue-900">Staff Portal</CardTitle>
+                             <CardDescription>Enter your Staff Code securely.</CardDescription>
+                         </CardHeader>
+                         {!isSupabaseConfigured && (
+                             <div className="mx-6 p-4 bg-red-50 border border-red-100 rounded-xl flex flex-col gap-2 animate-pulse">
+                                 <div className="flex items-center gap-2 text-red-700 font-bold text-sm">
+                                     <AlertCircle className="h-4 w-4" />
+                                     System Configuration Missing
+                                 </div>
+                                 <p className="text-xs text-red-600 leading-relaxed">
+                                     Supabase environment variables are not set. If you are on Vercel, please add them in <strong>Project Settings</strong> and redeploy.
+                                 </p>
+                                 <a 
+                                     href="https://vercel.com/dashboard" 
+                                     target="_blank" 
+                                     rel="noopener noreferrer"
+                                     className="text-xs text-red-700 font-semibold flex items-center gap-1 hover:underline"
+                                 >
+                                     Go to Vercel Dashboard <ExternalLink className="h-3 w-3" />
+                                 </a>
+                             </div>
+                         )}
+                         <form onSubmit={handleLogin}>
                             <CardContent className="space-y-5 pt-4">
                                 <div className="space-y-2">
                                     <Label htmlFor="id" className="text-slate-600 font-medium">Staff Code</Label>
@@ -207,6 +227,25 @@ export function LoginForm() {
                             </div>
                             <CardTitle className="text-2xl font-bold tracking-tight text-blue-900">Fishtory Portal</CardTitle>
                             <CardDescription className="mb-4">Welcome back to the registry.</CardDescription>
+                            {!isSupabaseConfigured && (
+                                <div className="mb-4 p-4 bg-red-50 border border-red-100 rounded-xl flex flex-col gap-2 animate-pulse text-left">
+                                    <div className="flex items-center gap-2 text-red-700 font-bold text-sm">
+                                        <AlertCircle className="h-4 w-4" />
+                                        System Configuration Missing
+                                    </div>
+                                    <p className="text-xs text-red-600 leading-relaxed">
+                                        Supabase environment variables are missing. Please add them in <strong>Project Settings</strong> on Vercel or your `.env.local` file.
+                                    </p>
+                                    <a 
+                                        href="https://vercel.com/dashboard" 
+                                        target="_blank" 
+                                        rel="noopener noreferrer"
+                                        className="text-xs text-red-700 font-semibold flex items-center gap-1 hover:underline"
+                                    >
+                                        Go to Vercel Dashboard <ExternalLink className="h-3 w-3" />
+                                    </a>
+                                </div>
+                            )}
                             <TabsList className="grid w-full grid-cols-2 bg-slate-100 p-1 rounded-lg">
                                 <TabsTrigger value="login" className="rounded-md data-[state=active]:bg-white data-[state=active]:text-blue-700 data-[state=active]:shadow-sm transition-all">Login</TabsTrigger>
                                 <TabsTrigger value="signup" className="rounded-md data-[state=active]:bg-white data-[state=active]:text-blue-700 data-[state=active]:shadow-sm transition-all">Sign Up</TabsTrigger>

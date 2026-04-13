@@ -43,8 +43,9 @@ const createResilientClient = () => {
   // Return a proxy that throws a clear error if any property (like .auth) is accessed
   return new Proxy({} as any, {
     get: (_, prop) => {
-      const msg = `Supabase Error: Cannot access ".${String(prop)}" because the client is not configured. ` +
-                 `Please set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY in Vercel settings.`
+      const msg = `Supabase Configuration Missing: Cannot access ".${String(prop)}" because the client is not configured correctly. ` +
+                 `If you are deploying on Vercel, ensure NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY are set in Project Settings. ` +
+                 `If running locally, check your .env.local file and restart your development server.`
       console.error(msg)
       throw new Error(msg)
     }
