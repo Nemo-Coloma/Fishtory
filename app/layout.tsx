@@ -9,6 +9,17 @@ const inter = Inter({ subsets: ['latin'] })
 export const metadata: Metadata = {
     title: 'Fishtory',
     description: 'Fisheries Data Management System',
+    manifest: '/manifest.json',
+    themeColor: '#0284c7',
+    viewport: 'width=device-width, initial-scale=1, maximum-scale=1',
+    appleWebApp: {
+        capable: true,
+        statusBarStyle: 'default',
+        title: 'Fishtory',
+    },
+    formatDetection: {
+        telephone: false,
+    },
 }
 
 export default function RootLayout({

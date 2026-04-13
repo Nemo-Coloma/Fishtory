@@ -1,14 +1,23 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
 import { supabase } from "@/lib/supabase"
 import dynamic from "next/dynamic"
 import { UserProfile } from "@/components/user-profile"
-import { toast } from "sonner" // Added this import
+import { toast } from "sonner" 
+import { Fish } from "lucide-react"
 
 // Dynamic import for Leaflet map to avoid window undefined error
 const CatchMap = dynamic(() => import("@/components/catch-map"), { 
@@ -72,6 +81,16 @@ export function AdminDashboard() {
                     )
                 }
             )
+            .on(
+                'postgres_changes',
+                { event: 'DELETE', schema: 'public', table: 'reports' },
+                (payload: any) => {
+                    console.log('Report deleted:', payload)
+                    setReports((current) =>
+                        current.filter((report) => report.id !== payload.old.id)
+                    )
+                }
+            )
             .subscribe()
 
         return () => {
@@ -109,6 +128,18 @@ export function AdminDashboard() {
     const pendingCount = reports.filter(r => r.status === 'pending').length
     const uniqueFishermen = new Set(reports.map(r => r.fisherman_id)).size
 
+    const speciesBreakdown = useMemo(() => {
+        const approved = reports.filter(r => r.status === 'approved')
+        const breakdown: Record<string, number> = {}
+        approved.forEach(r => {
+            const species = r.species || 'Unknown'
+            breakdown[species] = (breakdown[species] || 0) + Number(r.weight_kg)
+        })
+        return Object.entries(breakdown)
+            .map(([species, weight]) => ({ species, weight }))
+            .sort((a, b) => b.weight - a.weight)
+    }, [reports])
+
     return (
         <div className="container mx-auto py-6 sm:py-10 px-4 md:px-6 max-w-7xl">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
@@ -117,15 +148,69 @@ export function AdminDashboard() {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-                <Card>
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">Total Catch (Approved)</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-2xl font-bold">{totalCatch.toLocaleString()} kg</div>
-                        <p className="text-xs text-muted-foreground">From all approved reports</p>
-                    </CardContent>
-                </Card>
+                <Dialog>
+                    <DialogTrigger asChild>
+                        <Card className="cursor-pointer hover:border-blue-500 hover:shadow-md transition-all group overflow-hidden relative">
+                            <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                                <Fish className="h-12 w-12 text-blue-900" />
+                            </div>
+                            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                                <CardTitle className="text-sm font-medium">Total Catch (Approved)</CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                                <div className="text-2xl font-bold text-blue-700">{totalCatch.toLocaleString()} kg</div>
+                                <p className="text-xs text-muted-foreground flex items-center gap-1">
+                                    Click to see breakdown per species
+                                </p>
+                            </CardContent>
+                        </Card>
+                    </DialogTrigger>
+                    <DialogContent className="sm:max-w-md">
+                        <DialogHeader>
+                            <DialogTitle className="flex items-center gap-2">
+                                <Fish className="h-5 w-5 text-blue-600" />
+                                Catch Breakdown by Species
+                            </DialogTitle>
+                            <DialogDescription>
+                                Total weight distribution of all approved catch reports.
+                            </DialogDescription>
+                        </DialogHeader>
+                        <div className="mt-4 border rounded-lg overflow-hidden">
+                            <Table>
+                                <TableHeader className="bg-slate-50">
+                                    <TableRow>
+                                        <TableHead>Species / Uri ng Isda</TableHead>
+                                        <TableHead className="text-right">Total Weight (kg)</TableHead>
+                                    </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                    {speciesBreakdown.length === 0 ? (
+                                        <TableRow>
+                                            <TableCell colSpan={2} className="text-center py-4 text-muted-foreground">
+                                                No approved data available.
+                                            </TableCell>
+                                        </TableRow>
+                                    ) : (
+                                        speciesBreakdown.map((item) => (
+                                            <TableRow key={item.species}>
+                                                <TableCell className="capitalize font-medium">{item.species}</TableCell>
+                                                <TableCell className="text-right font-mono font-bold text-blue-600">
+                                                    {item.weight.toLocaleString()} kg
+                                                </TableCell>
+                                            </TableRow>
+                                        ))
+                                    )}
+                                    {speciesBreakdown.length > 0 && (
+                                        <TableRow className="bg-blue-50/50 font-bold border-t-2">
+                                            <TableCell>Grand Total</TableCell>
+                                            <TableCell className="text-right">{totalCatch.toLocaleString()} kg</TableCell>
+                                        </TableRow>
+                                    )}
+                                </TableBody>
+                            </Table>
+                        </div>
+                    </DialogContent>
+                </Dialog>
                 <Card>
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                         <CardTitle className="text-sm font-medium">Active Fishermen</CardTitle>

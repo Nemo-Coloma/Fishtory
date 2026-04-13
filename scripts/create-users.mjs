@@ -34,11 +34,11 @@ async function createUsers() {
 
     // Create Admin user
     const { data: adminData, error: adminError } = await supabase.auth.signUp({
-        email: 'admin01@fishtory.com',
-        password: 'AD2026',
+        email: 'admin001@fishtory.com',
+        password: 'admin123',
         options: {
             data: {
-                staff_code: 'ADMIN01',
+                staff_code: 'ADMIN-001',
                 role: 'admin',
                 full_name: 'Admin User'
             }
@@ -50,12 +50,12 @@ async function createUsers() {
     } else {
         console.log('\n✅ Admin created:', adminData.user?.email)
         console.log('   ID:', adminData.user?.id)
-        console.log('   Staff Code: ADMIN01')
+        console.log('   Staff Code: ADMIN-001')
     }
 
     console.log('\n📝 User mapping:')
     console.log('   FM-2026-001 → fm2026001@fishtory.com (password: @FM2026)')
-    console.log('   ADMIN01 → admin01@fishtory.com (password: AD2026)')
+    console.log('   ADMIN-001 → admin001@fishtory.com (password: admin123)')
 }
 
 createUsers()

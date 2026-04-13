@@ -35,9 +35,15 @@ export function LoginForm() {
 
         try {
             const parsedId = String(id).trim()
-            const loginEmail = role === "admin" 
-                ? `${parsedId.toLowerCase().replace(/[^a-z0-9-]/g, '')}@fishtory.com`
-                : parsedId
+            let loginEmail = parsedId
+
+            if (role === "admin") {
+                // Admin: mapping ADMIN-001 -> admin001@fishtory.com
+                loginEmail = `${parsedId.toLowerCase().replace(/[^a-z0-9]/g, '')}@fishtory.com`
+            } else if (role === "fisherman" && !parsedId.includes("@")) {
+                // Fisherman: mapping FM-2026-001 -> fm2026001@fishtory.com (if not already an email)
+                loginEmail = `${parsedId.toLowerCase().replace(/[^a-z0-9]/g, '')}@fishtory.com`
+            }
 
             const { supabase } = await import('@/lib/supabase')
 

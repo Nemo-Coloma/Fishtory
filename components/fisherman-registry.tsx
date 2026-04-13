@@ -57,6 +57,43 @@ export function FishermanRegistry() {
 
   useEffect(() => {
     fetchFishermen()
+
+    // Set up real-time subscription for fisherman profiles
+    const channel = supabase
+      .channel('fisherman-registry-changes')
+      .on(
+        'postgres_changes',
+        { event: 'INSERT', schema: 'public', table: 'fishermen_profiles' },
+        (payload: any) => {
+          console.log('New fisherman registered:', payload)
+          setFishermen((current) => [payload.new, ...current])
+        }
+      )
+      .on(
+        'postgres_changes',
+        { event: 'UPDATE', schema: 'public', table: 'fishermen_profiles' },
+        (payload: any) => {
+          console.log('Fisherman profile updated:', payload)
+          setFishermen((current) =>
+            current.map((f) => (f.id === payload.new.id ? payload.new : f))
+          )
+        }
+      )
+      .on(
+        'postgres_changes',
+        { event: 'DELETE', schema: 'public', table: 'fishermen_profiles' },
+        (payload: any) => {
+          console.log('Fisherman profile deleted:', payload)
+          setFishermen((current) =>
+            current.filter((f) => f.id !== payload.old.id)
+          )
+        }
+      )
+      .subscribe()
+
+    return () => {
+      supabase.removeChannel(channel)
+    }
   }, [])
 
   const fetchFishermen = async () => {
@@ -111,7 +148,7 @@ export function FishermanRegistry() {
       setIsDialogOpen(false)
       setEditingFisherman(null)
       setFormState({ fisherman_id: "", full_name: "", boat_name: "", location: "", contact_number: "" })
-      fetchFishermen()
+      // No need to manually fetchFishermen() here as the realtime subscription will handle the UI update
     } catch (error: any) {
       alert("Action failed: " + error.message)
     } finally {
@@ -130,9 +167,8 @@ export function FishermanRegistry() {
 
     if (error) {
       alert("Delete failed: " + error.message)
-    } else {
-      fetchFishermen()
     }
+    // No need to manually fetchFishermen() as the realtime subscription will handle the UI update
     setLoading(false)
   }
 
