@@ -1,7 +1,10 @@
 import { createClient } from '@supabase/supabase-js'
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+const FALLBACK_URL = 'https://gxqhdqampmfxuahiiign.supabase.co'
+const FALLBACK_KEY = 'sb_publishable__t4cA-UTDNL4g2t_7M6neQ_181oXxFF'
+
+const envUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+const envKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
 // Stricter check for Vercel/environment variables
 const isValid = (val: any) => {
@@ -10,13 +13,21 @@ const isValid = (val: any) => {
   return s !== 'undefined' && s !== 'null' && s !== ''
 }
 
+// Final resolved values
+export const supabaseUrl = isValid(envUrl) ? envUrl! : FALLBACK_URL
+export const supabaseAnonKey = isValid(envKey) ? envKey! : FALLBACK_KEY
+
 export const isSupabaseConfigured = isValid(supabaseUrl) && isValid(supabaseAnonKey)
 
 if (typeof window !== 'undefined') {
   console.log('--- FISHTORY DIAGNOSTICS ---')
   console.log('Timestamp:', new Date().toISOString())
+  
+  const source = isValid(envUrl) ? 'Environment Variables' : 'Hardcoded Fallback'
+  
   console.log('Supabase Config Check:', {
     isConfigured: isSupabaseConfigured,
+    source,
     url: { 
       present: isValid(supabaseUrl), 
       type: typeof supabaseUrl,
@@ -29,15 +40,17 @@ if (typeof window !== 'undefined') {
     }
   })
   
-  // Log all public env vars keys
-  const publicVars = Object.keys(process.env).filter(k => k.startsWith('NEXT_PUBLIC_'))
-  console.log('Detected Public Env Vars:', publicVars)
+  // Custom check for specific env var presence since Object.keys(process.env) fails on client
+  console.log('Detected Env Vars Status:', {
+    NEXT_PUBLIC_SUPABASE_URL: isValid(envUrl) ? 'Detected' : 'Missing',
+    NEXT_PUBLIC_SUPABASE_ANON_KEY: isValid(envKey) ? 'Detected' : 'Missing'
+  })
   console.log('---------------------------')
 }
 
 const createResilientClient = () => {
   if (isSupabaseConfigured) {
-    return createClient(supabaseUrl!, supabaseAnonKey!)
+    return createClient(supabaseUrl, supabaseAnonKey)
   }
   
   // Return a proxy that throws a clear error if any property (like .auth) is accessed
