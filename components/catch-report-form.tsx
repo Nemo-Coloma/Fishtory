@@ -204,27 +204,27 @@ export function CatchReportForm({ user, onSubmit }: CatchReportFormProps) {
   }
 
   return (
-    <Card className="w-full max-w-2xl mx-auto shadow-xl">
-      <CardHeader>
+    <Card className="w-full max-w-2xl mx-auto shadow-xl rounded-2xl border border-slate-200/50">
+      <CardHeader className="pb-4">
         <div className="flex items-center justify-between">
           <div>
-            <CardTitle className="text-2xl font-bold">Catch Report</CardTitle>
-            <CardDescription>Submit your catch in under 1 minute</CardDescription>
+            <CardTitle className="text-3xl font-bold tracking-tight">Catch Report</CardTitle>
+            <CardDescription className="text-base mt-1">Submit your catch in under 1 minute</CardDescription>
           </div>
-          <div className="flex items-center gap-2 text-sm">
+          <div className="flex items-center gap-3 text-sm">
             {isOnline ? (
-              <>
-                <Wifi className="h-4 w-4 text-green-600" />
-                <span className="text-green-600">Online</span>
-              </>
+              <div className="flex items-center gap-2 px-3 py-2 bg-accent/15 rounded-lg">
+                <Wifi className="h-4 w-4 text-accent" />
+                <span className="text-accent font-semibold">Online</span>
+              </div>
             ) : (
-              <>
+              <div className="flex items-center gap-2 px-3 py-2 bg-red-100 rounded-lg">
                 <WifiOff className="h-4 w-4 text-red-600" />
-                <span className="text-red-600">Offline</span>
-              </>
+                <span className="text-red-700 font-semibold">Offline</span>
+              </div>
             )}
             {pendingCount > 0 && (
-              <span className="bg-amber-100 text-amber-800 px-2 py-1 rounded-full text-xs font-medium">
+              <span className="bg-amber-100 text-amber-800 px-3 py-1.5 rounded-lg text-xs font-bold">
                 {pendingCount} pending
               </span>
             )}
@@ -233,24 +233,24 @@ export function CatchReportForm({ user, onSubmit }: CatchReportFormProps) {
       </CardHeader>
       <CardContent>
         <Tabs value={mode} onValueChange={(v) => setMode(v as ReportMode)} className="w-full">
-          <TabsList className="grid w-full grid-cols-2 mb-6">
-            <TabsTrigger value="manual" className="flex items-center gap-2">
+          <TabsList className="grid w-full grid-cols-2 mb-6 bg-slate-100/50 p-1 rounded-lg">
+            <TabsTrigger value="manual" className="flex items-center gap-2 data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-sm">
               <PenTool className="h-4 w-4" />
               Manual Entry
             </TabsTrigger>
-            <TabsTrigger value="voice" className="flex items-center gap-2">
+            <TabsTrigger value="voice" className="flex items-center gap-2 data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-sm">
               <Mic className="h-4 w-4" />
               Voice Assistant
             </TabsTrigger>
           </TabsList>
 
           {/* Manual Entry Mode */}
-          <TabsContent value="manual" className="space-y-4">
+          <TabsContent value="manual" className="space-y-5">
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="species">Species *</Label>
+                <Label htmlFor="species" className="text-slate-700 font-semibold text-sm">Species *</Label>
                 <Select value={species} onValueChange={setSpecies}>
-                  <SelectTrigger id="species">
+                  <SelectTrigger id="species" className="focus-visible:ring-primary h-10 border-slate-200/60">
                     <SelectValue placeholder="Select species" />
                   </SelectTrigger>
                   <SelectContent>
@@ -267,7 +267,7 @@ export function CatchReportForm({ user, onSubmit }: CatchReportFormProps) {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="weight">Weight (kg) *</Label>
+                <Label htmlFor="weight" className="text-slate-700 font-semibold text-sm">Weight (kg) *</Label>
                 <Input
                   id="weight"
                   type="number"
@@ -275,15 +275,16 @@ export function CatchReportForm({ user, onSubmit }: CatchReportFormProps) {
                   placeholder="e.g., 5.5"
                   value={weight}
                   onChange={(e) => setWeight(e.target.value)}
+                  className="focus-visible:ring-primary h-10 border-slate-200/60"
                 />
               </div>
             </div>
 
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="processing">Processing Method *</Label>
+                <Label htmlFor="processing" className="text-slate-700 font-semibold text-sm">Processing Method *</Label>
                 <Select value={processingMethod} onValueChange={setProcessingMethod}>
-                  <SelectTrigger id="processing">
+                  <SelectTrigger id="processing" className="focus-visible:ring-primary h-10 border-slate-200/60">
                     <SelectValue placeholder="Select method" />
                   </SelectTrigger>
                   <SelectContent>
@@ -297,9 +298,9 @@ export function CatchReportForm({ user, onSubmit }: CatchReportFormProps) {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="location">Location *</Label>
+                <Label htmlFor="location" className="text-slate-700 font-semibold text-sm">Location *</Label>
                 <Select value={location} onValueChange={setLocation}>
-                  <SelectTrigger id="location">
+                  <SelectTrigger id="location" className="focus-visible:ring-primary h-10 border-slate-200/60">
                     <SelectValue placeholder="Select location" />
                   </SelectTrigger>
                   <SelectContent>
@@ -316,20 +317,21 @@ export function CatchReportForm({ user, onSubmit }: CatchReportFormProps) {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="date">Date *</Label>
+              <Label htmlFor="date" className="text-slate-700 font-semibold text-sm">Date *</Label>
               <Input
                 id="date"
                 type="date"
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
+                className="focus-visible:ring-primary h-10 border-slate-200/60"
               />
             </div>
           </TabsContent>
 
           {/* Voice Assistant Mode */}
           <TabsContent value="voice" className="space-y-6">
-            <div className="text-center space-y-4">
-              <div className="mx-auto w-32 h-32 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-lg">
+            <div className="text-center space-y-5">
+              <div className="mx-auto w-32 h-32 rounded-2xl bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center shadow-xl shadow-primary/20">
                 {isListening ? (
                   <div className="relative">
                     <div className="absolute inset-0 rounded-full bg-red-400 animate-ping opacity-75" />
@@ -357,8 +359,8 @@ export function CatchReportForm({ user, onSubmit }: CatchReportFormProps) {
                 onClick={handleToggleRecording}
                 disabled={!isSupported}
                 className={cn(
-                  "w-full max-w-xs transition-all",
-                  isListening ? "bg-red-500 hover:bg-red-600" : "bg-blue-600 hover:bg-blue-700"
+                  "w-full max-w-xs transition-all font-semibold shadow-lg",
+                  isListening ? "bg-red-500 hover:bg-red-600 shadow-red-200" : "bg-primary hover:bg-primary/90 shadow-primary/20"
                 )}
               >
                 {isListening ? (
@@ -375,18 +377,18 @@ export function CatchReportForm({ user, onSubmit }: CatchReportFormProps) {
               </Button>
 
               {transcript && (
-                <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
-                  <p className="text-sm text-blue-900 font-medium">
+                <div className="p-4 bg-primary/10 rounded-xl border border-primary/20">
+                  <p className="text-sm text-slate-900 font-medium">
                     "{transcript}"
                   </p>
-                  <p className="text-xs text-blue-600 mt-2">
+                  <p className="text-xs text-primary font-semibold mt-2">
                     ✓ Form auto-filled. Review in Manual tab.
                   </p>
                 </div>
               )}
             </div>
 
-            <div className="p-4 bg-slate-50 rounded-lg border border-slate-200">
+            <div className="p-4 bg-slate-50 rounded-xl border border-slate-200/50">
               <h4 className="font-medium text-sm mb-2">Example phrases:</h4>
               <ul className="text-xs text-slate-600 space-y-1">
                 <li>• "Nakakuha ako ng limang kilong bangus sa Barretto, sariwa"</li>
@@ -398,11 +400,11 @@ export function CatchReportForm({ user, onSubmit }: CatchReportFormProps) {
         </Tabs>
 
         {/* Submit Button */}
-        <div className="mt-6 pt-6 border-t">
+        <div className="mt-8 pt-6 border-t border-slate-200/50">
           <Button
             onClick={handleSubmit}
             disabled={isSubmitting}
-            className="w-full"
+            className="w-full bg-primary hover:bg-primary/90 text-base h-11 font-semibold shadow-lg shadow-primary/20"
             size="lg"
           >
             {isSubmitting ? (

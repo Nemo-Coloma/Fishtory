@@ -175,78 +175,83 @@ export function CompleteProfileForm() {
 
     if (checkingSession) {
         return (
-            <div className="flex min-h-screen items-center justify-center">
-                <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
+            <div className="flex min-h-screen items-center justify-center bg-slate-50">
+                <Loader2 className="h-8 w-8 animate-spin text-primary" />
             </div>
         )
     }
 
     return (
-        <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-50 to-sky-100 p-4">
-            <Card className="w-full max-w-lg shadow-xl border-0">
+        <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-slate-50 via-white to-slate-50 p-4">
+            <Card className="w-full max-w-lg shadow-xl rounded-2xl border border-slate-200/50">
                 <CardHeader className="pb-2 text-center">
                     {/* Header icon */}
-                    <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-blue-700 shadow-lg">
-                        <Fish className="h-7 w-7 text-white" />
+                    <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-primary/15 to-primary/5 shadow-lg">
+                        <Fish className="h-8 w-8 text-primary" />
                     </div>
-                    <CardTitle className="text-2xl font-bold text-blue-900">Complete Your Profile</CardTitle>
-                    <CardDescription className="text-slate-500">
+                    <CardTitle className="text-3xl font-bold tracking-tight">Complete Your Profile</CardTitle>
+                    <CardDescription className="text-base mt-2">
                         Fill in your details to receive your Fisherman ID.
                     </CardDescription>
 
                     {/* Generated ID preview */}
                     {generatedId && (
-                        <div className="mt-3 flex items-center justify-center gap-2">
-                            <BadgeCheck className="h-5 w-5 text-green-500" />
-                            <span className="text-sm font-medium text-slate-600">Your assigned ID:</span>
-                            <span className="inline-flex items-center rounded-full bg-blue-700 text-white text-sm font-semibold px-3 py-1 tracking-wider">
-                                {generatedId}
-                            </span>
+                        <div className="mt-5 flex items-center justify-center gap-3 p-3 bg-primary/5 rounded-xl border border-primary/10">
+                            <BadgeCheck className="h-5 w-5 text-accent shrink-0" />
+                            <div className="flex flex-col items-start gap-1">
+                                <span className="text-xs font-semibold text-slate-600 uppercase tracking-wider">Your assigned ID</span>
+                                <span className="inline-flex items-center rounded-lg bg-primary text-white text-sm font-bold px-4 py-1.5 tracking-wider shadow-lg shadow-primary/20">
+                                    {generatedId}
+                                </span>
+                            </div>
                         </div>
                     )}
                 </CardHeader>
 
                 <form onSubmit={handleSaveProfile}>
-                    <CardContent className="space-y-5 pt-5">
+                    <CardContent className="space-y-5 pt-6">
                         {/* Name row */}
                         <div className="grid grid-cols-2 gap-3">
                             <div className="space-y-2">
-                                <Label htmlFor="firstName">First Name</Label>
+                                <Label htmlFor="firstName" className="text-slate-700 font-semibold text-sm">First Name</Label>
                                 <Input
                                     id="firstName"
                                     placeholder="Juan"
                                     value={firstName}
                                     onChange={(e) => setFirstName(e.target.value)}
                                     required
+                                    className="focus-visible:ring-primary h-10 border-slate-200/60"
                                 />
                             </div>
                             <div className="space-y-2">
-                                <Label htmlFor="lastName">Last Name</Label>
+                                <Label htmlFor="lastName" className="text-slate-700 font-semibold text-sm">Last Name</Label>
                                 <Input
                                     id="lastName"
                                     placeholder="dela Cruz"
                                     value={lastName}
                                     onChange={(e) => setLastName(e.target.value)}
                                     required
+                                    className="focus-visible:ring-primary h-10 border-slate-200/60"
                                 />
                             </div>
                         </div>
 
                         {/* Boat Name */}
                         <div className="space-y-2">
-                            <Label htmlFor="boatName">Boat Name / Pangalan ng Bangka</Label>
+                            <Label htmlFor="boatName" className="text-slate-700 font-semibold text-sm">Boat Name / Pangalan ng Bangka</Label>
                             <Input
                                 id="boatName"
                                 placeholder="e.g., Bulalacao II"
                                 value={boatName}
                                 onChange={(e) => setBoatName(e.target.value)}
                                 required
+                                className="focus-visible:ring-primary h-10 border-slate-200/60"
                             />
                         </div>
 
                         {/* Contact */}
                         <div className="space-y-2">
-                            <Label htmlFor="contact">Contact Number</Label>
+                            <Label htmlFor="contact" className="text-slate-700 font-semibold text-sm">Contact Number</Label>
                             <Input
                                 id="contact"
                                 type="tel"
@@ -254,14 +259,15 @@ export function CompleteProfileForm() {
                                 value={contactNumber}
                                 onChange={(e) => setContactNumber(e.target.value)}
                                 required
+                                className="focus-visible:ring-primary h-10 border-slate-200/60"
                             />
                         </div>
 
                         {/* Location */}
                         <div className="space-y-2">
-                            <Label htmlFor="location">Barangay / Location</Label>
+                            <Label htmlFor="location" className="text-slate-700 font-semibold text-sm">Barangay / Location</Label>
                             <Select value={location} onValueChange={setLocation} required>
-                                <SelectTrigger id="location">
+                                <SelectTrigger id="location" className="focus-visible:ring-primary h-10 border-slate-200/60">
                                     <SelectValue placeholder="Select your barangay" />
                                 </SelectTrigger>
                                 <SelectContent>
@@ -273,10 +279,10 @@ export function CompleteProfileForm() {
                         </div>
                     </CardContent>
 
-                    <CardFooter className="flex-col gap-3 pb-6">
+                    <CardFooter className="flex-col gap-4 pb-6 pt-2">
                         <Button
                             type="submit"
-                            className="w-full bg-blue-700 hover:bg-blue-800 text-white h-11 text-base font-semibold"
+                            className="w-full bg-primary hover:bg-primary/90 text-white h-11 text-base font-semibold shadow-lg shadow-primary/20"
                             disabled={loading}
                         >
                             {loading ? (
@@ -285,11 +291,11 @@ export function CompleteProfileForm() {
                                     Saving profile...
                                 </span>
                             ) : (
-                                "Save Profile & Continue to Dashboard"
+                                "Save Profile & Continue"
                             )}
                         </Button>
-                        <p className="text-xs text-slate-400 text-center">
-                            Your Fisherman ID <strong>{generatedId}</strong> will be permanently assigned to your account.
+                        <p className="text-xs text-slate-500 text-center">
+                            Your Fisherman ID <strong className="text-slate-700">{generatedId}</strong> will be permanently assigned to your account.
                         </p>
                     </CardFooter>
                 </form>

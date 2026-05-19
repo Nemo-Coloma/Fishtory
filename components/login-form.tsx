@@ -158,27 +158,27 @@ export function LoginForm() {
     const isAdmin = role === "admin"
 
     return (
-        <div className="min-h-[85vh] w-full flex flex-col items-center justify-center p-4 bg-gradient-to-br from-blue-50 via-white to-cyan-50">
+        <div className="min-h-[85vh] w-full flex flex-col items-center justify-center p-4 bg-gradient-to-br from-slate-50 via-white to-slate-50">
             {/* Back Button */}
             <button
                 onClick={() => router.push("/")}
-                className="absolute top-6 left-6 inline-flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-white/50 transition-all font-medium text-sm"
+                className="absolute top-6 left-6 inline-flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:text-primary hover:bg-primary/10 transition-all font-semibold text-sm"
                 title="Go back to landing page"
             >
                 <ArrowLeft className="h-4 w-4" />
                 Back
             </button>
 
-            <Card className="w-full max-w-md mx-auto shadow-xl rounded-xl border-slate-200">
+            <Card className="w-full max-w-md mx-auto shadow-xl rounded-2xl border border-slate-200/50">
                 {isAdmin ? (
                     // Admin: simple login only
                     <>
                         <CardHeader className="text-center pb-2">
-                            <div className="mx-auto bg-blue-100 p-3 rounded-full w-14 h-14 flex items-center justify-center mb-2">
-                                <Anchor className="h-6 w-6 text-blue-700" />
+                            <div className="mx-auto bg-gradient-to-br from-primary/15 to-primary/5 p-3 rounded-2xl w-16 h-16 flex items-center justify-center mb-4">
+                                <Anchor className="h-7 w-7 text-primary" />
                             </div>
-                             <CardTitle className="text-2xl text-blue-900">Staff Portal</CardTitle>
-                             <CardDescription>Enter your Staff Code securely.</CardDescription>
+                             <CardTitle className="text-3xl font-bold tracking-tight">Staff Portal</CardTitle>
+                             <CardDescription className="text-base mt-1">Enter your credentials securely</CardDescription>
                          </CardHeader>
                          {!isSupabaseConfigured && (
                              <div className="mx-6 p-4 bg-red-50 border border-red-100 rounded-xl flex flex-col gap-2 animate-pulse">
@@ -202,18 +202,18 @@ export function LoginForm() {
                          <form onSubmit={handleLogin}>
                             <CardContent className="space-y-5 pt-4">
                                 <div className="space-y-2">
-                                    <Label htmlFor="id" className="text-slate-600 font-medium">Staff Code</Label>
+                                    <Label htmlFor="id" className="text-slate-700 font-semibold text-sm">Staff Code</Label>
                                     <Input
                                         id="id"
                                         placeholder="ADMIN-001"
                                         value={id}
                                         onChange={(e) => setId(e.target.value)}
                                         required
-                                        className="focus-visible:ring-blue-500"
+                                        className="focus-visible:ring-primary h-11 border-slate-200/60"
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <Label htmlFor="password" className="text-slate-600 font-medium">Password</Label>
+                                    <Label htmlFor="password" className="text-slate-700 font-semibold text-sm">Password</Label>
                                     <Input
                                         id="password"
                                         type="password"
@@ -221,12 +221,12 @@ export function LoginForm() {
                                         value={password}
                                         onChange={(e) => setPassword(e.target.value)}
                                         required
-                                        className="focus-visible:ring-blue-500"
+                                        className="focus-visible:ring-primary h-11 border-slate-200/60"
                                     />
                                 </div>
                             </CardContent>
-                            <CardFooter className="pb-6 pt-2">
-                                <Button type="submit" className="w-full bg-blue-700 hover:bg-blue-800 text-md h-11 transition-all" disabled={loading}>
+                            <CardFooter className="pb-6 pt-4">
+                                <Button type="submit" className="w-full bg-primary hover:bg-primary/90 text-base h-11 shadow-lg shadow-primary/20 font-semibold transition-all" disabled={loading}>
                                     {loading ? "Authenticating..." : "Login to System"}
                                 </Button>
                             </CardFooter>
@@ -236,13 +236,13 @@ export function LoginForm() {
                     // Fisherman: Login + Sign Up tabs
                     <Tabs defaultValue="login" className="w-full">
                         <CardHeader className="text-center pb-0">
-                            <div className="mx-auto bg-blue-50 outline outline-1 outline-blue-100 p-3 rounded-full w-14 h-14 flex items-center justify-center mb-3">
-                                <Anchor className="h-6 w-6 text-blue-600" />
+                            <div className="mx-auto bg-gradient-to-br from-primary/15 to-primary/5 p-3 rounded-2xl w-16 h-16 flex items-center justify-center mb-4">
+                                <Anchor className="h-7 w-7 text-primary" />
                             </div>
-                            <CardTitle className="text-2xl font-bold tracking-tight text-blue-900">Fishtory Portal</CardTitle>
-                            <CardDescription className="mb-4">Welcome back to the registry.</CardDescription>
+                            <CardTitle className="text-3xl font-bold tracking-tight">Fishtory Portal</CardTitle>
+                            <CardDescription className="text-base mt-1 mb-6">Welcome back to the fisheries registry</CardDescription>
                             {!isSupabaseConfigured && (
-                                <div className="mb-4 p-4 bg-red-50 border border-red-100 rounded-xl flex flex-col gap-2 animate-pulse text-left">
+                                <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-xl flex flex-col gap-2 animate-pulse text-left">
                                     <div className="flex items-center gap-2 text-red-700 font-bold text-sm">
                                         <AlertCircle className="h-4 w-4" />
                                         System Configuration Missing
@@ -260,18 +260,18 @@ export function LoginForm() {
                                     </a>
                                 </div>
                             )}
-                            <TabsList className="grid w-full grid-cols-2 bg-slate-100 p-1 rounded-lg">
-                                <TabsTrigger value="login" className="rounded-md data-[state=active]:bg-white data-[state=active]:text-blue-700 data-[state=active]:shadow-sm transition-all">Login</TabsTrigger>
-                                <TabsTrigger value="signup" className="rounded-md data-[state=active]:bg-white data-[state=active]:text-blue-700 data-[state=active]:shadow-sm transition-all">Sign Up</TabsTrigger>
+                            <TabsList className="grid w-full grid-cols-2 bg-slate-100/50 p-1 rounded-lg mb-0">
+                                <TabsTrigger value="login" className="rounded-md data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-sm transition-all font-semibold">Login</TabsTrigger>
+                                <TabsTrigger value="signup" className="rounded-md data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-sm transition-all font-semibold">Sign Up</TabsTrigger>
                             </TabsList>
                         </CardHeader>
 
                         {/* ── LOGIN TAB ── */}
                         <TabsContent value="login" className="animate-in fade-in-50 slide-in-from-bottom-2 duration-300">
                             <form onSubmit={handleLogin}>
-                                <CardContent className="space-y-4 pt-6 pb-2">
+                                <CardContent className="space-y-5 pt-6 pb-2">
                                     <div className="space-y-2">
-                                        <Label htmlFor="id" className="text-slate-600 font-medium">Email Address</Label>
+                                        <Label htmlFor="id" className="text-slate-700 font-semibold text-sm">Email Address</Label>
                                         <Input
                                             id="id"
                                             type="email"
@@ -279,11 +279,11 @@ export function LoginForm() {
                                             value={id}
                                             onChange={(e) => setId(e.target.value)}
                                             required
-                                            className="focus-visible:ring-blue-500 h-11"
+                                            className="focus-visible:ring-primary h-11 border-slate-200/60"
                                         />
                                     </div>
                                     <div className="space-y-2">
-                                        <Label htmlFor="password" className="text-slate-600 font-medium">Password</Label>
+                                        <Label htmlFor="password" className="text-slate-700 font-semibold text-sm">Password</Label>
                                         <Input
                                             id="password"
                                             type="password"
@@ -291,12 +291,12 @@ export function LoginForm() {
                                             value={password}
                                             onChange={(e) => setPassword(e.target.value)}
                                             required
-                                            className="focus-visible:ring-blue-500 h-11"
+                                            className="focus-visible:ring-primary h-11 border-slate-200/60"
                                         />
                                     </div>
                                 </CardContent>
                                 <CardFooter className="pb-8 pt-4">
-                                    <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-md h-11 shadow-md shadow-blue-200 transition-all" disabled={loading}>
+                                    <Button type="submit" className="w-full bg-primary hover:bg-primary/90 text-base h-11 shadow-lg shadow-primary/20 font-semibold transition-all" disabled={loading}>
                                         {loading ? "Authenticating..." : "Sign In"}
                                     </Button>
                                 </CardFooter>
@@ -306,16 +306,18 @@ export function LoginForm() {
                         {/* ── SIGN UP TAB ── */}
                         <TabsContent value="signup" className="animate-in fade-in-50 slide-in-from-bottom-2 duration-300">
                             {signUpSuccess ? (
-                                <CardContent className="pt-8 pb-10">
-                                    <div className="flex flex-col items-center gap-4 text-center">
-                                        <div className="bg-green-50 p-3 rounded-full">
-                                            <CheckCircle2 className="h-10 w-10 text-green-500" />
+                                <CardContent className="pt-10 pb-12">
+                                    <div className="flex flex-col items-center gap-5 text-center">
+                                        <div className="bg-accent/15 p-3 rounded-2xl">
+                                            <CheckCircle2 className="h-12 w-12 text-accent" />
                                         </div>
-                                        <h3 className="text-xl font-bold text-slate-800">Check Your Email!</h3>
-                                        <p className="text-sm text-slate-500 max-w-xs leading-relaxed">
-                                            We sent a verification link to <br/><span className="font-semibold text-slate-800">{signUpEmail}</span>.
-                                            Please verify your email then come back to log in.
-                                        </p>
+                                        <div>
+                                            <h3 className="text-2xl font-bold text-slate-900 mb-2">Check Your Email!</h3>
+                                            <p className="text-sm text-slate-600 max-w-xs leading-relaxed">
+                                                We sent a verification link to <br/><span className="font-semibold text-slate-800">{signUpEmail}</span>.
+                                                Please verify your email then come back to log in.
+                                            </p>
+                                        </div>
                                     </div>
                                 </CardContent>
                             ) : (
@@ -323,30 +325,30 @@ export function LoginForm() {
                                     <CardContent className="space-y-4 pt-6 pb-2">
                                         <div className="grid grid-cols-2 gap-3">
                                             <div className="space-y-2">
-                                                <Label htmlFor="firstName" className="text-slate-600 font-medium">First Name</Label>
+                                                <Label htmlFor="firstName" className="text-slate-700 font-semibold text-sm">First Name</Label>
                                                 <Input
                                                     id="firstName"
                                                     placeholder="Juan"
                                                     value={signUpFirstName}
                                                     onChange={(e) => setSignUpFirstName(e.target.value)}
                                                     required
-                                                    className="focus-visible:ring-blue-500"
+                                                    className="focus-visible:ring-primary h-10 border-slate-200/60"
                                                 />
                                             </div>
                                             <div className="space-y-2">
-                                                <Label htmlFor="lastName" className="text-slate-600 font-medium">Last Name</Label>
+                                                <Label htmlFor="lastName" className="text-slate-700 font-semibold text-sm">Last Name</Label>
                                                 <Input
                                                     id="lastName"
                                                     placeholder="dela Cruz"
                                                     value={signUpLastName}
                                                     onChange={(e) => setSignUpLastName(e.target.value)}
                                                     required
-                                                    className="focus-visible:ring-blue-500"
+                                                    className="focus-visible:ring-primary h-10 border-slate-200/60"
                                                 />
                                             </div>
                                         </div>
                                         <div className="space-y-2">
-                                            <Label htmlFor="signupEmail" className="text-slate-600 font-medium">Email Address</Label>
+                                            <Label htmlFor="signupEmail" className="text-slate-700 font-semibold text-sm">Email Address</Label>
                                             <Input
                                                 id="signupEmail"
                                                 type="email"
@@ -354,11 +356,11 @@ export function LoginForm() {
                                                 value={signUpEmail}
                                                 onChange={(e) => setSignUpEmail(e.target.value)}
                                                 required
-                                                className="focus-visible:ring-blue-500"
+                                                className="focus-visible:ring-primary h-10 border-slate-200/60"
                                             />
                                         </div>
                                         <div className="space-y-2">
-                                            <Label htmlFor="signupPassword" className="text-slate-600 font-medium">Password</Label>
+                                            <Label htmlFor="signupPassword" className="text-slate-700 font-semibold text-sm">Password</Label>
                                             <Input
                                                 id="signupPassword"
                                                 type="password"
@@ -366,11 +368,11 @@ export function LoginForm() {
                                                 value={signUpPassword}
                                                 onChange={(e) => setSignUpPassword(e.target.value)}
                                                 required
-                                                className="focus-visible:ring-blue-500"
+                                                className="focus-visible:ring-primary h-10 border-slate-200/60"
                                             />
                                         </div>
                                         <div className="space-y-2">
-                                            <Label htmlFor="confirmPassword" className="text-slate-600 font-medium">Confirm Password</Label>
+                                            <Label htmlFor="confirmPassword" className="text-slate-700 font-semibold text-sm">Confirm Password</Label>
                                             <Input
                                                 id="confirmPassword"
                                                 type="password"
@@ -378,15 +380,15 @@ export function LoginForm() {
                                                 value={signUpConfirmPassword}
                                                 onChange={(e) => setSignUpConfirmPassword(e.target.value)}
                                                 required
-                                                className="focus-visible:ring-blue-500"
+                                                className="focus-visible:ring-primary h-10 border-slate-200/60"
                                             />
                                         </div>
-                                        <p className="text-[11px] text-slate-400 text-center pt-2">
+                                        <p className="text-[11px] text-slate-500 text-center pt-2">
                                             By creating an account, you agree to our terms of service and privacy policy.
                                         </p>
                                     </CardContent>
                                     <CardFooter className="pb-8 pt-4">
-                                        <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-md h-11 shadow-md shadow-blue-200 transition-all" disabled={signUpLoading}>
+                                        <Button type="submit" className="w-full bg-primary hover:bg-primary/90 text-base h-11 shadow-lg shadow-primary/20 font-semibold transition-all" disabled={signUpLoading}>
                                             {signUpLoading ? "Setting up..." : "Create Account"}
                                         </Button>
                                     </CardFooter>
