@@ -1,74 +1,108 @@
 import Link from 'next/link'
 import { Button } from "@/components/ui/button"
-import { Anchor, Waves, ArrowRight } from "lucide-react"
+import { Anchor, Waves, Building2, ArrowRight } from "lucide-react"
 
 export default function Home() {
     return (
-        <main className="min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-br from-blue-50 via-white to-cyan-50 relative overflow-hidden">
+        <main className="min-h-screen w-full flex flex-col items-center justify-center bg-background relative overflow-hidden">
             
-            {/* Decorative background elements */}
-            <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
-                <div className="absolute -top-[20%] -right-[10%] w-[70%] h-[70%] rounded-full bg-blue-100/50 blur-3xl opacity-50"></div>
-                <div className="absolute -bottom-[20%] -left-[10%] w-[60%] h-[60%] rounded-full bg-cyan-100/50 blur-3xl opacity-50"></div>
+            {/* Subtle background gradient */}
+            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-accent/5 pointer-events-none" />
+            
+            {/* Centered content wrapper */}
+            <div className="relative z-10 w-full flex flex-col items-center justify-center px-4 sm:px-6 py-12 sm:py-0">
+                
+                {/* Hero Section - Centered and Fixed Width */}
+                <div className="w-full max-w-3xl flex flex-col items-center text-center space-y-8 sm:space-y-12">
+                    
+                    {/* Logo and Branding */}
+                    <div className="flex flex-col items-center space-y-4 sm:space-y-6">
+                        <div className="inline-flex items-center justify-center rounded-2xl bg-primary/10 p-4">
+                            <Anchor className="h-8 w-8 sm:h-10 sm:w-10 text-primary" />
+                        </div>
+                        <div>
+                            <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold text-foreground tracking-tight">
+                                Fishtory
+                            </h1>
+                            <p className="text-base sm:text-lg text-muted-foreground mt-3 max-w-2xl mx-auto leading-relaxed">
+                                The unified registry and reporting platform for fisheries and agricultural management.
+                            </p>
+                        </div>
+                    </div>
+
+                    {/* Entry Cards - Better spacing and layout */}
+                    <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6 pt-4 sm:pt-8">
+                        
+                        {/* Fisherman Portal Card */}
+                        <Link href="/login?role=fisherman" className="group">
+                            <div className="relative h-full bg-card rounded-2xl border border-border p-6 sm:p-8 transition-all duration-300 hover:border-primary hover:shadow-lg hover:-translate-y-1">
+                                <div className="flex flex-col h-full">
+                                    {/* Icon */}
+                                    <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-primary/10 text-primary mb-4 group-hover:bg-primary/20 transition-colors">
+                                        <Waves className="h-6 w-6" />
+                                    </div>
+                                    
+                                    {/* Content */}
+                                    <div className="flex-1 text-left">
+                                        <h2 className="text-xl sm:text-2xl font-bold text-foreground mb-2">
+                                            Fisherman Portal
+                                        </h2>
+                                        <p className="text-sm sm:text-base text-muted-foreground">
+                                            Register your account, apply for your Digital ID, and submit daily catch reports.
+                                        </p>
+                                    </div>
+                                    
+                                    {/* CTA Button */}
+                                    <div className="mt-6 pt-6 border-t border-border">
+                                        <div className="inline-flex items-center gap-2 text-primary font-semibold text-sm sm:text-base group-hover:gap-3 transition-all">
+                                            Enter Portal
+                                            <ArrowRight className="h-4 w-4" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </Link>
+
+                        {/* Admin Portal Card */}
+                        <Link href="/login?role=admin" className="group">
+                            <div className="relative h-full bg-card rounded-2xl border border-border p-6 sm:p-8 transition-all duration-300 hover:border-primary hover:shadow-lg hover:-translate-y-1">
+                                <div className="flex flex-col h-full">
+                                    {/* Icon */}
+                                    <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-secondary/50 text-secondary-foreground mb-4 group-hover:bg-secondary transition-colors">
+                                        <Building2 className="h-6 w-6" />
+                                    </div>
+                                    
+                                    {/* Content */}
+                                    <div className="flex-1 text-left">
+                                        <h2 className="text-xl sm:text-2xl font-bold text-foreground mb-2">
+                                            Staff & Admin
+                                        </h2>
+                                        <p className="text-sm sm:text-base text-muted-foreground">
+                                            Access the dashboard to verify reports, manage registry, and view analytics.
+                                        </p>
+                                    </div>
+                                    
+                                    {/* CTA Button */}
+                                    <div className="mt-6 pt-6 border-t border-border">
+                                        <div className="inline-flex items-center gap-2 text-secondary-foreground font-semibold text-sm sm:text-base group-hover:gap-3 transition-all">
+                                            Staff Login
+                                            <ArrowRight className="h-4 w-4" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </Link>
+                    </div>
+                </div>
             </div>
 
-            <div className="z-10 w-full max-w-5xl flex flex-col items-center animate-in fade-in slide-in-from-bottom-8 duration-700">
-                
-                {/* Hero Section */}
-                <div className="text-center mb-16">
-                    <div className="mx-auto bg-blue-100 p-4 rounded-full w-20 h-20 flex items-center justify-center mb-6 shadow-sm border border-blue-200">
-                        <Anchor className="h-10 w-10 text-blue-700" />
-                    </div>
-                    <h1 className="text-5xl md:text-7xl font-extrabold text-blue-950 tracking-tight mb-4 drop-shadow-sm">
-                        Fishtory
-                    </h1>
-                    <p className="text-lg md:text-xl text-slate-600 max-w-2xl mx-auto font-medium">
-                        The unified registry and reporting platform for the city's fisheries and agricultural management.
+            {/* Footer - Fixed at bottom */}
+            <div className="relative z-10 mt-auto w-full border-t border-border bg-background/80 backdrop-blur-sm">
+                <div className="flex items-center justify-center px-4 py-6 text-center">
+                    <p className="text-xs sm:text-sm text-muted-foreground font-medium">
+                        &copy; {new Date().getFullYear()} Republic of the Philippines. Local Government Unit.
                     </p>
                 </div>
-
-                {/* Entry Pathways */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-4xl px-4">
-                    
-                    {/* Fisherman Card */}
-                    <div className="group relative bg-white p-8 rounded-3xl shadow-xl shadow-blue-900/5 border border-slate-100 transition-all hover:-translate-y-1 hover:shadow-2xl hover:shadow-blue-900/10 flex flex-col items-center text-center">
-                        <div className="h-12 w-12 bg-cyan-50 rounded-2xl flex items-center justify-center mb-6 text-cyan-600 group-hover:scale-110 group-hover:bg-cyan-100 transition-all">
-                            <Waves className="h-6 w-6" />
-                        </div>
-                        <h2 className="text-2xl font-bold text-slate-800 mb-3">Fisherman Portal</h2>
-                        <p className="text-slate-500 mb-8 flex-1">
-                            Register your account, apply for your Digital ID, and submit daily catch reports directly from your vessel.
-                        </p>
-                        <Link href="/login?role=fisherman" className="w-full">
-                            <Button className="w-full bg-blue-600 hover:bg-blue-700 text-md h-12 shadow-md hover:shadow-lg transition-all rounded-xl flex items-center justify-center gap-2 group-hover:pr-4">
-                                Enter Portal
-                                <ArrowRight className="h-4 w-4 opacity-70 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
-                            </Button>
-                        </Link>
-                    </div>
-
-                    {/* Admin Card */}
-                    <div className="group relative bg-white p-8 rounded-3xl shadow-xl shadow-blue-900/5 border border-slate-100 transition-all hover:-translate-y-1 hover:shadow-2xl hover:shadow-blue-900/10 flex flex-col items-center text-center">
-                        <div className="h-12 w-12 bg-blue-50 rounded-2xl flex items-center justify-center mb-6 text-blue-600 group-hover:scale-110 group-hover:bg-blue-100 transition-all">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-building-2"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/></svg>
-                        </div>
-                        <h2 className="text-2xl font-bold text-slate-800 mb-3">Staff & Admin</h2>
-                        <p className="text-slate-500 mb-8 flex-1">
-                            Access the global dashboard to verify reports, manage the registry, and view city-wide analytics.
-                        </p>
-                        <Link href="/login?role=admin" className="w-full">
-                            <Button variant="outline" className="w-full border-blue-200 text-blue-700 hover:bg-blue-50 text-md h-12 transition-all rounded-xl flex items-center justify-center gap-2 group-hover:pr-4">
-                                Staff Login
-                                <ArrowRight className="h-4 w-4 opacity-70 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
-                            </Button>
-                        </Link>
-                    </div>
-
-                </div>
-            </div>
-            
-            <div className="absolute bottom-6 text-center w-full z-10 text-slate-400 text-sm font-medium">
-                &copy; {new Date().getFullYear()} Republic of the Philippines. Local Government Unit.
             </div>
         </main>
     )
