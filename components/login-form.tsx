@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { CheckCircle2, Anchor, AlertCircle, ExternalLink } from "lucide-react"
+import { CheckCircle2, Anchor, AlertCircle, ExternalLink, ArrowLeft } from "lucide-react"
 import { toast } from "sonner"
 import { isSupabaseConfigured } from "@/lib/supabase"
 
@@ -158,7 +158,17 @@ export function LoginForm() {
     const isAdmin = role === "admin"
 
     return (
-        <div className="min-h-[85vh] w-full flex items-center justify-center p-4 bg-gradient-to-br from-blue-50 via-white to-cyan-50">
+        <div className="min-h-[85vh] w-full flex flex-col items-center justify-center p-4 bg-gradient-to-br from-blue-50 via-white to-cyan-50">
+            {/* Back Button */}
+            <button
+                onClick={() => router.push("/")}
+                className="absolute top-6 left-6 inline-flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-white/50 transition-all font-medium text-sm"
+                title="Go back to landing page"
+            >
+                <ArrowLeft className="h-4 w-4" />
+                Back
+            </button>
+
             <Card className="w-full max-w-md mx-auto shadow-xl rounded-xl border-slate-200">
                 {isAdmin ? (
                     // Admin: simple login only
