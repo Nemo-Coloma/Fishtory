@@ -10,6 +10,12 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Fish, BadgeCheck, Loader2 } from "lucide-react"
 
+interface LandingCenter {
+    id: string
+    name: string
+    location?: string
+}
+
 export function CompleteProfileForm() {
     const router = useRouter()
     const [loading, setLoading] = useState(false)
@@ -23,6 +29,10 @@ export function CompleteProfileForm() {
     const [boatName, setBoatName] = useState("")
     const [contactNumber, setContactNumber] = useState("")
     const [location, setLocation] = useState("")
+    
+    // Data from database
+    const [landingCenters, setLandingCenters] = useState<LandingCenter[]>([])
+    const [loadingData, setLoadingData] = useState(true)
 
     useEffect(() => {
         const initPage = async () => {
@@ -67,6 +77,17 @@ export function CompleteProfileForm() {
                 setGeneratedId(`FM-${year}-0001`)
             }
 
+            // Fetch landing centers for location dropdown
+            const { data: locationsData } = await supabase
+                .from('landing_centers')
+                .select('id, name, location')
+                .order('name')
+
+            if (locationsData) {
+                setLandingCenters(locationsData)
+            }
+            
+            setLoadingData(false)
             setCheckingSession(false)
         }
         initPage()
@@ -260,16 +281,25 @@ export function CompleteProfileForm() {
                         {/* Location */}
                         <div className="space-y-2">
                             <Label htmlFor="location">Barangay / Location</Label>
-                            <Select value={location} onValueChange={setLocation} required>
-                                <SelectTrigger id="location">
-                                    <SelectValue placeholder="Select your barangay" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="Banicain">Banicain</SelectItem>
-                                    <SelectItem value="Barretto">Barretto</SelectItem>
-                                    <SelectItem value="Kalaklan">Kalaklan</SelectItem>
-                                </SelectContent>
-                            </Select>
+                            {loadingData ? (
+                                <div className="flex items-center gap-2">
+                                    <Loader2 className="h-4 w-4 animate-spin" />
+                                    <span className="text-sm text-slate-500">Loading locations...</span>
+                                </div>
+                            ) : (
+                                <Select value={location} onValueChange={setLocation} required>
+                                    <SelectTrigger id="location">
+                                        <SelectValue placeholder="Select your barangay" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {landingCenters.map((center) => (
+                                            <SelectItem key={center.id} value={center.name}>
+                                                {center.name}{center.location ? ` - ${center.location}` : ''}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            )}
                         </div>
                     </CardContent>
 

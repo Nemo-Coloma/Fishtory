@@ -99,49 +99,52 @@ export function DownloadReportsButton() {
   }
 
   return (
-    <div className="flex flex-col sm:flex-row items-end gap-3 bg-slate-50 p-3 rounded-lg border border-slate-200">
-      <div className="grid gap-1.5">
-        <Label htmlFor="start-date" className="text-[10px] uppercase font-bold text-slate-500 flex items-center gap-1">
-          <Calendar className="w-3 h-3" /> Start Date
+    <div className="flex flex-col sm:flex-row items-center gap-1.5 h-full py-1 pr-1">
+      <div className="grid gap-1 px-4 py-0.5">
+        <Label htmlFor="start-date" className="text-[9px] uppercase font-black text-slate-500 flex items-center gap-2 tracking-[0.2em] opacity-80">
+          <Calendar className="w-3 h-3 text-blue-500" /> FROM
         </Label>
         <Input 
           id="start-date"
           type="date" 
           value={startDate} 
           onChange={(e) => setStartDate(e.target.value)}
-          className="h-9 w-full sm:w-[140px] text-xs bg-white"
+          className="h-8 w-full sm:w-[130px] text-xs font-bold bg-transparent border-none text-slate-100 outline-none cursor-pointer p-0 invert-[0.8] brightness-200"
         />
       </div>
-      <div className="grid gap-1.5">
-        <Label htmlFor="end-date" className="text-[10px] uppercase font-bold text-slate-500 flex items-center gap-1">
-          <Calendar className="w-3 h-3" /> End Date
+      
+      <div className="h-10 w-[1px] bg-slate-800/20 hidden sm:block self-center"></div>
+
+      <div className="grid gap-1 px-4 py-0.5">
+        <Label htmlFor="end-date" className="text-[9px] uppercase font-black text-slate-500 flex items-center gap-2 tracking-[0.2em] opacity-80">
+          <Calendar className="w-3 h-3 text-blue-500" /> TO
         </Label>
         <Input 
           id="end-date"
           type="date" 
           value={endDate} 
           onChange={(e) => setEndDate(e.target.value)}
-          className="h-9 w-full sm:w-[140px] text-xs bg-white"
+          className="h-8 w-full sm:w-[130px] text-xs font-bold bg-transparent border-none text-slate-100 outline-none cursor-pointer p-0 invert-[0.8] brightness-200"
         />
       </div>
-      <Button
-        onClick={handleDownload}
-        disabled={isDownloading}
-        size="sm"
-        className="flex items-center gap-2 h-9 w-full sm:w-auto px-4"
-      >
-        {isDownloading ? (
-          <>
-            <Loader2 className="h-4 w-4 animate-spin" />
-            <span className="hidden sm:inline">Exporting...</span>
-          </>
-        ) : (
-          <>
-            <Download className="h-4 w-4" />
-            <span>Download Excel</span>
-          </>
-        )}
-      </Button>
+
+      <div className="px-3">
+        <Button
+            onClick={handleDownload}
+            disabled={isDownloading}
+            className="flex items-center gap-2 h-10 px-6 bg-gradient-to-tr from-blue-600 to-cyan-400 hover:from-blue-500 hover:to-cyan-300 font-black rounded-2xl shadow-xl shadow-blue-500/20 transition-all active:scale-95 group border border-white/5"
+        >
+            {isDownloading ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+                <Download className="h-4 w-4 transition-transform group-hover:-translate-y-0.5" />
+            )}
+            <div className="flex flex-col items-start leading-none">
+                <span className="text-[8px] opacity-70 uppercase tracking-widest font-bold">Export Data</span>
+                <span className="text-xs">EXCEL</span>
+            </div>
+        </Button>
+      </div>
     </div>
   )
 }

@@ -12,7 +12,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { supabase } from "@/lib/supabase"
 import { toast } from "sonner"
-import { LogOut, User, Save, FileText, Anchor, Scale, MapPin, Calendar, CheckCircle2, Search, ClipboardList, Pencil, Lock } from "lucide-react"
+import { LogOut, User, Save, FileText, Anchor, Scale, MapPin, Calendar, CheckCircle2, Search, ClipboardList, Pencil, Lock, Loader2 } from "lucide-react"
 import { createFishermanAccount } from "@/app/actions/create-fisherman"
 
 export function StaffDashboard() {
@@ -33,6 +33,10 @@ export function StaffDashboard() {
     email: "",
     password: "",
   })
+  
+  // Data from database
+  const [landingCenters, setLandingCenters] = useState<any[]>([])
+  const [loadingData, setLoadingData] = useState(true)
 
   // Catch Report state (Option 2)
   const [fishermen, setFishermen] = useState<any[]>([])
@@ -75,15 +79,35 @@ export function StaffDashboard() {
         setUser({ ...session.user, staff_id: 'STAFF', full_name: 'Staff Member' })
       }
 
-      // Fetch fishermen for the dropdown
-      const { data: fishermenData } = await supabase
+      // Fetch fishermen for the dropdown - get ALL registered fishermen
+      const { data: fishermenData, error: fishermenError } = await supabase
         .from('fisherman_registration')
-        .select('id, fisherman_id, first_name, last_name, boat_name, user_id, location')
-        .order('first_name')
+        .select('id, fisherman_id, first_name, last_name, boat_name, user_id, location, phone_number')
+        .order('created_at', { ascending: false })
+      
+      if (fishermenError) {
+        console.error('[Staff Dashboard] Error fetching fishermen:', fishermenError)
+      }
       
       if (fishermenData) {
         setFishermen(fishermenData)
+        console.log('[Staff Dashboard] Loaded', fishermenData.length, 'fishermen')
+      } else {
+        console.warn('[Staff Dashboard] No fishermen data returned')
+        setFishermen([])
       }
+      
+      // Fetch landing centers for location dropdown
+      const { data: locationsData } = await supabase
+        .from('landing_centers')
+        .select('id, name, location')
+        .order('name')
+      
+      if (locationsData) {
+        setLandingCenters(locationsData)
+      }
+      
+      setLoadingData(false)
     }
     
     fetchUserDataAndFishermen()
@@ -174,7 +198,7 @@ export function StaffDashboard() {
 
   const handleLogout = async () => {
     await supabase.auth.signOut()
-    router.push("/staff/login")
+    router.push("/")
   }
 
   // --- Option 1: Handle Profile Registration ---
@@ -419,11 +443,25 @@ export function StaffDashboard() {
                       </div>
                       <div className="space-y-2">
                         <Label>Location / Address *</Label>
-                        <Input
-                          value={formData.location}
-                          onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                          required placeholder="Enter complete address"
-                        />
+                        {loadingData ? (
+                          <div className="flex items-center gap-2">
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                            <span className="text-sm text-slate-500">Loading...</span>
+                          </div>
+                        ) : (
+                          <Select value={formData.location} onValueChange={(value) => setFormData({ ...formData, location: value })} required>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select location" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {landingCenters.map((center) => (
+                                <SelectItem key={center.id} value={center.name}>
+                                  {center.name}{center.location ? ` - ${center.location}` : ''}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        )}
                       </div>
                       <div className="space-y-2">
                         <Label>Phone Number *</Label>

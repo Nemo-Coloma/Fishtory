@@ -6,7 +6,8 @@ import { createClient as createServerClient } from '@/lib/supabase/server'
 interface CreateStaffParams {
   email: string
   password?: string
-  fullName: string
+  firstName: string
+  lastName: string
   staffId: string
 }
 
@@ -59,7 +60,8 @@ export async function createStaffAccount(params: CreateStaffParams) {
       user_metadata: {
         role: 'staff',
         staff_id: params.staffId.trim(),
-        full_name: params.fullName.trim()
+        first_name: params.firstName.trim(),
+        last_name: params.lastName.trim()
       }
     })
 
@@ -78,7 +80,8 @@ export async function createStaffAccount(params: CreateStaffParams) {
       .insert({
         user_id: newUserId,
         staff_id: params.staffId.trim(),
-        full_name: params.fullName.trim(),
+        first_name: params.firstName.trim(),
+        last_name: params.lastName.trim(),
         email: params.email.trim(),
         role: 'staff'
       })
@@ -101,7 +104,8 @@ export async function createStaffAccount(params: CreateStaffParams) {
         id: profileData.id,
         user_id: profileData.user_id,
         staff_id: profileData.staff_id,
-        full_name: profileData.full_name,
+        first_name: profileData.first_name,
+        last_name: profileData.last_name,
         email: profileData.email,
         role: profileData.role
       }

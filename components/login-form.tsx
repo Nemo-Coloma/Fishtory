@@ -120,17 +120,17 @@ export function LoginForm() {
     const isAdmin = role === "admin"
 
     return (
-        <div className="min-h-[85vh] w-full flex items-center justify-center p-4 bg-gradient-to-br from-blue-50 via-white to-cyan-50">
-            <Card className="w-full max-w-md mx-auto shadow-xl rounded-xl border-slate-200">
+        <div className="w-full">
+            <Card className="w-full max-w-md mx-auto bg-slate-900/60 backdrop-blur-xl shadow-2xl rounded-2xl border-slate-800/50 ring-1 ring-white/5 overflow-hidden">
                 {isAdmin ? (
                     // Admin: simple login only
                     <>
-                        <CardHeader className="text-center pb-2">
-                            <div className="mx-auto bg-slate-100 p-3 rounded-full w-14 h-14 flex items-center justify-center mb-2">
-                                <Anchor className="h-6 w-6 text-slate-700" />
+                        <CardHeader className="text-center pb-2 pt-8">
+                            <div className="mx-auto bg-blue-500/10 p-4 rounded-2xl w-16 h-16 flex items-center justify-center mb-4 border border-blue-500/20 shadow-[0_0_20px_rgba(37,99,235,0.2)]">
+                                <Anchor className="h-8 w-8 text-blue-400" />
                             </div>
-                             <CardTitle className="text-2xl text-slate-900">Admin Portal</CardTitle>
-                             <CardDescription>Enter your Admin Credentials securely.</CardDescription>
+                             <CardTitle className="text-3xl font-bold text-white tracking-tight">Admin Portal</CardTitle>
+                             <CardDescription className="text-slate-400">Enter your Admin Credentials securely.</CardDescription>
                          </CardHeader>
                          {!isSupabaseConfigured && (
                              <div className="mx-6 p-4 bg-red-50 border border-red-100 rounded-xl flex flex-col gap-2 animate-pulse">
@@ -152,20 +152,20 @@ export function LoginForm() {
                              </div>
                          )}
                          <form onSubmit={handleLogin}>
-                            <CardContent className="space-y-5 pt-4">
-                                <div className="space-y-2">
-                                    <Label htmlFor="id" className="text-slate-600 font-medium">Admin ID / Email</Label>
+                             <CardContent className="space-y-6 pt-6">
+                                <div className="space-y-3">
+                                    <Label htmlFor="id" className="text-slate-300 font-medium">Admin ID / Email</Label>
                                     <Input
                                         id="id"
                                         placeholder="ADMIN-001 or admin@fishtory.com"
                                         value={id}
                                         onChange={(e) => setId(e.target.value)}
                                         required
-                                        className="focus-visible:ring-blue-500"
+                                        className="bg-slate-950/50 border-slate-800 text-white placeholder:text-slate-600 focus-visible:ring-blue-500 h-12 rounded-xl"
                                     />
                                 </div>
-                                <div className="space-y-2">
-                                    <Label htmlFor="password" className="text-slate-600 font-medium">Password</Label>
+                                <div className="space-y-3">
+                                    <Label htmlFor="password" className="text-slate-300 font-medium">Password</Label>
                                     <Input
                                         id="password"
                                         type="password"
@@ -173,12 +173,12 @@ export function LoginForm() {
                                         value={password}
                                         onChange={(e) => setPassword(e.target.value)}
                                         required
-                                        className="focus-visible:ring-blue-500"
+                                        className="bg-slate-950/50 border-slate-800 text-white placeholder:text-slate-600 focus-visible:ring-blue-500 h-12 rounded-xl"
                                     />
                                 </div>
                             </CardContent>
-                            <CardFooter className="pb-6 pt-2">
-                                <Button type="submit" className="w-full bg-slate-800 hover:bg-slate-900 text-white text-md h-11 transition-all" disabled={loading}>
+                            <CardFooter className="pb-8 pt-4">
+                                <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-500 text-white text-md h-12 transition-all rounded-xl shadow-[0_0_15px_rgba(37,99,235,0.3)] hover:shadow-[0_0_25px_rgba(37,99,235,0.5)]" disabled={loading}>
                                     {loading ? "Authenticating..." : "Login as Admin"}
                                 </Button>
                             </CardFooter>
@@ -187,12 +187,12 @@ export function LoginForm() {
                 ) : (
                     // Fisherman: Login only (Public Registration is disabled per role-based security guidelines)
                     <>
-                        <CardHeader className="text-center pb-0">
-                            <div className="mx-auto bg-blue-50 outline outline-1 outline-blue-100 p-3 rounded-full w-14 h-14 flex items-center justify-center mb-3">
-                                <Anchor className="h-6 w-6 text-blue-600" />
+                        <CardHeader className="text-center pb-2 pt-8">
+                            <div className="mx-auto bg-blue-500/10 p-4 rounded-2xl w-16 h-16 flex items-center justify-center mb-4 border border-blue-500/20 shadow-[0_0_20px_rgba(37,99,235,0.2)]">
+                                <Anchor className="h-8 w-8 text-blue-400" />
                             </div>
-                            <CardTitle className="text-2xl font-bold tracking-tight text-blue-900">Fishtory Portal</CardTitle>
-                            <CardDescription className="mb-4">Welcome back to the registry.</CardDescription>
+                            <CardTitle className="text-3xl font-bold tracking-tight text-white">Fishtory Portal</CardTitle>
+                            <CardDescription className="mb-4 text-slate-400">Welcome back to the registry.</CardDescription>
                             {!isSupabaseConfigured && (
                                 <div className="mb-4 p-4 bg-red-50 border border-red-100 rounded-xl flex flex-col gap-2 animate-pulse text-left">
                                     <div className="flex items-center gap-2 text-red-700 font-bold text-sm">
@@ -215,20 +215,20 @@ export function LoginForm() {
                         </CardHeader>
 
                         <form onSubmit={handleLogin}>
-                            <CardContent className="space-y-4 pt-6 pb-2">
-                                <div className="space-y-2">
-                                    <Label htmlFor="id" className="text-slate-600 font-medium">Email Address / Fisherman ID</Label>
+                            <CardContent className="space-y-6 pt-6 pb-2">
+                                <div className="space-y-3">
+                                    <Label htmlFor="id" className="text-slate-300 font-medium">Email Address / Fisherman ID</Label>
                                     <Input
                                         id="id"
                                         placeholder="juan@email.com or FM-YYYY-NNNN"
                                         value={id}
                                         onChange={(e) => setId(e.target.value)}
                                         required
-                                        className="focus-visible:ring-blue-500 h-11"
+                                        className="bg-slate-950/50 border-slate-800 text-white placeholder:text-slate-600 focus-visible:ring-blue-500 h-12 rounded-xl"
                                     />
                                 </div>
-                                <div className="space-y-2">
-                                    <Label htmlFor="password" className="text-slate-600 font-medium">Password</Label>
+                                <div className="space-y-3">
+                                    <Label htmlFor="password" className="text-slate-300 font-medium">Password</Label>
                                     <Input
                                         id="password"
                                         type="password"
@@ -236,12 +236,12 @@ export function LoginForm() {
                                         value={password}
                                         onChange={(e) => setPassword(e.target.value)}
                                         required
-                                        className="focus-visible:ring-blue-500 h-11"
+                                        className="bg-slate-950/50 border-slate-800 text-white placeholder:text-slate-600 focus-visible:ring-blue-500 h-12 rounded-xl"
                                     />
                                 </div>
                             </CardContent>
-                            <CardFooter className="pb-8 pt-4">
-                                <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-md h-11 shadow-md shadow-blue-200 transition-all" disabled={loading}>
+                            <CardFooter className="pb-8 pt-6">
+                                <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-500 text-white text-md h-12 rounded-xl shadow-[0_0_15px_rgba(37,99,235,0.3)] hover:shadow-[0_0_25px_rgba(37,99,235,0.5)] transition-all" disabled={loading}>
                                     {loading ? "Authenticating..." : "Sign In"}
                                 </Button>
                             </CardFooter>

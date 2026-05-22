@@ -21,16 +21,10 @@ export function StaffLoginForm() {
         setLoading(true)
 
         try {
-            const parsedId = String(id).trim()
-            let loginEmail = parsedId
-
-            if (parsedId.includes('@')) {
-                loginEmail = parsedId
-            } else if (parsedId.toLowerCase().startsWith('staff')) {
-                loginEmail = `${parsedId.toLowerCase().replace(/[^a-z0-9]/g, '')}@domain.com`
-            }
-
             const { supabase } = await import('@/lib/supabase')
+
+            // Staff login uses email directly, just like fisherman login
+            const loginEmail = String(id).trim()
 
             const { data, error } = await supabase.auth.signInWithPassword({
                 email: loginEmail,
@@ -67,13 +61,13 @@ export function StaffLoginForm() {
     }
 
     return (
-        <Card className="w-full max-w-md mx-auto shadow-xl rounded-xl border-slate-200">
-            <CardHeader className="text-center pb-2">
-                <div className="mx-auto bg-green-100 p-3 rounded-full w-14 h-14 flex items-center justify-center mb-2">
-                    <Users className="h-6 w-6 text-green-700" />
+        <Card className="w-full max-w-md mx-auto bg-slate-900/60 backdrop-blur-xl shadow-2xl rounded-2xl border-slate-800/50 ring-1 ring-white/5 overflow-hidden">
+            <CardHeader className="text-center pb-2 pt-8">
+                <div className="mx-auto bg-emerald-500/10 p-4 rounded-2xl w-16 h-16 flex items-center justify-center mb-4 border border-emerald-500/20 shadow-[0_0_20px_rgba(16,185,129,0.2)]">
+                    <Users className="h-8 w-8 text-emerald-400" />
                 </div>
-                <CardTitle className="text-2xl text-green-900">Staff Portal</CardTitle>
-                <CardDescription>Enter your Staff Code securely.</CardDescription>
+                <CardTitle className="text-3xl font-bold tracking-tight text-white">Staff Portal</CardTitle>
+                <CardDescription className="text-slate-400">Enter your Staff Code securely.</CardDescription>
             </CardHeader>
             
             {!isSupabaseConfigured && (
@@ -97,20 +91,21 @@ export function StaffLoginForm() {
             )}
             
             <form onSubmit={handleLogin}>
-                <CardContent className="space-y-5 pt-4">
-                    <div className="space-y-2">
-                        <Label htmlFor="id" className="text-slate-600 font-medium">Staff Code / Email</Label>
+                <CardContent className="space-y-6 pt-6 pb-2">
+                    <div className="space-y-3">
+                        <Label htmlFor="id" className="text-slate-300 font-medium">Email Address</Label>
                         <Input
                             id="id"
-                            placeholder="STAFF-01 or staff01@app.com"
+                            type="email"
+                            placeholder="your.email@office.gov"
                             value={id}
                             onChange={(e) => setId(e.target.value)}
                             required
-                            className="focus-visible:ring-green-500"
+                            className="bg-slate-950/50 border-slate-800 text-white placeholder:text-slate-600 focus-visible:ring-emerald-500 h-12 rounded-xl"
                         />
                     </div>
-                    <div className="space-y-2">
-                        <Label htmlFor="password" className="text-slate-600 font-medium">Password</Label>
+                    <div className="space-y-3">
+                        <Label htmlFor="password" className="text-slate-300 font-medium">Password</Label>
                         <Input
                             id="password"
                             type="password"
@@ -118,16 +113,16 @@ export function StaffLoginForm() {
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             required
-                            className="focus-visible:ring-green-500"
+                            className="bg-slate-950/50 border-slate-800 text-white placeholder:text-slate-600 focus-visible:ring-emerald-500 h-12 rounded-xl"
                         />
                     </div>
                 </CardContent>
-                <CardFooter className="pb-6 pt-2 flex flex-col gap-3">
-                    <Button type="submit" className="w-full bg-green-700 hover:bg-green-800 text-md h-11 transition-all flex items-center gap-2" disabled={loading}>
-                        <ShieldCheck className="h-4 w-4" />
+                <CardFooter className="pb-8 pt-6 flex flex-col gap-4">
+                    <Button type="submit" className="w-full bg-emerald-600 hover:bg-emerald-500 text-white text-md h-12 rounded-xl shadow-[0_0_15px_rgba(16,185,129,0.3)] hover:shadow-[0_0_25px_rgba(16,185,129,0.5)] transition-all flex items-center justify-center gap-2" disabled={loading}>
+                        <ShieldCheck className="h-5 w-5" />
                         {loading ? "Authenticating..." : "Login to System"}
                     </Button>
-                    <p className="text-xs text-slate-400 text-center">
+                    <p className="text-xs text-slate-500 text-center font-medium uppercase tracking-widest">
                         Authorized Personnel Only
                     </p>
                 </CardFooter>

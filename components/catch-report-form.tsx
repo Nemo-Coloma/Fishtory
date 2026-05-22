@@ -22,18 +22,47 @@ interface CatchReportFormProps {
   onSubmit?: () => void
 }
 
+interface FishSpecies {
+  id: string
+  name_en: string
+  name_tl?: string
+}
+
+interface ProcessingMethod {
+  id: string
+  name_en: string
+  name_tl?: string
+}
+
+interface LandingCenter {
+  id: string
+  name: string
+  location?: string
+}
+
 export function CatchReportForm({ user, onSubmit }: CatchReportFormProps) {
   const [mode, setMode] = useState<ReportMode>('manual')
   const [isOnline, setIsOnline] = useState(true)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [pendingCount, setPendingCount] = useState(0)
   
-  // Form state
-  const [species, setSpecies] = useState("")
+  // Form state - store IDs for database integrity
+  const [speciesId, setSpeciesId] = useState("")
   const [weight, setWeight] = useState("")
-  const [processingMethod, setProcessingMethod] = useState("")
-  const [location, setLocation] = useState("")
+  const [processingMethodId, setProcessingMethodId] = useState("")
+  const [locationId, setLocationId] = useState("")
   const [date, setDate] = useState(new Date().toISOString().split('T')[0])
+  
+  // Helper to get display names from IDs
+  const getSpeciesName = (id: string) => fishSpecies.find(f => f.id === id)?.name_en || ''
+  const getProcessingMethodName = (id: string) => processingMethods.find(m => m.id === id)?.name_en || ''
+  const getLocationName = (id: string) => landingCenters.find(c => c.id === id)?.name || ''
+  
+  // Data from database
+  const [fishSpecies, setFishSpecies] = useState<FishSpecies[]>([])
+  const [processingMethods, setProcessingMethods] = useState<ProcessingMethod[]>([])
+  const [landingCenters, setLandingCenters] = useState<LandingCenter[]>([])
+  const [loadingData, setLoadingData] = useState(true)
 
   // Voice recognition
   const {
@@ -54,6 +83,35 @@ export function CatchReportForm({ user, onSubmit }: CatchReportFormProps) {
       toast.error("Speech Recognition Error", { description: error })
     }
   })
+
+  // Fetch lookup data from database
+  useEffect(() => {
+    async function fetchLookupData() {
+      try {
+        const [speciesRes, methodsRes, locationsRes] = await Promise.all([
+          supabase.from('fish_species').select('id, name_en, name_tl').order('name_en'),
+          supabase.from('processing_methods').select('id, name_en, name_tl').order('name_en'),
+          supabase.from('landing_centers').select('id, name, location').order('name')
+        ])
+
+        if (!speciesRes.error && speciesRes.data) {
+          setFishSpecies(speciesRes.data)
+        }
+        if (!methodsRes.error && methodsRes.data) {
+          setProcessingMethods(methodsRes.data)
+        }
+        if (!locationsRes.error && locationsRes.data) {
+          setLandingCenters(locationsRes.data)
+        }
+      } catch (error) {
+        console.error('Error fetching lookup data:', error)
+      } finally {
+        setLoadingData(false)
+      }
+    }
+
+    fetchLookupData()
+  }, [])
 
   // Detect online/offline status
   useEffect(() => {
@@ -91,10 +149,20 @@ export function CatchReportForm({ user, onSubmit }: CatchReportFormProps) {
     // Parse the transcript and auto-fill form
     const parsed = parseTranscript(text)
     
-    if (parsed.species) setSpecies(parsed.species)
+    // Convert text to IDs for database integrity
+    if (parsed.species) {
+      const species = fishSpecies.find(f => f.name_en.toLowerCase() === parsed.species!.toLowerCase() || f.name_tl?.toLowerCase() === parsed.species!.toLowerCase())
+      if (species) setSpeciesId(species.id)
+    }
     if (parsed.weight) setWeight(parsed.weight)
-    if (parsed.processingMethod) setProcessingMethod(parsed.processingMethod)
-    if (parsed.location) setLocation(parsed.location)
+    if (parsed.processingMethod) {
+      const method = processingMethods.find(m => m.name_en.toLowerCase() === parsed.processingMethod!.toLowerCase() || m.name_tl?.toLowerCase() === parsed.processingMethod!.toLowerCase())
+      if (method) setProcessingMethodId(method.id)
+    }
+    if (parsed.location) {
+      const center = landingCenters.find(c => c.name.toLowerCase() === parsed.location!.toLowerCase())
+      if (center) setLocationId(center.id)
+    }
     
     toast.success("Voice Processed", {
       description: formatParsedData(parsed)
@@ -118,7 +186,7 @@ export function CatchReportForm({ user, onSubmit }: CatchReportFormProps) {
       description: "You must be logged in to submit a report."
     })
     
-    if (!species || !weight || !processingMethod || !location) {
+    if (!speciesId || !weight || !processingMethodId || !locationId) {
       return toast.error("Missing Information", {
         description: "Please fill in all required fields."
       })
@@ -130,7 +198,7 @@ export function CatchReportForm({ user, onSubmit }: CatchReportFormProps) {
     const boatName = user.user_metadata?.boat_name || 'Unknown'
 
     if (isOnline) {
-      // Submit directly to Supabase
+      // Submit directly to Supabase with IDs for data integrity
       const { error } = await supabase
         .from('reports')
         .insert([
@@ -138,10 +206,10 @@ export function CatchReportForm({ user, onSubmit }: CatchReportFormProps) {
             fisherman_id: fishermanId,
             user_id: user.id,
             boat_name: boatName,
-            species,
+            species_id: speciesId,
             weight_kg: Number(weight),
-            processing_method: processingMethod,
-            location,
+            processing_method_id: processingMethodId,
+            location_id: locationId,
             status: 'pending',
             created_at: date
           }
@@ -157,16 +225,20 @@ export function CatchReportForm({ user, onSubmit }: CatchReportFormProps) {
         onSubmit?.()
       }
     } else {
-      // Offline: Save to IndexedDB
+      // Offline: Save to IndexedDB with IDs
       try {
+        // Store both IDs and names for offline use
         await savePendingReport({
           fisherman_id: fishermanId,
           user_id: user.id,
           boat_name: boatName,
-          species,
+          species: getSpeciesName(speciesId),
           weight_kg: Number(weight),
-          processing_method: processingMethod,
-          location,
+          processing_method: getProcessingMethodName(processingMethodId),
+          location: getLocationName(locationId),
+          species_id: speciesId,
+          processing_method_id: processingMethodId,
+          location_id: locationId,
           transcript: transcript || undefined
         })
         
@@ -195,10 +267,10 @@ export function CatchReportForm({ user, onSubmit }: CatchReportFormProps) {
   }
 
   const resetForm = () => {
-    setSpecies("")
+    setSpeciesId("")
     setWeight("")
-    setProcessingMethod("")
-    setLocation("")
+    setProcessingMethodId("")
+    setLocationId("")
     setDate(new Date().toISOString().split('T')[0])
     resetTranscript()
   }
@@ -246,84 +318,88 @@ export function CatchReportForm({ user, onSubmit }: CatchReportFormProps) {
 
           {/* Manual Entry Mode */}
           <TabsContent value="manual" className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="species">Species *</Label>
-                <Select value={species} onValueChange={setSpecies}>
-                  <SelectTrigger id="species">
-                    <SelectValue placeholder="Select species" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="bangus">Bangus (Milkfish)</SelectItem>
-                    <SelectItem value="tilapia">Tilapia</SelectItem>
-                    <SelectItem value="lapu-lapu">Lapu-lapu (Grouper)</SelectItem>
-                    <SelectItem value="dilis">Dilis (Anchovies)</SelectItem>
-                    <SelectItem value="sardinas">Sardinas (Sardines)</SelectItem>
-                    <SelectItem value="tuna">Tuna</SelectItem>
-                    <SelectItem value="taba">Taba (Bigeye)</SelectItem>
-                    <SelectItem value="bariles">Bariles (Trevally)</SelectItem>
-                  </SelectContent>
-                </Select>
+            {loadingData ? (
+              <div className="flex items-center justify-center py-8">
+                <Loader2 className="h-6 w-6 animate-spin text-blue-500" />
+                <span className="ml-2 text-sm text-slate-500">Loading options...</span>
               </div>
+            ) : (
+              <>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="species">Species *</Label>
+                    <Select value={speciesId} onValueChange={setSpeciesId}>
+                      <SelectTrigger id="species">
+                        <SelectValue placeholder="Select species" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {fishSpecies.map((fish) => (
+                          <SelectItem key={fish.id} value={fish.id}>
+                            {fish.name_en}{fish.name_tl ? ` (${fish.name_tl})` : ''}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="weight">Weight (kg) *</Label>
-                <Input
-                  id="weight"
-                  type="number"
-                  step="0.1"
-                  placeholder="e.g., 5.5"
-                  value={weight}
-                  onChange={(e) => setWeight(e.target.value)}
-                />
-              </div>
-            </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="weight">Weight (kg) *</Label>
+                    <Input
+                      id="weight"
+                      type="number"
+                      step="0.1"
+                      placeholder="e.g., 5.5"
+                      value={weight}
+                      onChange={(e) => setWeight(e.target.value)}
+                    />
+                  </div>
+                </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="processing">Processing Method *</Label>
-                <Select value={processingMethod} onValueChange={setProcessingMethod}>
-                  <SelectTrigger id="processing">
-                    <SelectValue placeholder="Select method" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="fresh">Fresh (Sariwa)</SelectItem>
-                    <SelectItem value="smoked">Smoked (Tinapa)</SelectItem>
-                    <SelectItem value="dried">Dried (Tuyo)</SelectItem>
-                    <SelectItem value="salted">Salted (Daing)</SelectItem>
-                    <SelectItem value="canned">Canned (Sardinas)</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="processing">Processing Method *</Label>
+                    <Select value={processingMethodId} onValueChange={setProcessingMethodId}>
+                      <SelectTrigger id="processing">
+                        <SelectValue placeholder="Select method" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {processingMethods.map((method) => (
+                          <SelectItem key={method.id} value={method.id}>
+                            {method.name_en}{method.name_tl ? ` (${method.name_tl})` : ''}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="location">Location *</Label>
-                <Select value={location} onValueChange={setLocation}>
-                  <SelectTrigger id="location">
-                    <SelectValue placeholder="Select location" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="banicain">Banicain</SelectItem>
-                    <SelectItem value="barretto">Barretto</SelectItem>
-                    <SelectItem value="kalaklan">Kalaklan</SelectItem>
-                    <SelectItem value="olongapo">Olongapo City</SelectItem>
-                    <SelectItem value="subic">Subic</SelectItem>
-                    <SelectItem value="mariveles">Mariveles</SelectItem>
-                    <SelectItem value="bataan">Bataan</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="location">Location *</Label>
+                    <Select value={locationId} onValueChange={setLocationId}>
+                      <SelectTrigger id="location">
+                        <SelectValue placeholder="Select location" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {landingCenters.map((center) => (
+                          <SelectItem key={center.id} value={center.id}>
+                            {center.name}{center.location ? ` - ${center.location}` : ''}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="date">Date *</Label>
-              <Input
-                id="date"
-                type="date"
-                value={date}
-                onChange={(e) => setDate(e.target.value)}
-              />
-            </div>
+                <div className="space-y-2">
+                  <Label htmlFor="date">Date *</Label>
+                  <Input
+                    id="date"
+                    type="date"
+                    value={date}
+                    onChange={(e) => setDate(e.target.value)}
+                  />
+                </div>
+              </>
+            )}
           </TabsContent>
 
           {/* Voice Assistant Mode */}

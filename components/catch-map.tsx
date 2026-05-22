@@ -123,24 +123,24 @@ export default function CatchMap({ reports }: { reports: Report[] }) {
                 </div>
             </div>
 
-            <div className="flex flex-wrap gap-2 sm:gap-3 items-center">
-                <span className="text-xs sm:text-sm font-medium text-slate-500 w-full sm:w-auto">Quick Jump:</span>
+            <div className="flex flex-wrap gap-2 sm:gap-3 items-center bg-slate-900/40 p-4 rounded-xl border border-slate-800/50">
+                <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest w-full sm:w-auto px-2">Quick Jump:</span>
                 {Object.entries(JUMP_COORDS).map(([name, coords]) => (
                     <Button 
                         key={name} 
                         variant="outline" 
                         size="sm"
-                        className="flex gap-1.5 sm:gap-2 text-xs sm:text-sm"
+                        className="flex gap-1.5 sm:gap-2 text-xs font-bold border-slate-700 bg-slate-950/50 text-slate-300 hover:bg-slate-800 hover:text-blue-400 rounded-lg transition-all"
                         onClick={() => setMapTarget(coords)}
                     >
-                        <MapPin className="h-3 w-3 sm:h-4 sm:w-4" />
+                        <MapPin className="h-3.5 w-3.5 text-blue-500" />
                         {name}
                     </Button>
                 ))}
                 <Button 
                     variant="ghost" 
                     size="sm"
-                    className="text-xs sm:text-sm"
+                    className="text-xs font-bold text-slate-500 hover:text-white hover:bg-white/5 ml-auto"
                     onClick={() => setMapTarget({ lat: 14.84, lng: 120.27, zoom: 13 })}
                 >
                     Reset View

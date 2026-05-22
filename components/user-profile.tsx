@@ -17,6 +17,12 @@ import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { UserCircle, Save, Loader2, CheckCircle2 } from "lucide-react"
 
+interface LandingCenter {
+  id: string
+  name: string
+  location?: string
+}
+
 export function UserProfile() {
   const [loading, setLoading] = useState(false)
   const [saved, setSaved] = useState(false)
@@ -36,10 +42,15 @@ export function UserProfile() {
   const [boatName, setBoatName] = useState("")
   const [contactNumber, setContactNumber] = useState("")
   const [location, setLocation] = useState("")
+  
+  // Data from database
+  const [landingCenters, setLandingCenters] = useState<LandingCenter[]>([])
+  const [loadingData, setLoadingData] = useState(false)
 
   useEffect(() => {
     if (!isOpen) return
     setSaved(false)
+    setLoadingData(true)
 
     async function loadProfile() {
       const { data: { user } } = await supabase.auth.getUser()
@@ -71,6 +82,18 @@ export function UserProfile() {
           setLocation(profileRow.location || "")
         }
       }
+      
+      // Fetch landing centers for location dropdown
+      const { data: locationsData } = await supabase
+        .from('landing_centers')
+        .select('id, name, location')
+        .order('name')
+
+      if (locationsData) {
+        setLandingCenters(locationsData)
+      }
+      
+      setLoadingData(false)
     }
 
     loadProfile()
@@ -139,10 +162,10 @@ export function UserProfile() {
         <Button
           variant="ghost"
           size="icon"
-          className="rounded-full hover:bg-blue-100 transition-colors"
+          className="rounded-full hover:bg-slate-800 transition-colors bg-blue-600/10 border border-blue-500/20"
           title="Edit Profile"
         >
-          <UserCircle className="h-8 w-8 text-blue-900" />
+          <UserCircle className="h-6 w-6 text-blue-400" />
         </Button>
       </DialogTrigger>
 
@@ -249,16 +272,25 @@ export function UserProfile() {
               <Label htmlFor="location" className="text-sm font-medium">
                 Barangay / Location
               </Label>
-              <Select value={location} onValueChange={setLocation}>
-                <SelectTrigger id="location">
-                  <SelectValue placeholder="Select barangay" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Banicain">Banicain</SelectItem>
-                  <SelectItem value="Barretto">Barretto</SelectItem>
-                  <SelectItem value="Kalaklan">Kalaklan</SelectItem>
-                </SelectContent>
-              </Select>
+              {loadingData ? (
+                <div className="flex items-center gap-2">
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  <span className="text-xs text-slate-500">Loading...</span>
+                </div>
+              ) : (
+                <Select value={location} onValueChange={setLocation}>
+                  <SelectTrigger id="location">
+                    <SelectValue placeholder="Select barangay" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {landingCenters.map((center) => (
+                      <SelectItem key={center.id} value={center.name}>
+                        {center.name}{center.location ? ` - ${center.location}` : ''}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )}
             </div>
           )}
         </div>

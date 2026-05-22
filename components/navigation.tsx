@@ -1,8 +1,9 @@
 "use client"
 
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { cn } from "@/lib/utils"
+import { supabase } from "@/lib/supabase"
 
 export function Navigation() {
     const pathname = usePathname()
@@ -10,6 +11,13 @@ export function Navigation() {
     if (pathname === "/" || pathname === "/login") return null
 
     const isFisherman = pathname.startsWith("/dashboard")
+
+    const router = useRouter()
+
+    const handleLogout = async () => {
+        await supabase.auth.signOut()
+        router.push("/")
+    }
 
     return (
         <div className="border-b">
@@ -21,9 +29,9 @@ export function Navigation() {
                     <div className="text-sm font-medium">
                         {isFisherman ? "Fisherman Portal" : "Agricultural Office"}
                     </div>
-                    <Link href="/login" className="text-sm text-muted-foreground hover:text-primary">
+                    <button onClick={handleLogout} className="text-sm text-muted-foreground hover:text-red-600 transition-colors">
                         Logout
-                    </Link>
+                    </button>
                 </div>
             </div>
         </div>
