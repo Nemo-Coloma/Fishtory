@@ -1,4 +1,4 @@
-import { createServerClient, type CookieOptions } from '@supabase/ssr'
+import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
 export async function middleware(request: NextRequest) {
@@ -8,61 +8,73 @@ export async function middleware(request: NextRequest) {
     },
   })
 
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        get(name: string) {
-          return request.cookies.get(name)?.value
+  try {
+    const supabase = createServerClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      {
+        cookies: {
+          getAll() {
+            return request.cookies.getAll()
+          },
+          setAll(cookiesToSet) {
+            cookiesToSet.forEach(({ name, value }) =>
+              request.cookies.set(name, value)
+            )
+            response = NextResponse.next({ request })
+            cookiesToSet.forEach(({ name, value, options }) =>
+              response.cookies.set(name, value, options)
+            )
+          },
         },
-        set(name: string, value: string, options: CookieOptions) {
-          request.cookies.set({ name, value, ...options })
-          response.cookies.set({ name, value, ...options })
-        },
-        remove(name: string, options: CookieOptions) {
-          request.cookies.set({ name, value: '', ...options })
-          response.cookies.set({ name, value: '', ...options })
-        },
-      },
-    }
-  )
-
-  const { data: { user } } = await supabase.auth.getUser()
-
-  const isGet = request.method === 'GET'
-  const isServerAction = request.headers.has('next-action')
-
-  if (isGet && !isServerAction) {
-    const role = user?.user_metadata?.role
-
-    // Protect /staff/* — only 'staff' role allowed
-    if (request.nextUrl.pathname.startsWith('/staff') && !request.nextUrl.pathname.startsWith('/staff/login')) {
-      if (!user) {
-        return NextResponse.redirect(new URL('/staff/login', request.url))
       }
-      if (role !== 'staff') {
-        // Redirect admins to their portal, fishermen back to login
+    )
+
+    const { data: { user } } = await supabase.auth.getUser()
+
+    const isGet = request.method === 'GET'
+    const isServerAction = request.headers.has('next-action')
+
+    if (isGet && !isServerAction) {
+      const role = user?.user_metadata?.role
+
+      // Protect /staff/* — only 'staff' role allowed
+      if (
+        request.nextUrl.pathname.startsWith('/staff') &&
+        !request.nextUrl.pathname.startsWith('/staff/login')
+      ) {
+        if (!user) {
+          return NextResponse.redirect(new URL('/staff/login', request.url))
+        }
+        if (role !== 'staff') {
+          if (role === 'admin') return NextResponse.redirect(new URL('/admin', request.url))
+          return NextResponse.redirect(new URL('/staff/login', request.url))
+        }
+      }
+
+      // Protect /admin — only 'admin' role allowed
+      if (request.nextUrl.pathname.startsWith('/admin')) {
+        if (!user || role !== 'admin') {
+          return NextResponse.redirect(new URL('/login?role=admin', request.url))
+        }
+      }
+
+      // Protect /dashboard and /complete-profile — fishermen only
+      if (
+        request.nextUrl.pathname.startsWith('/dashboard') ||
+        request.nextUrl.pathname.startsWith('/complete-profile')
+      ) {
+        if (!user) {
+          return NextResponse.redirect(new URL('/login', request.url))
+        }
         if (role === 'admin') return NextResponse.redirect(new URL('/admin', request.url))
-        return NextResponse.redirect(new URL('/staff/login', request.url))
+        if (role === 'staff') return NextResponse.redirect(new URL('/staff/dashboard', request.url))
       }
     }
-
-    // Protect /admin/* — only 'admin' role allowed
-    if (request.nextUrl.pathname.startsWith('/admin')) {
-      if (!user || role !== 'admin') {
-        return NextResponse.redirect(new URL('/login?role=admin', request.url))
-      }
-    }
-
-    // Protect /dashboard — only 'fisherman' role allowed
-    if (request.nextUrl.pathname.startsWith('/dashboard') || request.nextUrl.pathname.startsWith('/complete-profile')) {
-      if (!user) {
-        return NextResponse.redirect(new URL('/login', request.url))
-      }
-      if (role === 'admin') return NextResponse.redirect(new URL('/admin', request.url))
-      if (role === 'staff') return NextResponse.redirect(new URL('/staff/dashboard', request.url))
-    }
+  } catch (error) {
+    // If Supabase auth fails (e.g. network issue), let the request through
+    // rather than crashing with MIDDLEWARE_INVOCATION_FAILED
+    console.error('[middleware] auth error:', error)
   }
 
   return response
