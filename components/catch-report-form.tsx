@@ -52,6 +52,7 @@ export function CatchReportForm({ user, onSubmit }: CatchReportFormProps) {
   const [processingMethodId, setProcessingMethodId] = useState("")
   const [locationId, setLocationId] = useState("")
   const [date, setDate] = useState(new Date().toISOString().split('T')[0])
+  const [catchStatus, setCatchStatus] = useState("")
   
   // Helper to get display names from IDs
   const getSpeciesName = (id: string) => fishSpecies.find(f => f.id === id)?.name_en || ''
@@ -186,7 +187,7 @@ export function CatchReportForm({ user, onSubmit }: CatchReportFormProps) {
       description: "You must be logged in to submit a report."
     })
     
-    if (!speciesId || !weight || !processingMethodId || !locationId) {
+    if (!speciesId || !weight || !processingMethodId || !locationId || !catchStatus) {
       return toast.error("Missing Information", {
         description: "Please fill in all required fields."
       })
@@ -206,10 +207,11 @@ export function CatchReportForm({ user, onSubmit }: CatchReportFormProps) {
             fisherman_id: fishermanId,
             user_id: user.id,
             boat_name: boatName,
-            species_id: speciesId,
+            species: getSpeciesName(speciesId),
             weight_kg: Number(weight),
-            processing_method_id: processingMethodId,
-            location_id: locationId,
+            processing_method: getProcessingMethodName(processingMethodId),
+            location: getLocationName(locationId),
+            catch_status: catchStatus,
             status: 'pending',
             created_at: date
           }
@@ -239,6 +241,7 @@ export function CatchReportForm({ user, onSubmit }: CatchReportFormProps) {
           species_id: speciesId,
           processing_method_id: processingMethodId,
           location_id: locationId,
+          catch_status: catchStatus,
           transcript: transcript || undefined
         })
         
@@ -272,6 +275,7 @@ export function CatchReportForm({ user, onSubmit }: CatchReportFormProps) {
     setProcessingMethodId("")
     setLocationId("")
     setDate(new Date().toISOString().split('T')[0])
+    setCatchStatus("")
     resetTranscript()
   }
 
@@ -389,14 +393,31 @@ export function CatchReportForm({ user, onSubmit }: CatchReportFormProps) {
                   </div>
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="date">Date *</Label>
-                  <Input
-                    id="date"
-                    type="date"
-                    value={date}
-                    onChange={(e) => setDate(e.target.value)}
-                  />
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="date">Date *</Label>
+                    <Input
+                      id="date"
+                      type="date"
+                      value={date}
+                      onChange={(e) => setDate(e.target.value)}
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="catch-status">Catch Status *</Label>
+                    <Select value={catchStatus || undefined} onValueChange={setCatchStatus}>
+                      <SelectTrigger id="catch-status">
+                        <SelectValue placeholder="Select status" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="SOLD">SOLD</SelectItem>
+                        <SelectItem value="PARTIAL SOLD">PARTIAL SOLD</SelectItem>
+                        <SelectItem value="CONSUMED">CONSUMED</SelectItem>
+                        <SelectItem value="NOT MARKETABLE">NOT MARKETABLE</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
                 </div>
               </>
             )}

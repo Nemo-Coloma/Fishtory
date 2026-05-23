@@ -97,6 +97,7 @@ async function seedSocioEconomicProfiles() {
     const welfares = ['Good', 'Struggling', 'Struggling', 'Good', 'Good', 'Struggling', 'Good', 'Struggling'];
 
     const profiles = FISHERMEN.map((f, i) => ({
+        user_id: f.user_id,
         fisherman_id: f.fisherman_id,
         location: f.location,
         age: Math.floor(Math.random() * 30) + 25,
@@ -124,7 +125,7 @@ async function seedSocioEconomicProfiles() {
     }));
 
     for (const p of profiles) {
-        const { error } = await supabase.from('fishermen_profiles').upsert(p, { onConflict: 'fisherman_id' });
+        const { error } = await supabase.from('fishermen_profiles').upsert(p, { onConflict: 'user_id' });
         if (error) {
             console.error(`  ❌ Error for profile ${p.fisherman_id}:`, error.message);
         } else {

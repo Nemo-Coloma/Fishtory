@@ -41,6 +41,7 @@ import { Checkbox } from "./ui/checkbox"
 import { Textarea } from "@/components/ui/textarea"
 
 interface ProfileRecord {
+    user_id: string;
     fisherman_id: string;
     first_name: string;
     last_name: string;
@@ -70,6 +71,27 @@ interface ProfileRecord {
     subsidy_requirements?: string;
 }
 
+// Field labels for display
+const FIELD_LABELS = {
+    education_attainment: {
+        "Elementary": "Elementary",
+        "High School": "High School",
+        "College Graduate": "College Graduate",
+        "Vocational": "Vocational",
+        "No Formal Education": "No Formal Education"
+    },
+    gender: {
+        "male": "Male",
+        "female": "Female",
+        "other": "Other"
+    },
+    boat_ownership_status: {
+        "Owned": "Owned",
+        "Rented": "Rented",
+        "Shared": "Shared"
+    }
+};
+
 export function SocioEconomicExcelView() {
     const [loading, setLoading] = useState(true)
     const [data, setData] = useState<ProfileRecord[]>([])
@@ -85,7 +107,7 @@ export function SocioEconomicExcelView() {
         setLoading(true)
         try {
             const [regRes, profRes] = await Promise.all([
-                supabase.from('fisherman_registration').select('fisherman_id, first_name, last_name, location'),
+                supabase.from('fisherman_registration').select('user_id, fisherman_id, first_name, last_name, location'),
                 supabase.from('fishermen_profiles').select('*')
             ])
 
@@ -115,11 +137,34 @@ export function SocioEconomicExcelView() {
         try {
             const { name, first_name, last_name, ...profileToSave } = editingProfile as any
             
-            const { error } = await supabase
-                .from('fishermen_profiles')
-                .upsert(profileToSave, { onConflict: 'fisherman_id' })
+            console.log("Saving profile:", profileToSave);
 
-            if (error) throw error
+            // Check if profile exists
+            const { data: existing } = await supabase
+                .from('fishermen_profiles')
+                .select('id')
+                .eq('user_id', profileToSave.user_id)
+                .single();
+
+            let saveError;
+
+            if (existing) {
+                // Update existing
+                const { error } = await supabase
+                    .from('fishermen_profiles')
+                    .update(profileToSave)
+                    .eq('user_id', profileToSave.user_id);
+                saveError = error;
+            } else {
+                // Insert new with generated ID since schema lacks default
+                profileToSave.id = crypto.randomUUID();
+                const { error } = await supabase
+                    .from('fishermen_profiles')
+                    .insert([profileToSave]);
+                saveError = error;
+            }
+
+            if (saveError) throw saveError;
 
             toast.success("Profile updated successfully")
             setEditingProfile(null)

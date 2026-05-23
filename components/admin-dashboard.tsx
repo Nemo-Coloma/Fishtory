@@ -108,7 +108,8 @@ export function AdminDashboard() {
     const [socioEconomicData, setSocioEconomicData] = useState<any[]>([])
     const [loading, setLoading] = useState(true)
     const [user, setUser] = useState<any>(null)
-    const [fishermenMap, setFishermenMap] = useState<Record<string, { first_name: string, last_name: string }>>({})
+    const [fishermenMap, setFishermenMap] = useState<Record<string, { first_name: string, last_name: string }>>({})    
+    const [fishermenByIdMap, setFishermenByIdMap] = useState<Record<string, any>>({})
     const [staffCounts, setStaffCounts] = useState<{ id: string, name: string, fullName: string, email: string, count: number }[]>([])
     const [isGeneratingStaffReport, setIsGeneratingStaffReport] = useState(false)
     
@@ -182,7 +183,7 @@ export function AdminDashboard() {
             supabase.from('fish_species').select('id, name_en, name_tl'),
             supabase.from('processing_methods').select('id, name_en, name_tl'),
             supabase.from('landing_centers').select('id, name, location'),
-            supabase.from('fisherman_registration').select('id, fisherman_id, first_name, last_name, boat_name, user_id, location, phone_number, total_boats_operated, total_crew, created_at').order('first_name')
+            supabase.from('fisherman_registration').select('id, fisherman_id, first_name, last_name, boat_name, user_id, location, phone_number, total_boats_operated, total_crew, lean_daily_avg_catch, peak_daily_avg_catch, created_at').order('first_name')
         ])
 
         // Process lookup data for display
@@ -216,6 +217,13 @@ export function AdminDashboard() {
         // Process fishermen registry
         if (!registryRes.error && registryRes.data) {
             setFishermenRegistry(registryRes.data)
+            // Build a map keyed by fisherman_id string for quick report lookups
+            const byId: Record<string, any> = {}
+            registryRes.data.forEach((f: any) => {
+                if (f.fisherman_id) byId[f.fisherman_id] = f
+                if (f.user_id) byId[f.user_id] = f
+            })
+            setFishermenByIdMap(byId)
         }
         setLoadingRegistry(false)
 
@@ -324,9 +332,18 @@ export function AdminDashboard() {
     }
 
     const handleUpdateStatus = async (reportId: string, newStatus: string) => {
+        const adminName = user?.user_metadata?.first_name
+            ? `${user.user_metadata.first_name} ${user.user_metadata.last_name || ''}`.trim()
+            : (user?.email || 'Admin')
+
+        const updatePayload: any = { status: newStatus }
+        if (newStatus === 'approved') {
+            updatePayload.approved_by_name = adminName
+        }
+
         const { error } = await supabase
             .from('reports')
-            .update({ status: newStatus })
+            .update(updatePayload)
             .eq('id', reportId)
 
         if (error) {
@@ -337,7 +354,7 @@ export function AdminDashboard() {
             toast.success(`Report ${newStatus} successfully`)
             setReports((current) =>
                 current.map((report) =>
-                    report.id === reportId ? { ...report, status: newStatus } : report
+                    report.id === reportId ? { ...report, status: newStatus, approved_by_name: updatePayload.approved_by_name } : report
                 )
             )
         }
@@ -850,62 +867,100 @@ export function AdminDashboard() {
                                     <Table>
                                         <TableHeader className="bg-slate-950/50 border-b border-slate-800">
                                             <TableRow className="hover:bg-transparent border-slate-800">
-                                                <TableHead className="px-8 h-14 text-slate-400 font-bold uppercase tracking-wider text-[10px] cursor-pointer hover:text-white transition-colors" onClick={() => toggleSort('created_at')}>
+                                                <TableHead className="px-6 h-14 text-slate-400 font-bold uppercase tracking-wider text-[10px] cursor-pointer hover:text-white transition-colors" onClick={() => toggleSort('created_at')}>
                                                     <div className="flex items-center gap-2">Date {sortConfig.key === 'created_at' && (sortConfig.direction === 'asc' ? '↑' : '↓')}</div>
                                                 </TableHead>
-                                                <TableHead className="px-8 h-14 text-slate-400 font-bold uppercase tracking-wider text-[10px] cursor-pointer hover:text-white transition-colors" onClick={() => toggleSort('fisherman')}>
+                                                <TableHead className="px-6 h-14 text-slate-400 font-bold uppercase tracking-wider text-[10px] cursor-pointer hover:text-white transition-colors" onClick={() => toggleSort('fisherman')}>
                                                     <div className="flex items-center gap-2">Fisherman {sortConfig.key === 'fisherman' && (sortConfig.direction === 'asc' ? '↑' : '↓')}</div>
                                                 </TableHead>
-                                                <TableHead className="px-8 h-14 text-slate-400 font-bold uppercase tracking-wider text-[10px] cursor-pointer hover:text-white transition-colors" onClick={() => toggleSort('species')}>
+                                                <TableHead className="px-6 h-14 text-slate-400 font-bold uppercase tracking-wider text-[10px]">Phone</TableHead>
+                                                <TableHead className="px-6 h-14 text-slate-400 font-bold uppercase tracking-wider text-[10px]">Boat</TableHead>
+                                                <TableHead className="px-6 h-14 text-slate-400 font-bold uppercase tracking-wider text-[10px]">Boats / Crew</TableHead>
+                                                <TableHead className="px-6 h-14 text-slate-400 font-bold uppercase tracking-wider text-[10px] cursor-pointer hover:text-white transition-colors" onClick={() => toggleSort('species')}>
                                                     <div className="flex items-center gap-2">Species {sortConfig.key === 'species' && (sortConfig.direction === 'asc' ? '↑' : '↓')}</div>
                                                 </TableHead>
-                                                <TableHead className="px-8 h-14 text-slate-400 font-bold uppercase tracking-wider text-[10px] cursor-pointer hover:text-white transition-colors" onClick={() => toggleSort('weight_kg')}>
+                                                <TableHead className="px-6 h-14 text-slate-400 font-bold uppercase tracking-wider text-[10px] cursor-pointer hover:text-white transition-colors" onClick={() => toggleSort('weight_kg')}>
                                                     <div className="flex items-center gap-2">Weight {sortConfig.key === 'weight_kg' && (sortConfig.direction === 'asc' ? '↑' : '↓')}</div>
                                                 </TableHead>
-                                                <TableHead className="px-8 h-14 text-slate-400 font-bold uppercase tracking-wider text-[10px]">Status</TableHead>
-                                                <TableHead className="px-8 h-14 text-slate-400 font-bold uppercase tracking-wider text-[10px]">Action</TableHead>
+                                                <TableHead className="px-6 h-14 text-slate-400 font-bold uppercase tracking-wider text-[10px]">Lean / Peak Catch</TableHead>
+                                                <TableHead className="px-6 h-14 text-slate-400 font-bold uppercase tracking-wider text-[10px]">Status</TableHead>
+                                                <TableHead className="px-6 h-14 text-slate-400 font-bold uppercase tracking-wider text-[10px]">Action</TableHead>
                                             </TableRow>
                                         </TableHeader>
                                         <TableBody>
                                             {loading ? (
                                                 <TableRow><TableCell colSpan={6} className="text-center py-20 text-slate-500 italic">Synchronizing reports...</TableCell></TableRow>
                                             ) : sortedAndFilteredReports.length === 0 ? (
-                                                <TableRow><TableCell colSpan={6} className="text-center py-20 text-slate-500">No records found matching your filters.</TableCell></TableRow>
+                                                <TableRow><TableCell colSpan={10} className="text-center py-20 text-slate-500">No records found matching your filters.</TableCell></TableRow>
                                             ) : (
-                                                sortedAndFilteredReports.map((report) => (
+                                                sortedAndFilteredReports.map((report) => {
+                                                    const reg = fishermenByIdMap[report.fisherman_id] || fishermenByIdMap[report.user_id] || null
+                                                    return (
                                                     <TableRow key={report.id} className="border-slate-800/50 group hover:bg-slate-800/30 transition-all">
-                                                        <TableCell className="px-8 py-5 text-sm font-medium text-slate-400">
+                                                        <TableCell className="px-6 py-4 text-sm font-medium text-slate-400 whitespace-nowrap">
                                                             {new Date(report.created_at).toLocaleDateString()}
                                                         </TableCell>
-                                                        <TableCell className="px-8 py-5 font-bold text-white">
-                                                            {fishermenMap[report.user_id]
-                                                                ? `${fishermenMap[report.user_id].last_name}, ${fishermenMap[report.user_id].first_name}`
-                                                                : report.fisherman_id || '—'}
+                                                        <TableCell className="px-6 py-4">
+                                                            <div className="font-bold text-white">
+                                                                {reg ? `${reg.first_name} ${reg.last_name}` : (report.fisherman_id || '—')}
+                                                            </div>
+                                                            <div className="text-[10px] text-slate-500 font-mono mt-0.5">{report.fisherman_id}</div>
                                                         </TableCell>
-                                                         <TableCell className="px-8 py-5 capitalize text-slate-300 font-semibold">
-                                                             {report.species_id 
-                                                                 ? (fishSpeciesMap[report.species_id] || report.species || '—')
-                                                                 : (report.species || '—')}
-                                                         </TableCell>
-                                                        <TableCell className="px-8 py-5">
+                                                        <TableCell className="px-6 py-4 text-slate-300 text-sm whitespace-nowrap">
+                                                            {reg?.phone_number || '—'}
+                                                        </TableCell>
+                                                        <TableCell className="px-6 py-4">
+                                                            <div className="font-semibold text-slate-200">{reg?.boat_name || report.boat_name || '—'}</div>
+                                                        </TableCell>
+                                                        <TableCell className="px-6 py-4 text-center">
+                                                            <div className="flex flex-col items-center gap-0.5">
+                                                                <span className="font-black text-blue-400 text-sm">{reg?.total_boats_operated ?? '—'}</span>
+                                                                <span className="text-[9px] text-slate-600 font-bold uppercase">boats</span>
+                                                                <span className="font-black text-cyan-400 text-sm">{reg?.total_crew ?? '—'}</span>
+                                                                <span className="text-[9px] text-slate-600 font-bold uppercase">crew</span>
+                                                            </div>
+                                                        </TableCell>
+                                                        <TableCell className="px-6 py-4 capitalize text-slate-300 font-semibold">
+                                                            {report.species_id
+                                                                ? (fishSpeciesMap[report.species_id] || report.species || '—')
+                                                                : (report.species || '—')}
+                                                        </TableCell>
+                                                        <TableCell className="px-6 py-4">
                                                             <span className="font-black text-blue-400">{report.weight_kg}</span>
                                                             <span className="text-[10px] ml-1 font-bold opacity-40">KG</span>
                                                         </TableCell>
-                                                        <TableCell className="px-8 py-5">
-                                                            <span className={cn(
-                                                                "inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider",
-                                                                report.status === 'approved' ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20" :
-                                                                    report.status === 'rejected' ? "bg-rose-500/10 text-rose-400 border border-rose-500/20" :
-                                                                        "bg-amber-500/10 text-amber-400 border border-amber-500/20"
-                                                            )}>
-                                                                <div className={cn("h-1.5 w-1.5 rounded-full",
-                                                                    report.status === 'approved' ? "bg-emerald-400" :
-                                                                        report.status === 'rejected' ? "bg-rose-400" : "bg-amber-400 animate-pulse"
-                                                                )} />
-                                                                {report.status}
-                                                            </span>
+                                                        <TableCell className="px-6 py-4">
+                                                            <div className="flex flex-col gap-0.5">
+                                                                <div className="flex items-center gap-1">
+                                                                    <span className="text-[9px] text-slate-500 font-bold uppercase w-9">Lean</span>
+                                                                    <span className="font-black text-amber-400 text-sm">{reg?.lean_daily_avg_catch != null ? `${reg.lean_daily_avg_catch} kg` : '—'}</span>
+                                                                </div>
+                                                                <div className="flex items-center gap-1">
+                                                                    <span className="text-[9px] text-slate-500 font-bold uppercase w-9">Peak</span>
+                                                                    <span className="font-black text-emerald-400 text-sm">{reg?.peak_daily_avg_catch != null ? `${reg.peak_daily_avg_catch} kg` : '—'}</span>
+                                                                </div>
+                                                            </div>
                                                         </TableCell>
-                                                        <TableCell className="px-8 py-5">
+                                                        <TableCell className="px-6 py-4">
+                                                            <div className="flex flex-col gap-1">
+                                                                <span className={cn(
+                                                                    "inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider w-fit",
+                                                                    report.status === 'approved' ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20" :
+                                                                        report.status === 'rejected' ? "bg-rose-500/10 text-rose-400 border border-rose-500/20" :
+                                                                            "bg-amber-500/10 text-amber-400 border border-amber-500/20"
+                                                                )}>
+                                                                    <div className={cn("h-1.5 w-1.5 rounded-full",
+                                                                        report.status === 'approved' ? "bg-emerald-400" :
+                                                                            report.status === 'rejected' ? "bg-rose-400" : "bg-amber-400 animate-pulse"
+                                                                    )} />
+                                                                    {report.status}
+                                                                </span>
+                                                                {report.status === 'approved' && report.approved_by_name && (
+                                                                    <span className="text-[9px] text-slate-500 font-bold pl-1">by {report.approved_by_name}</span>
+                                                                )}
+                                                            </div>
+                                                        </TableCell>
+                                                        <TableCell className="px-6 py-4">
                                                             <div className="flex gap-2">
                                                                 {report.status === 'pending' && (
                                                                     <>
@@ -917,7 +972,8 @@ export function AdminDashboard() {
                                                             </div>
                                                         </TableCell>
                                                     </TableRow>
-                                                ))
+                                                    )
+                                                })
                                             )}
                                         </TableBody>
                                     </Table>

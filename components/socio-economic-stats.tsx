@@ -6,8 +6,101 @@ import { supabase } from "@/lib/supabase"
 import { Users, BookOpen, Home, Fish, Anchor, BarChart3, MapPin, Loader2 } from "lucide-react"
 
 export function SocioEconomicStats() {
-    const [loading, setLoading] = useState(true)
-    const [data, setData] = useState<any>(null)
+
+    
+    // ✅ STATES GO HERE
+        const [loading, setLoading] = useState(true)
+        const [data, setData] = useState<any>(null)
+
+        // ✅ FORM STATE
+        const [form, setForm] = useState({
+            user_id: "",
+            location: "",
+            education_attainment: "",
+            dependency_ratio: "",
+            boat_type_motorized: false
+        })
+
+        // ✅ SAVING STATE
+        const [saving, setSaving] = useState(false)
+
+        // ✅ HANDLE INPUT CHANGES
+        const handleChange = (
+            e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+        ) => {
+            const { name, value } = e.target
+
+            setForm(prev => ({
+                ...prev,
+                [name]: value
+            }))
+        }
+
+        // ✅ HANDLE CHECKBOX
+        const handleCheckbox = (
+            e: React.ChangeEvent<HTMLInputElement>
+        ) => {
+            setForm(prev => ({
+                ...prev,
+                boat_type_motorized: e.target.checked
+            }))
+        }
+
+        // ✅ SAVE FUNCTION
+        const handleSave = async () => {
+            setSaving(true)
+
+            const {
+                data: { user }
+            } = await supabase.auth.getUser()
+
+            if (!user) {
+                alert("User not logged in")
+                setSaving(false)
+                return
+            }
+
+            const profileData = {
+                user_id: user.id,
+                location: form.location,
+                education_attainment: form.education_attainment,
+                dependency_ratio: Number(form.dependency_ratio),
+                boat_type_motorized: form.boat_type_motorized,
+            };
+
+            const { data: existing } = await supabase
+                .from("fishermen_profiles")
+                .select("id")
+                .eq("user_id", user.id)
+                .single();
+
+            let saveError;
+            if (existing) {
+                const { error } = await supabase
+                    .from("fishermen_profiles")
+                    .update(profileData)
+                    .eq("user_id", user.id);
+                saveError = error;
+            } else {
+                const { error } = await supabase
+                    .from("fishermen_profiles")
+                    .insert([{ ...profileData, id: crypto.randomUUID() }]);
+                saveError = error;
+            }
+
+            setSaving(false)
+
+            if (saveError) {
+                console.error("Save error:", saveError.message)
+                alert(saveError.message)
+                return
+            }
+
+            alert("Profile saved successfully!")
+        }
+
+
+    
 
     useEffect(() => {
         async function fetchSocioEconomicData() {
@@ -28,9 +121,12 @@ export function SocioEconomicStats() {
 
             const topBarangays = Object.entries(barangayCounts)
                 .sort((a, b) => b[1] - a[1])
-                .slice(0, 5)
+                .slice(0, 5)            
 
-            // Compute average dependency ratio from real data
+
+            
+       
+           // Compute average dependency ratio from real data
             const profileData = profiles.data || []
             const validRatios = profileData.filter((p: any) => p.dependency_ratio != null).map((p: any) => Number(p.dependency_ratio))
             const avgDependencyRatio = validRatios.length > 0
@@ -119,7 +215,13 @@ export function SocioEconomicStats() {
                     </div>
                 ))}
             </div>
-
+<button
+    onClick={handleSave}
+    disabled={saving}
+    className="px-4 py-2 bg-blue-600 text-white rounded-lg"
+>
+    {saving ? "Saving..." : "Save to Registry"}
+</button>
             {/* Main Bento Grid */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
                 {/* Registry Heatmap - 7 Columns */}

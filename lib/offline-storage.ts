@@ -17,6 +17,7 @@ export interface PendingCatchReport {
   weight_kg: number
   processing_method: string
   location: string
+  catch_status?: string
   // Database IDs for data integrity
   species_id?: string
   processing_method_id?: string
