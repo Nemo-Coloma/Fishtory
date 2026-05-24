@@ -11,6 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { supabase } from "@/lib/supabase"
 import { DigitalIdCard } from "@/components/digital-id-card"
+import { CatchReportForm } from "@/components/catch-report-form"
 import { VoiceInput } from "@/components/voice-input"
 import { parseTranscript, formatParsedData, getSuggestions, ParsedCatchData } from "@/lib/voice-parser"
 import { savePendingReport } from "@/lib/offline-storage"
@@ -586,137 +587,10 @@ export function FishermanDashboard() {
                     <div className="w-full">
                         {activeTab === "new-report" && (
                             <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-                                <Card className="w-full border-none shadow-2xl rounded-3xl overflow-hidden bg-slate-900/60 backdrop-blur-xl border border-slate-800 ring-1 ring-white/5">
-                                    <CardHeader className="p-4 sm:p-8 border-b border-slate-800/50 bg-gradient-to-r from-blue-900/20 to-transparent">
-                                        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6">
-                                            <div className="space-y-1">
-                                                <CardTitle className="text-2xl font-bold text-white">New Catch Report</CardTitle>
-                                                <CardDescription className="text-slate-400 font-medium opacity-80 uppercase tracking-widest text-[10px]">
-                                                    Fill out the details below
-                                                </CardDescription>
-                                            </div>
-                                        </div>
-                                        <VoiceInput
-                                            onTranscript={handleVoiceTranscript}
-                                            lang="tl-PH"
-                                        />
-                                        {showSuggestions && parsedData && getSuggestions(parsedData).length > 0 && (
-                                            <div className="mt-4 p-4 rounded-2xl bg-amber-50 border border-amber-200">
-                                                <div className="flex items-center gap-2 mb-2 text-amber-700">
-                                                    <span className="text-[10px] font-bold uppercase tracking-wider">Suggestions</span>
-                                                </div>
-                                                <ul className="text-xs text-amber-800 space-y-1">
-                                                    {getSuggestions(parsedData).map((suggestion, idx) => (
-                                                        <li key={idx}>• {suggestion}</li>
-                                                    ))}
-                                                </ul>
-                                                <Button
-                                                    variant="ghost"
-                                                    size="sm"
-                                                    onClick={() => setShowSuggestions(false)}
-                                                    className="mt-2 text-amber-700 hover:text-amber-900"
-                                                >
-                                                    Dismiss
-                                                </Button>
-                                            </div>
-                                        )}
-                                    </CardHeader>
-                                    <CardContent className="p-4 sm:p-8 space-y-6 sm:space-y-8">
-                                        {loadingData ? (
-                                            <div className="flex items-center justify-center py-12">
-                                                <Loader2 className="h-8 w-8 animate-spin text-blue-500" />
-                                                <span className="ml-3 text-slate-400">Loading form data...</span>
-                                            </div>
-                                        ) : (
-                                            <>
-                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-2">
-                                                    <div className="space-y-3">
-                                                        <Label className="text-sm font-bold text-slate-300 uppercase tracking-wide">Fish Species / Uri ng Isda</Label>
-                                                        <Select value={species} onValueChange={setSpecies}>
-                                                            <SelectTrigger className="h-14 rounded-2xl bg-slate-950/50 border-slate-800 focus:ring-4 focus:ring-blue-900 transition-all text-lg font-medium text-white">
-                                                                <SelectValue placeholder="Pumili ng isda" />
-                                                            </SelectTrigger>
-                                                            <SelectContent className="rounded-2xl shadow-2xl border-slate-800 p-2 bg-slate-900 text-slate-100">
-                                                                {fishSpecies.map((fish) => (
-                                                                    <SelectItem key={fish.id} value={fish.name_en.toLowerCase()} className="rounded-xl p-3 focus:bg-slate-800 focus:text-blue-400 cursor-pointer">
-                                                                        {fish.name_en}{fish.name_tl ? ` / ${fish.name_tl}` : ''}
-                                                                    </SelectItem>
-                                                                ))}
-                                                            </SelectContent>
-                                                        </Select>
-                                                    </div>
-
-                                                    <div className="space-y-3">
-                                                        <Label className="text-sm font-bold text-slate-300 uppercase tracking-wide">Location / Lokasyon</Label>
-                                                        <Select value={location} onValueChange={setLocation}>
-                                                            <SelectTrigger className="h-14 rounded-2xl bg-slate-950/50 border-slate-800 focus:ring-4 focus:ring-blue-900 transition-all text-lg font-medium text-white">
-                                                                <SelectValue placeholder="Pumili ng lokasyon" />
-                                                            </SelectTrigger>
-                                                            <SelectContent className="rounded-2xl shadow-2xl border-slate-800 p-2 bg-slate-900 text-slate-100">
-                                                                {landingCenters.map((center) => (
-                                                                    <SelectItem key={center.id} value={center.name} className="rounded-xl p-3 focus:bg-slate-800 focus:text-blue-400 cursor-pointer">
-                                                                        {center.name}{center.location ? ` - ${center.location}` : ''}
-                                                                    </SelectItem>
-                                                                ))}
-                                                            </SelectContent>
-                                                        </Select>
-                                                    </div>
-                                                </div>
-
-                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                                    <div className="space-y-3">
-                                                        <Label className="text-sm font-bold text-slate-300 uppercase tracking-wide">Weight (kg) / Bigat</Label>
-                                                        <div className="relative group">
-                                                            <Input
-                                                                type="number"
-                                                                placeholder="0.0"
-                                                                value={weight}
-                                                                onChange={(e) => setWeight(e.target.value)}
-                                                                className="h-14 rounded-2xl bg-slate-950/50 border-slate-800 focus:ring-4 focus:ring-blue-900 transition-all text-xl font-bold pr-12 text-white placeholder:text-slate-600"
-                                                            />
-                                                            <div className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 font-bold tracking-tighter uppercase">KG</div>
-                                                        </div>
-                                                    </div>
-                                                    <div className="space-y-3">
-                                                        <Label className="text-sm font-bold text-slate-300 uppercase tracking-wide">Processing / Pagproseso</Label>
-                                                        <Select value={processingMethod} onValueChange={setProcessingMethod}>
-                                                            <SelectTrigger className="h-14 rounded-2xl bg-slate-950/50 border-slate-800 focus:ring-4 focus:ring-blue-900 transition-all text-lg font-medium text-white">
-                                                                <SelectValue placeholder="Pumili ng proseso" />
-                                                            </SelectTrigger>
-                                                            <SelectContent className="rounded-2xl shadow-2xl border-slate-800 p-2 bg-slate-900 text-slate-100">
-                                                                {processingMethods.map((method) => (
-                                                                    <SelectItem key={method.id} value={method.name_en.toLowerCase()} className="rounded-xl p-3 focus:bg-slate-800 focus:text-blue-400 cursor-pointer">
-                                                                        {method.name_en}{method.name_tl ? ` / ${method.name_tl}` : ''}
-                                                                    </SelectItem>
-                                                                ))}
-                                                            </SelectContent>
-                                                        </Select>
-                                                    </div>
-                                                </div>
-                                            </>
-                                        )}
-                                    </CardContent>
-                                    <CardFooter className="p-4 sm:p-8 pt-0 flex justify-end">
-                                        <Button
-                                            size="lg"
-                                            className={cn(
-                                                "w-full md:w-auto h-16 px-10 rounded-2xl text-lg font-bold transition-all shadow-lg hover:shadow-2xl hover:scale-[1.02] active:scale-[0.98]",
-                                                "bg-blue-600 hover:bg-blue-700 text-white shadow-blue-200"
-                                            )}
-                                            onClick={handleSubmit}
-                                            disabled={loading}
-                                        >
-                                            {loading ? (
-                                                <div className="flex items-center gap-3">
-                                                    <div className="h-5 w-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                                                    Submitting...
-                                                </div>
-                                            ) : (
-                                                "Submit Report / Ipasa ang Ulat"
-                                            )}
-                                        </Button>
-                                    </CardFooter>
-                                </Card>
+                                <CatchReportForm 
+                                    user={user}
+                                    onSubmit={() => setActiveTab("my-reports")}
+                                />
                             </div>
                         )}
 

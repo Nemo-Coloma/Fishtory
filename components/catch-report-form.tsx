@@ -46,13 +46,16 @@ export function CatchReportForm({ user, onSubmit }: CatchReportFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [pendingCount, setPendingCount] = useState(0)
   
-  // Form state - store IDs for database integrity
   const [speciesId, setSpeciesId] = useState("")
   const [weight, setWeight] = useState("")
   const [processingMethodId, setProcessingMethodId] = useState("")
   const [locationId, setLocationId] = useState("")
   const [date, setDate] = useState(new Date().toISOString().split('T')[0])
-  const [catchStatus, setCatchStatus] = useState("")
+  
+  const [soldKg, setSoldKg] = useState("")
+  const [processedKg, setProcessedKg] = useState("")
+  const [consumedKg, setConsumedKg] = useState("")
+  const [notMarketableKg, setNotMarketableKg] = useState("")
   
   // Helper to get display names from IDs
   const getSpeciesName = (id: string) => fishSpecies.find(f => f.id === id)?.name_en || ''
@@ -187,9 +190,22 @@ export function CatchReportForm({ user, onSubmit }: CatchReportFormProps) {
       description: "You must be logged in to submit a report."
     })
     
-    if (!speciesId || !weight || !processingMethodId || !locationId || !catchStatus) {
+    if (!speciesId || !weight || !processingMethodId || !locationId) {
       return toast.error("Missing Information", {
         description: "Please fill in all required fields."
+      })
+    }
+
+    const soldVal = Number(soldKg) || 0
+    const processedVal = Number(processedKg) || 0
+    const consumedVal = Number(consumedKg) || 0
+    const notMarketableVal = Number(notMarketableKg) || 0
+    const totalBreakdown = soldVal + processedVal + consumedVal + notMarketableVal
+    const totalWeight = Number(weight) || 0
+
+    if (Math.abs(totalWeight - totalBreakdown) > 0.01) {
+      return toast.error("Invalid Catch Breakdown", {
+        description: `The sum of breakdown fields (${totalBreakdown.toFixed(2)} kg) must equal the total weight (${totalWeight.toFixed(2)} kg).`
       })
     }
 
@@ -208,10 +224,13 @@ export function CatchReportForm({ user, onSubmit }: CatchReportFormProps) {
             user_id: user.id,
             boat_name: boatName,
             species: getSpeciesName(speciesId),
-            weight_kg: Number(weight),
+            weight_kg: totalWeight,
             processing_method: getProcessingMethodName(processingMethodId),
             location: getLocationName(locationId),
-            catch_status: catchStatus,
+            sold_kg: soldVal,
+            processed_kg: processedVal,
+            consumed_kg: consumedVal,
+            not_marketable_kg: notMarketableVal,
             status: 'pending',
             created_at: date
           }
@@ -235,13 +254,16 @@ export function CatchReportForm({ user, onSubmit }: CatchReportFormProps) {
           user_id: user.id,
           boat_name: boatName,
           species: getSpeciesName(speciesId),
-          weight_kg: Number(weight),
+          weight_kg: totalWeight,
           processing_method: getProcessingMethodName(processingMethodId),
           location: getLocationName(locationId),
           species_id: speciesId,
           processing_method_id: processingMethodId,
           location_id: locationId,
-          catch_status: catchStatus,
+          sold_kg: soldVal,
+          processed_kg: processedVal,
+          consumed_kg: consumedVal,
+          not_marketable_kg: notMarketableVal,
           transcript: transcript || undefined
         })
         
@@ -275,12 +297,24 @@ export function CatchReportForm({ user, onSubmit }: CatchReportFormProps) {
     setProcessingMethodId("")
     setLocationId("")
     setDate(new Date().toISOString().split('T')[0])
-    setCatchStatus("")
+    setSoldKg("")
+    setProcessedKg("")
+    setConsumedKg("")
+    setNotMarketableKg("")
     resetTranscript()
   }
 
+  const totalWeight = Number(weight) || 0
+  const soldVal = Number(soldKg) || 0
+  const processedVal = Number(processedKg) || 0
+  const consumedVal = Number(consumedKg) || 0
+  const notMarketableVal = Number(notMarketableKg) || 0
+  const totalBreakdown = soldVal + processedVal + consumedVal + notMarketableVal
+  const remainingWeight = totalWeight - totalBreakdown
+  const isRemainingNegative = remainingWeight < 0
+
   return (
-    <Card className="w-full max-w-2xl mx-auto shadow-xl">
+    <Card className="w-full max-w-2xl mx-auto shadow-2xl border-slate-800 bg-slate-900/60 backdrop-blur-xl ring-1 ring-white/5">
       <CardHeader>
         <div className="flex items-center justify-between">
           <div>
@@ -359,6 +393,79 @@ export function CatchReportForm({ user, onSubmit }: CatchReportFormProps) {
                   </div>
                 </div>
 
+                {/* Catch Breakdown Section */}
+                <div className="border border-slate-700 rounded-xl p-4 bg-slate-800/40 space-y-4">
+                  <div className="flex items-center justify-between border-b border-slate-700 pb-2">
+                    <h3 className="font-semibold text-sm text-slate-200">Catch Breakdown (kg)</h3>
+                    <div className="text-xs font-semibold">
+                      Remaining: <span className={cn(
+                        "px-2 py-0.5 rounded font-mono font-bold transition-all duration-300",
+                        isRemainingNegative 
+                          ? "bg-red-100 text-red-600 dark:bg-red-950/40 dark:text-red-400 animate-pulse border border-red-200 dark:border-red-900" 
+                          : "bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300"
+                      )}>{remainingWeight.toFixed(1)} kg</span>
+                    </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div className="space-y-1.5">
+                      <Label htmlFor="sold" className="text-xs font-semibold text-slate-600 dark:text-slate-400">Sold (kg)</Label>
+                      <Input
+                        id="sold"
+                        type="number"
+                        step="0.1"
+                        min="0"
+                        placeholder="0.0"
+                        value={soldKg}
+                        onChange={(e) => setSoldKg(e.target.value)}
+                        className="h-9"
+                      />
+                    </div>
+                    
+                    <div className="space-y-1.5">
+                      <Label htmlFor="processed" className="text-xs font-semibold text-slate-600 dark:text-slate-400">Processed (kg)</Label>
+                      <Input
+                        id="processed"
+                        type="number"
+                        step="0.1"
+                        min="0"
+                        placeholder="0.0"
+                        value={processedKg}
+                        onChange={(e) => setProcessedKg(e.target.value)}
+                        className="h-9"
+                      />
+                    </div>
+                    
+                    <div className="space-y-1.5">
+                      <Label htmlFor="consumed" className="text-xs font-semibold text-slate-600 dark:text-slate-400">Consumed (kg)</Label>
+                      <Input
+                        id="consumed"
+                        type="number"
+                        step="0.1"
+                        min="0"
+                        placeholder="0.0"
+                        value={consumedKg}
+                        onChange={(e) => setConsumedKg(e.target.value)}
+                        className="h-9"
+                      />
+                    </div>
+                    
+                    <div className="space-y-1.5">
+                      <Label htmlFor="notMarketable" className="text-xs font-semibold text-slate-600 dark:text-slate-400">Not Marketable (kg)</Label>
+                      <Input
+                        id="notMarketable"
+                        type="number"
+                        step="0.1"
+                        min="0"
+                        placeholder="0.0"
+                        value={notMarketableKg}
+                        onChange={(e) => setNotMarketableKg(e.target.value)}
+                        className="h-9"
+                      />
+                    </div>
+                  </div>
+                </div>
+
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="processing">Processing Method *</Label>
@@ -402,21 +509,6 @@ export function CatchReportForm({ user, onSubmit }: CatchReportFormProps) {
                       value={date}
                       onChange={(e) => setDate(e.target.value)}
                     />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="catch-status">Catch Status *</Label>
-                    <Select value={catchStatus || undefined} onValueChange={setCatchStatus}>
-                      <SelectTrigger id="catch-status">
-                        <SelectValue placeholder="Select status" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="SOLD">SOLD</SelectItem>
-                        <SelectItem value="PARTIAL SOLD">PARTIAL SOLD</SelectItem>
-                        <SelectItem value="CONSUMED">CONSUMED</SelectItem>
-                        <SelectItem value="NOT MARKETABLE">NOT MARKETABLE</SelectItem>
-                      </SelectContent>
-                    </Select>
                   </div>
                 </div>
               </>
@@ -472,11 +564,11 @@ export function CatchReportForm({ user, onSubmit }: CatchReportFormProps) {
               </Button>
 
               {transcript && (
-                <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
-                  <p className="text-sm text-blue-900 font-medium">
-                    "{transcript}"
+                <div className="p-4 bg-blue-950/40 rounded-lg border border-blue-800/50">
+                  <p className="text-sm text-blue-200 font-medium">
+                    &ldquo;{transcript}&rdquo;
                   </p>
-                  <p className="text-xs text-blue-600 mt-2">
+                  <p className="text-xs text-blue-400 mt-2">
                     ✓ Form auto-filled. Review in Manual tab.
                   </p>
                 </div>

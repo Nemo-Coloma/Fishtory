@@ -155,7 +155,11 @@ class SyncManager {
             processing_method: report.processing_method,
             location: report.location,
             status: 'pending',
-            created_at: report.created_at
+            created_at: report.created_at,
+            sold_kg: report.sold_kg ?? 0,
+            processed_kg: report.processed_kg ?? 0,
+            consumed_kg: report.consumed_kg ?? 0,
+            not_marketable_kg: report.not_marketable_kg ?? 0
           })
 
           if (error) {

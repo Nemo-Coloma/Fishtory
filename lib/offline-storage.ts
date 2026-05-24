@@ -27,6 +27,11 @@ export interface PendingCatchReport {
   sync_status: 'pending' | 'syncing' | 'failed'
   sync_attempts: number
   last_sync_attempt?: string
+  // Breakdown fields
+  sold_kg?: number
+  processed_kg?: number
+  consumed_kg?: number
+  not_marketable_kg?: number
 }
 
 /**

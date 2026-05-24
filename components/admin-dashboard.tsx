@@ -108,17 +108,17 @@ export function AdminDashboard() {
     const [socioEconomicData, setSocioEconomicData] = useState<any[]>([])
     const [loading, setLoading] = useState(true)
     const [user, setUser] = useState<any>(null)
-    const [fishermenMap, setFishermenMap] = useState<Record<string, { first_name: string, last_name: string }>>({})    
+    const [fishermenMap, setFishermenMap] = useState<Record<string, { first_name: string, last_name: string }>>({})
     const [fishermenByIdMap, setFishermenByIdMap] = useState<Record<string, any>>({})
     const [staffCounts, setStaffCounts] = useState<{ id: string, name: string, fullName: string, email: string, count: number }[]>([])
     const [isGeneratingStaffReport, setIsGeneratingStaffReport] = useState(false)
-    
+
     // Lookup data from database for display
     const [fishSpeciesMap, setFishSpeciesMap] = useState<Record<string, string>>({})
     const [processingMethodsMap, setProcessingMethodsMap] = useState<Record<string, string>>({})
     const [landingCentersMap, setLandingCentersMap] = useState<Record<string, string>>({})
     const [loadingLookups, setLoadingLookups] = useState(true)
-    
+
     // Fisherman Registration state (integrated from staff portal)
     const [fishermanForm, setFishermanForm] = useState({
         firstName: "",
@@ -133,7 +133,7 @@ export function AdminDashboard() {
     })
     const [createdFishermanCreds, setCreatedFishermanCreds] = useState<{ email: string; pass: string; id: string } | null>(null)
     const [creatingFisherman, setCreatingFisherman] = useState(false)
-    
+
     // Fisherman Registry search state
     const [fishermenRegistry, setFishermenRegistry] = useState<any[]>([])
     const [registrySearchQuery, setRegistrySearchQuery] = useState("")
@@ -173,7 +173,7 @@ export function AdminDashboard() {
 
     const fetchReports = async () => {
         setLoading(true)
-        
+
         // Fetch all data in parallel
         const [reportsRes, profilesRes, staffRes, socioRes, speciesRes, methodsRes, locationsRes, registryRes] = await Promise.all([
             supabase.from('reports').select('*').order('created_at', { ascending: false }),
@@ -190,28 +190,28 @@ export function AdminDashboard() {
         const speciesMap: Record<string, string> = {}
         const methodsMap: Record<string, string> = {}
         const locationsMap: Record<string, string> = {}
-        
+
         if (!speciesRes.error && speciesRes.data) {
             speciesRes.data.forEach((s: any) => {
                 speciesMap[s.id] = `${s.name_en}${s.name_tl ? ` (${s.name_tl})` : ''}`
             })
             setFishSpeciesMap(speciesMap)
         }
-        
+
         if (!methodsRes.error && methodsRes.data) {
             methodsRes.data.forEach((m: any) => {
                 methodsMap[m.id] = `${m.name_en}${m.name_tl ? ` (${m.name_tl})` : ''}`
             })
             setProcessingMethodsMap(methodsMap)
         }
-        
+
         if (!locationsRes.error && locationsRes.data) {
             locationsRes.data.forEach((l: any) => {
                 locationsMap[l.id] = `${l.name}${l.location ? ` - ${l.location}` : ''}`
             })
             setLandingCentersMap(locationsMap)
         }
-        
+
         setLoadingLookups(false)
 
         // Process fishermen registry
@@ -446,17 +446,96 @@ export function AdminDashboard() {
     const sortedAndFilteredReports = useMemo(() => {
         let filtered = [...reports]
 
-        // 1. Search Query (Species, Boat, or Fisherman Name)
+        // 1. Search Query (Species, Boat, Fisherman Name, Date)
         if (reportSearchQuery) {
             const q = reportSearchQuery.toLowerCase()
+
             filtered = filtered.filter(report => {
-                const fisherman = fishermenMap[report.user_id]
-                const fullName = fisherman ? `${fisherman.first_name} ${fisherman.last_name}`.toLowerCase() : ""
+                // Look up fisherman by user_id (from fisherman_registration profiles)
+                const fishermanByUser = fishermenMap[report.user_id]
+                // Also look up by fisherman_id string OR user_id from the registry (fishermenByIdMap)
+                const reg = fishermenByIdMap[report.fisherman_id] || fishermenByIdMap[report.user_id]
+
+                // Build full name from whichever source has data
+                const fullName = fishermanByUser
+                    ? `${fishermanByUser.first_name} ${fishermanByUser.last_name}`.toLowerCase()
+                    : reg
+                    ? `${reg.first_name} ${reg.last_name}`.toLowerCase()
+                    : ""
+
+                // Registry boat name (more accurate than report.boat_name which may be stale)
+                const registryBoatName = reg?.boat_name?.toLowerCase() ?? ""
+                const registryLocation = reg?.location?.toLowerCase() ?? ""
+
+                // Use LOCAL date (not UTC) so searching "2026-05-24" matches what the UI shows
+                const reportDate = report.created_at
+                    ? new Date(report.created_at)
+                    : null
+
+                // Build LOCAL date parts to avoid UTC timezone shift
+                const localYear  = reportDate ? reportDate.getFullYear() : null
+                const localMonth = reportDate ? reportDate.getMonth() + 1 : null   // 1-based
+                const localDay   = reportDate ? reportDate.getDate() : null
+
+                // YYYY-MM-DD (local)
+                const localISODate = localYear
+                    ? `${localYear}-${String(localMonth).padStart(2, '0')}-${String(localDay).padStart(2, '0')}`
+                    : ""
+
+                // "Mon May 24 2026" style (local)
+                const readableDate = reportDate
+                    ? reportDate.toDateString().toLowerCase()
+                    : ""
+
+                // "May 24, 2026" style
+                const longDate = reportDate
+                    ? reportDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }).toLowerCase()
+                    : ""
+
+                // Month name only: "may"
+                const monthName = reportDate
+                    ? reportDate.toLocaleDateString('en-US', { month: 'long' }).toLowerCase()
+                    : ""
+
+                // "May 2026" style
+                const monthYear = reportDate
+                    ? reportDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' }).toLowerCase()
+                    : ""
+
+                // DD/MM/YYYY (local) — common Philippine date format
+                const ddmmyyyy = localYear
+                    ? `${String(localDay).padStart(2, '0')}/${String(localMonth).padStart(2, '0')}/${localYear}`
+                    : ""
+
+                // MM/DD/YYYY (local)
+                const mmddyyyy = localYear
+                    ? `${String(localMonth).padStart(2, '0')}/${String(localDay).padStart(2, '0')}/${localYear}`
+                    : ""
+
+                // Check if query looks like DD/MM/YYYY and convert to YYYY-MM-DD for comparison
+                const ddmmyyyyMatch = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/.exec(q)
+                const ddmmyyyyISO = ddmmyyyyMatch
+                    ? `${ddmmyyyyMatch[3]}-${ddmmyyyyMatch[2].padStart(2, '0')}-${ddmmyyyyMatch[1].padStart(2, '0')}`
+                    : null
+
                 return (
                     report.species?.toLowerCase().includes(q) ||
                     report.boat_name?.toLowerCase().includes(q) ||
+                    registryBoatName.includes(q) ||
                     fullName.includes(q) ||
-                    report.fisherman_id?.toLowerCase().includes(q)
+                    report.fisherman_id?.toLowerCase().includes(q) ||
+                    registryLocation.includes(q) ||
+                    // Date matches — all local-timezone based
+                    localISODate.includes(q) ||          // "2026-05-24" or partial "2026-05"
+                    readableDate.includes(q) ||           // "mon may 24 2026"
+                    longDate.includes(q) ||               // "may 24, 2026"
+                    monthName.includes(q) ||              // "may"
+                    monthYear.includes(q) ||              // "may 2026"
+                    ddmmyyyy.includes(q) ||               // "24/05/2026"
+                    mmddyyyy.includes(q) ||               // "05/24/2026"
+                    String(localYear).includes(q) ||      // "2026"
+                    // DD/MM/YYYY exact format converted and compared
+                    (ddmmyyyyISO !== null && localISODate === ddmmyyyyISO)
                 )
             })
         }
@@ -489,7 +568,7 @@ export function AdminDashboard() {
         })
 
         return filtered
-    }, [reports, reportSearchQuery, monthFilter, sortConfig, fishermenMap])
+    }, [reports, reportSearchQuery, monthFilter, sortConfig, fishermenMap, fishermenByIdMap])
 
     const toggleSort = (key: string) => {
         setSortConfig(current => ({
@@ -689,7 +768,7 @@ export function AdminDashboard() {
 
             {/* Mobile Backdrop */}
             {isMobileMenuOpen && (
-                <div 
+                <div
                     className="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-40 lg:hidden"
                     onClick={() => setIsMobileMenuOpen(false)}
                 />
@@ -709,7 +788,7 @@ export function AdminDashboard() {
             </div>
 
             {/* --- MAIN CONTENT --- */}
-            <main 
+            <main
                 className={cn(
                     "flex-1 overflow-y-auto pt-24 lg:pt-0 relative z-10 transition-all duration-300",
                     isSidebarCollapsed ? "lg:ml-20" : "lg:ml-80"
@@ -896,82 +975,82 @@ export function AdminDashboard() {
                                                 sortedAndFilteredReports.map((report) => {
                                                     const reg = fishermenByIdMap[report.fisherman_id] || fishermenByIdMap[report.user_id] || null
                                                     return (
-                                                    <TableRow key={report.id} className="border-slate-800/50 group hover:bg-slate-800/30 transition-all">
-                                                        <TableCell className="px-6 py-4 text-sm font-medium text-slate-400 whitespace-nowrap">
-                                                            {new Date(report.created_at).toLocaleDateString()}
-                                                        </TableCell>
-                                                        <TableCell className="px-6 py-4">
-                                                            <div className="font-bold text-white">
-                                                                {reg ? `${reg.first_name} ${reg.last_name}` : (report.fisherman_id || '—')}
-                                                            </div>
-                                                            <div className="text-[10px] text-slate-500 font-mono mt-0.5">{report.fisherman_id}</div>
-                                                        </TableCell>
-                                                        <TableCell className="px-6 py-4 text-slate-300 text-sm whitespace-nowrap">
-                                                            {reg?.phone_number || '—'}
-                                                        </TableCell>
-                                                        <TableCell className="px-6 py-4">
-                                                            <div className="font-semibold text-slate-200">{reg?.boat_name || report.boat_name || '—'}</div>
-                                                        </TableCell>
-                                                        <TableCell className="px-6 py-4 text-center">
-                                                            <div className="flex flex-col items-center gap-0.5">
-                                                                <span className="font-black text-blue-400 text-sm">{reg?.total_boats_operated ?? '—'}</span>
-                                                                <span className="text-[9px] text-slate-600 font-bold uppercase">boats</span>
-                                                                <span className="font-black text-cyan-400 text-sm">{reg?.total_crew ?? '—'}</span>
-                                                                <span className="text-[9px] text-slate-600 font-bold uppercase">crew</span>
-                                                            </div>
-                                                        </TableCell>
-                                                        <TableCell className="px-6 py-4 capitalize text-slate-300 font-semibold">
-                                                            {report.species_id
-                                                                ? (fishSpeciesMap[report.species_id] || report.species || '—')
-                                                                : (report.species || '—')}
-                                                        </TableCell>
-                                                        <TableCell className="px-6 py-4">
-                                                            <span className="font-black text-blue-400">{report.weight_kg}</span>
-                                                            <span className="text-[10px] ml-1 font-bold opacity-40">KG</span>
-                                                        </TableCell>
-                                                        <TableCell className="px-6 py-4">
-                                                            <div className="flex flex-col gap-0.5">
-                                                                <div className="flex items-center gap-1">
-                                                                    <span className="text-[9px] text-slate-500 font-bold uppercase w-9">Lean</span>
-                                                                    <span className="font-black text-amber-400 text-sm">{reg?.lean_daily_avg_catch != null ? `${reg.lean_daily_avg_catch} kg` : '—'}</span>
+                                                        <TableRow key={report.id} className="border-slate-800/50 group hover:bg-slate-800/30 transition-all">
+                                                            <TableCell className="px-6 py-4 text-sm font-medium text-slate-400 whitespace-nowrap">
+                                                                {new Date(report.created_at).toLocaleDateString()}
+                                                            </TableCell>
+                                                            <TableCell className="px-6 py-4">
+                                                                <div className="font-bold text-white">
+                                                                    {reg ? `${reg.first_name} ${reg.last_name}` : (report.fisherman_id || '—')}
                                                                 </div>
-                                                                <div className="flex items-center gap-1">
-                                                                    <span className="text-[9px] text-slate-500 font-bold uppercase w-9">Peak</span>
-                                                                    <span className="font-black text-emerald-400 text-sm">{reg?.peak_daily_avg_catch != null ? `${reg.peak_daily_avg_catch} kg` : '—'}</span>
+                                                                <div className="text-[10px] text-slate-500 font-mono mt-0.5">{report.fisherman_id}</div>
+                                                            </TableCell>
+                                                            <TableCell className="px-6 py-4 text-slate-300 text-sm whitespace-nowrap">
+                                                                {reg?.phone_number || '—'}
+                                                            </TableCell>
+                                                            <TableCell className="px-6 py-4">
+                                                                <div className="font-semibold text-slate-200">{reg?.boat_name || report.boat_name || '—'}</div>
+                                                            </TableCell>
+                                                            <TableCell className="px-6 py-4 text-center">
+                                                                <div className="flex flex-col items-center gap-0.5">
+                                                                    <span className="font-black text-blue-400 text-sm">{reg?.total_boats_operated ?? '—'}</span>
+                                                                    <span className="text-[9px] text-slate-600 font-bold uppercase">boats</span>
+                                                                    <span className="font-black text-cyan-400 text-sm">{reg?.total_crew ?? '—'}</span>
+                                                                    <span className="text-[9px] text-slate-600 font-bold uppercase">crew</span>
                                                                 </div>
-                                                            </div>
-                                                        </TableCell>
-                                                        <TableCell className="px-6 py-4">
-                                                            <div className="flex flex-col gap-1">
-                                                                <span className={cn(
-                                                                    "inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider w-fit",
-                                                                    report.status === 'approved' ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20" :
-                                                                        report.status === 'rejected' ? "bg-rose-500/10 text-rose-400 border border-rose-500/20" :
-                                                                            "bg-amber-500/10 text-amber-400 border border-amber-500/20"
-                                                                )}>
-                                                                    <div className={cn("h-1.5 w-1.5 rounded-full",
-                                                                        report.status === 'approved' ? "bg-emerald-400" :
-                                                                            report.status === 'rejected' ? "bg-rose-400" : "bg-amber-400 animate-pulse"
-                                                                    )} />
-                                                                    {report.status}
-                                                                </span>
-                                                                {report.status === 'approved' && report.approved_by_name && (
-                                                                    <span className="text-[9px] text-slate-500 font-bold pl-1">by {report.approved_by_name}</span>
-                                                                )}
-                                                            </div>
-                                                        </TableCell>
-                                                        <TableCell className="px-6 py-4">
-                                                            <div className="flex gap-2">
-                                                                {report.status === 'pending' && (
-                                                                    <>
-                                                                        <Button size="sm" className="bg-blue-600 hover:bg-blue-500 h-8 font-bold px-4 rounded-lg" onClick={() => handleUpdateStatus(report.id, 'approved')}>Approve</Button>
-                                                                        <Button size="sm" variant="ghost" className="h-8 text-rose-400 hover:bg-rose-500/10 font-bold px-4 rounded-lg" onClick={() => handleUpdateStatus(report.id, 'rejected')}>Reject</Button>
-                                                                    </>
-                                                                )}
-                                                                <Button size="sm" variant="ghost" className="h-8 w-8 p-0 text-slate-500 hover:text-rose-500" onClick={() => setReportToDelete(report.id)}><Trash2 className="h-4 w-4" /></Button>
-                                                            </div>
-                                                        </TableCell>
-                                                    </TableRow>
+                                                            </TableCell>
+                                                            <TableCell className="px-6 py-4 capitalize text-slate-300 font-semibold">
+                                                                {report.species_id
+                                                                    ? (fishSpeciesMap[report.species_id] || report.species || '—')
+                                                                    : (report.species || '—')}
+                                                            </TableCell>
+                                                            <TableCell className="px-6 py-4">
+                                                                <span className="font-black text-blue-400">{report.weight_kg}</span>
+                                                                <span className="text-[10px] ml-1 font-bold opacity-40">KG</span>
+                                                            </TableCell>
+                                                            <TableCell className="px-6 py-4">
+                                                                <div className="flex flex-col gap-0.5">
+                                                                    <div className="flex items-center gap-1">
+                                                                        <span className="text-[9px] text-slate-500 font-bold uppercase w-9">Lean</span>
+                                                                        <span className="font-black text-amber-400 text-sm">{reg?.lean_daily_avg_catch != null ? `${reg.lean_daily_avg_catch} kg` : '—'}</span>
+                                                                    </div>
+                                                                    <div className="flex items-center gap-1">
+                                                                        <span className="text-[9px] text-slate-500 font-bold uppercase w-9">Peak</span>
+                                                                        <span className="font-black text-emerald-400 text-sm">{reg?.peak_daily_avg_catch != null ? `${reg.peak_daily_avg_catch} kg` : '—'}</span>
+                                                                    </div>
+                                                                </div>
+                                                            </TableCell>
+                                                            <TableCell className="px-6 py-4">
+                                                                <div className="flex flex-col gap-1">
+                                                                    <span className={cn(
+                                                                        "inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider w-fit",
+                                                                        report.status === 'approved' ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20" :
+                                                                            report.status === 'rejected' ? "bg-rose-500/10 text-rose-400 border border-rose-500/20" :
+                                                                                "bg-amber-500/10 text-amber-400 border border-amber-500/20"
+                                                                    )}>
+                                                                        <div className={cn("h-1.5 w-1.5 rounded-full",
+                                                                            report.status === 'approved' ? "bg-emerald-400" :
+                                                                                report.status === 'rejected' ? "bg-rose-400" : "bg-amber-400 animate-pulse"
+                                                                        )} />
+                                                                        {report.status}
+                                                                    </span>
+                                                                    {report.status === 'approved' && report.approved_by_name && (
+                                                                        <span className="text-[9px] text-slate-500 font-bold pl-1">by {report.approved_by_name}</span>
+                                                                    )}
+                                                                </div>
+                                                            </TableCell>
+                                                            <TableCell className="px-6 py-4">
+                                                                <div className="flex gap-2">
+                                                                    {report.status === 'pending' && (
+                                                                        <>
+                                                                            <Button size="sm" className="bg-blue-600 hover:bg-blue-500 h-8 font-bold px-4 rounded-lg" onClick={() => handleUpdateStatus(report.id, 'approved')}>Approve</Button>
+                                                                            <Button size="sm" variant="ghost" className="h-8 text-rose-400 hover:bg-rose-500/10 font-bold px-4 rounded-lg" onClick={() => handleUpdateStatus(report.id, 'rejected')}>Reject</Button>
+                                                                        </>
+                                                                    )}
+                                                                    <Button size="sm" variant="ghost" className="h-8 w-8 p-0 text-slate-500 hover:text-rose-500" onClick={() => setReportToDelete(report.id)}><Trash2 className="h-4 w-4" /></Button>
+                                                                </div>
+                                                            </TableCell>
+                                                        </TableRow>
                                                     )
                                                 })
                                             )}
