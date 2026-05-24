@@ -677,15 +677,15 @@ export function FishermanDashboard() {
                                                                             "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-extrabold uppercase tracking-widest ring-1 ring-inset shadow-sm transition-all",
                                                                             report.status === 'approved'
                                                                                 ? "bg-emerald-950/50 text-emerald-400 ring-emerald-500/20"
-                                                                                : report.status === 'rejected'
+                                                                                : report.status === 'not_approved'
                                                                                     ? "bg-rose-950/50 text-rose-400 ring-rose-500/20"
                                                                                     : "bg-amber-950/50 text-amber-400 ring-amber-500/20"
                                                                         )}>
                                                                             <div className={cn(
                                                                                 "h-1.5 w-1.5 rounded-full shadow-sm",
-                                                                                report.status === 'approved' ? "bg-emerald-400 shadow-emerald-400/50" : report.status === 'rejected' ? "bg-rose-400 shadow-rose-400/50" : "bg-amber-400 shadow-amber-400/50 animate-pulse"
+                                                                                report.status === 'approved' ? "bg-emerald-400 shadow-emerald-400/50" : report.status === 'not_approved' ? "bg-rose-400 shadow-rose-400/50" : "bg-amber-400 shadow-amber-400/50 animate-pulse"
                                                                             )} />
-                                                                            {report.status}
+                                                                            {report.status === 'not_approved' ? 'Not Approved' : report.status}
                                                                         </span>
                                                                         {report.status === 'approved' && report.approved_by_name && (
                                                                             <span className="text-[9px] text-slate-500 font-medium">by {report.approved_by_name}</span>
