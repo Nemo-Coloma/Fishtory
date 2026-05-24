@@ -9,11 +9,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { supabase } from "@/lib/supabase"
 import { toast } from "sonner"
-import { LogOut, User, Save, FileText, Anchor, Scale, MapPin, Calendar, CheckCircle2, Search, ClipboardList, Pencil, Lock, Loader2 } from "lucide-react"
+import { LogOut, User, Save, FileText, Anchor, Scale, MapPin, Calendar, CheckCircle2, Search, ClipboardList, Pencil, Lock, Loader2, ChevronRight } from "lucide-react"
 import { createFishermanAccount } from "@/app/actions/create-fisherman"
+import { cn } from "@/lib/utils"
 
 export function StaffDashboard() {
   const router = useRouter()
@@ -325,124 +326,127 @@ export function StaffDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      <header className="bg-white border-b border-slate-200 sticky top-0 z-10 shadow-sm">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-slate-950 text-slate-100">
+      {/* Background Effects */}
+      <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
+        <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-blue-600/10 blur-[120px] mix-blend-screen"></div>
+        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-cyan-500/10 blur-[120px] mix-blend-screen"></div>
+      </div>
+
+      {/* Header */}
+      <header className="relative z-10 bg-slate-900/40 backdrop-blur-xl border-b border-slate-800 sticky top-0">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center gap-3">
-              <div className="bg-green-100 p-2 rounded-lg">
-                <FileText className="h-6 w-6 text-green-700" />
+              <div className="bg-gradient-to-tr from-blue-600 to-cyan-400 p-2 rounded-xl text-white shadow-[0_0_20px_rgba(37,99,235,0.3)]">
+                <FileText className="h-5 w-5" />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-slate-900">Staff Portal</h1>
-                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                <h1 className="text-lg font-black text-white tracking-tighter">Staff Portal</h1>
+                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
                   {user?.staff_id || 'STAFF'} • {user?.full_name || 'Staff Member'}
                 </p>
               </div>
             </div>
-            <Button onClick={handleLogout} variant="ghost" className="text-slate-500 hover:text-red-600 hover:bg-red-50">
+            <Button onClick={handleLogout} variant="outline" className="bg-slate-900/50 border-slate-700 hover:bg-rose-900/30 hover:border-rose-500/50 text-slate-300 hover:text-rose-400 rounded-xl">
               <LogOut className="h-4 w-4 mr-2" />
-              Logout
+              <span className="hidden sm:inline">Logout</span>
             </Button>
           </div>
         </div>
       </header>
 
-      <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <Tabs defaultValue="report" className="w-full space-y-6" onValueChange={(v) => { if (v === 'my-reports') fetchMyReports() }}>
-          <div className="bg-white p-2 rounded-xl shadow-sm border border-slate-200 w-full md:w-max mx-auto">
-            <TabsList className="grid w-full md:w-[900px] grid-cols-3">
-              <TabsTrigger value="register" className="text-sm font-semibold py-3 data-[state=active]:bg-blue-600 data-[state=active]:text-white transition-all">
-                Option 1: Register Fisherman
+          {/* Tabs Navigation */}
+          <div className="bg-slate-900/60 backdrop-blur-xl p-2 rounded-2xl border border-slate-800 w-full">
+            <TabsList className="grid w-full grid-cols-3 bg-transparent">
+              <TabsTrigger value="register" className="rounded-xl px-3 py-3 text-xs sm:text-sm font-bold data-[state=active]:bg-blue-600 data-[state=active]:text-white transition-all">
+                <span className="hidden sm:inline">Register Fisherman</span>
+                <span className="sm:hidden">Register</span>
               </TabsTrigger>
-              <TabsTrigger value="report" className="text-sm font-semibold py-3 data-[state=active]:bg-green-600 data-[state=active]:text-white transition-all">
-                Option 2: Submit Daily Catch
+              <TabsTrigger value="report" className="rounded-xl px-3 py-3 text-xs sm:text-sm font-bold data-[state=active]:bg-cyan-600 data-[state=active]:text-white transition-all">
+                <span className="hidden sm:inline">Submit Daily Catch</span>
+                <span className="sm:hidden">Submit Catch</span>
               </TabsTrigger>
-              <TabsTrigger value="my-reports" className="text-sm font-semibold py-3 data-[state=active]:bg-slate-700 data-[state=active]:text-white transition-all">
-                <ClipboardList className="h-4 w-4 mr-1.5 inline-block" />
-                My Submitted Reports
+              <TabsTrigger value="my-reports" className="rounded-xl px-3 py-3 text-xs sm:text-sm font-bold data-[state=active]:bg-slate-700 data-[state=active]:text-white transition-all">
+                <span className="hidden sm:inline">My Reports</span>
+                <span className="sm:hidden">Reports</span>
               </TabsTrigger>
             </TabsList>
           </div>
 
           {/* OPTION 1: REGISTER FISHERMAN */}
           <TabsContent value="register" className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <Card className="border-blue-100 shadow-md">
-              <CardHeader className="bg-blue-50/50 border-b border-blue-100">
-                <CardTitle className="text-blue-900">Fisherman Profile Registration (Form A)</CardTitle>
-                <CardDescription>
-                  Enter the fisherman's details below to register them in the master registry.
-                </CardDescription>
+            <Card className="bg-slate-900/40 backdrop-blur-xl border-slate-800 rounded-3xl overflow-hidden">
+              <CardHeader className="border-b border-slate-800/50 p-6">
+                <CardTitle className="text-xl font-black text-white flex items-center gap-3">
+                  <User className="text-blue-500" /> Fisherman Registration
+                </CardTitle>
+                <CardDescription className="text-slate-400">Enter the fisherman's details to register them in the master registry.</CardDescription>
               </CardHeader>
-              <CardContent className="pt-6">
+              <CardContent className="p-6">
                 {createdCredentials && (
-                  <div className="bg-blue-50 border-2 border-dashed border-blue-200 rounded-xl p-5 mb-6 space-y-3 animate-in zoom-in duration-300">
-                    <div className="flex items-center gap-2 text-blue-800 font-bold">
-                      <CheckCircle2 className="h-5 w-5 text-green-600" />
-                      Fisherman Login Account Created!
+                  <div className="bg-blue-500/10 border border-blue-500/30 rounded-2xl p-5 mb-6 space-y-3 animate-in zoom-in duration-300">
+                    <div className="flex items-center gap-2 text-blue-400 font-bold">
+                      <CheckCircle2 className="h-5 w-5" />
+                      Account Created Successfully!
                     </div>
-                    <p className="text-sm text-slate-600 font-medium">
-                      The account has been created. Please copy these credentials and share them with the fisherman so they can log in:
-                    </p>
-                    <div className="bg-white p-4 rounded-lg border border-slate-200 space-y-2 font-mono text-sm shadow-sm">
-                      <div className="flex justify-between items-center py-1 border-b border-slate-100">
-                        <span className="text-slate-500 font-semibold">Fisherman ID:</span>
-                        <span className="text-blue-700 font-bold">{createdCredentials.id}</span>
+                    <div className="bg-slate-950/50 p-4 rounded-xl border border-slate-800 space-y-2 font-mono text-sm">
+                      <div className="flex justify-between items-center py-1 border-b border-slate-800">
+                        <span className="text-slate-500">Fisherman ID:</span>
+                        <span className="text-blue-400 font-bold">{createdCredentials.id}</span>
                       </div>
-                      <div className="flex justify-between items-center py-1 border-b border-slate-100">
-                        <span className="text-slate-500 font-semibold">Login Email:</span>
-                        <span className="text-slate-800 font-bold select-all">{createdCredentials.email}</span>
+                      <div className="flex justify-between items-center py-1 border-b border-slate-800">
+                        <span className="text-slate-500">Email:</span>
+                        <span className="text-slate-200 font-bold select-all">{createdCredentials.email}</span>
                       </div>
                       <div className="flex justify-between items-center py-1">
-                        <span className="text-slate-500 font-semibold">Temporary Password:</span>
-                        <span className="text-slate-800 font-bold select-all">{createdCredentials.pass}</span>
+                        <span className="text-slate-500">Password:</span>
+                        <span className="text-slate-200 font-bold select-all">{createdCredentials.pass}</span>
                       </div>
                     </div>
-                    <div className="flex justify-end pt-1">
-                      <Button 
-                        type="button" 
-                        variant="outline" 
-                        size="sm"
-                        className="text-blue-700 border-blue-200 hover:bg-blue-50"
-                        onClick={() => {
-                          navigator.clipboard.writeText(
-                            `Fisherman ID: ${createdCredentials.id}\nEmail: ${createdCredentials.email}\nTemporary Password: ${createdCredentials.pass}`
-                          )
-                          toast.success("Copied to Clipboard", { description: "Credentials copied successfully." })
-                        }}
-                      >
-                        Copy Credentials
-                      </Button>
-                    </div>
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      className="w-full bg-slate-900 border-slate-700 hover:bg-blue-900/30 text-blue-400"
+                      onClick={() => {
+                        navigator.clipboard.writeText(
+                          `Fisherman ID: ${createdCredentials.id}\nEmail: ${createdCredentials.email}\nPassword: ${createdCredentials.pass}`
+                        )
+                        toast.success("Credentials Copied")
+                      }}
+                    >
+                      Copy Credentials
+                    </Button>
                   </div>
                 )}
                 
-                <form onSubmit={handleRegisterSubmit} className="space-y-8">
-                  {/* Operator Details */}
+                <form onSubmit={handleRegisterSubmit} className="space-y-6">
+                  {/* Fisherman Details */}
                   <div className="space-y-4">
-                    <h3 className="text-lg font-semibold flex items-center gap-2 text-slate-800 border-b pb-2">
-                      <User className="h-5 w-5 text-blue-600" />
-                      Fisherman Details
-                    </h3>
-                    <div className="grid md:grid-cols-2 gap-4">
+                    <h3 className="text-sm font-bold text-slate-400 uppercase tracking-widest border-b border-slate-800 pb-2">Fisherman Details</h3>
+                    <div className="grid sm:grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <Label>First Name *</Label>
+                        <Label className="text-xs font-bold text-slate-300">First Name *</Label>
                         <Input
                           value={formData.firstName}
                           onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
                           required placeholder="e.g., Juan"
+                          className="bg-slate-950/50 border-slate-700 rounded-xl h-12 focus:ring-blue-600"
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label>Last Name *</Label>
+                        <Label className="text-xs font-bold text-slate-300">Last Name *</Label>
                         <Input
                           value={formData.lastName}
                           onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
                           required placeholder="e.g., Dela Cruz"
+                          className="bg-slate-950/50 border-slate-700 rounded-xl h-12 focus:ring-blue-600"
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label>Location / Address *</Label>
+                        <Label className="text-xs font-bold text-slate-300">Location *</Label>
                         {loadingData ? (
                           <div className="flex items-center gap-2">
                             <Loader2 className="h-4 w-4 animate-spin" />
@@ -450,10 +454,10 @@ export function StaffDashboard() {
                           </div>
                         ) : (
                           <Select value={formData.location} onValueChange={(value) => setFormData({ ...formData, location: value })} required>
-                            <SelectTrigger>
+                            <SelectTrigger className="bg-slate-950/50 border-slate-700 rounded-xl h-12">
                               <SelectValue placeholder="Select location" />
                             </SelectTrigger>
-                            <SelectContent>
+                            <SelectContent className="bg-slate-900 border-slate-700">
                               {landingCenters.map((center) => (
                                 <SelectItem key={center.id} value={center.name}>
                                   {center.name}{center.location ? ` - ${center.location}` : ''}
@@ -464,29 +468,32 @@ export function StaffDashboard() {
                         )}
                       </div>
                       <div className="space-y-2">
-                        <Label>Phone Number *</Label>
+                        <Label className="text-xs font-bold text-slate-300">Phone Number *</Label>
                         <Input
                           value={formData.phoneNumber}
                           onChange={(e) => setFormData({ ...formData, phoneNumber: e.target.value })}
                           required placeholder="Enter contact number"
+                          className="bg-slate-950/50 border-slate-700 rounded-xl h-12 focus:ring-blue-600"
                         />
                       </div>
-                      <div className="space-y-2">
-                        <Label>Email Address (For Fisherman Login) *</Label>
+                      <div className="space-y-2 sm:col-span-2">
+                        <Label className="text-xs font-bold text-slate-300">Email Address (For Login) *</Label>
                         <Input
                           type="email"
                           value={formData.email}
                           onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                           required placeholder="juan.delacruz@email.com"
+                          className="bg-slate-950/50 border-slate-700 rounded-xl h-12 focus:ring-blue-600"
                         />
                       </div>
-                      <div className="space-y-2">
-                        <Label>Temporary Password (Optional)</Label>
+                      <div className="space-y-2 sm:col-span-2">
+                        <Label className="text-xs font-bold text-slate-300">Temporary Password (Optional)</Label>
                         <Input
                           type="text"
                           value={formData.password}
                           onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                           placeholder="Leave blank to auto-generate"
+                          className="bg-slate-950/50 border-slate-700 rounded-xl h-12 focus:ring-blue-600"
                         />
                       </div>
                     </div>
@@ -494,42 +501,43 @@ export function StaffDashboard() {
 
                   {/* Vessel Details */}
                   <div className="space-y-4">
-                    <h3 className="text-lg font-semibold text-slate-800 border-b pb-2">Vessel Details</h3>
-                    <div className="grid md:grid-cols-2 gap-4">
-                      <div className="space-y-2 md:col-span-2">
-                        <Label>Name of Vessel *</Label>
+                    <h3 className="text-sm font-bold text-slate-400 uppercase tracking-widest border-b border-slate-800 pb-2">Vessel Details</h3>
+                    <div className="grid sm:grid-cols-2 gap-4">
+                      <div className="space-y-2 sm:col-span-2">
+                        <Label className="text-xs font-bold text-slate-300">Vessel Name *</Label>
                         <Input
                           value={formData.vesselName}
                           onChange={(e) => setFormData({ ...formData, vesselName: e.target.value })}
                           required placeholder="Enter vessel name"
+                          className="bg-slate-950/50 border-slate-700 rounded-xl h-12 focus:ring-blue-600"
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label>Total Boats Operated *</Label>
+                        <Label className="text-xs font-bold text-slate-300">Total Boats *</Label>
                         <Input
                           type="number" min="1"
                           value={formData.totalBoatsOperated}
                           onChange={(e) => setFormData({ ...formData, totalBoatsOperated: parseInt(e.target.value) })}
                           required
+                          className="bg-slate-950/50 border-slate-700 rounded-xl h-12 focus:ring-blue-600"
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label>Total No. of Crew *</Label>
+                        <Label className="text-xs font-bold text-slate-300">Total Crew *</Label>
                         <Input
                           type="number" min="1"
                           value={formData.totalCrew}
                           onChange={(e) => setFormData({ ...formData, totalCrew: parseInt(e.target.value) })}
                           required
+                          className="bg-slate-950/50 border-slate-700 rounded-xl h-12 focus:ring-blue-600"
                         />
                       </div>
                     </div>
                   </div>
 
-                  <div className="flex justify-end pt-4">
-                    <Button type="submit" disabled={submitting} className="bg-blue-700 hover:bg-blue-800 px-8">
-                      {submitting ? "Saving..." : <><Save className="h-4 w-4 mr-2" /> Register Profile</>}
-                    </Button>
-                  </div>
+                  <Button type="submit" disabled={submitting} className="w-full bg-blue-600 hover:bg-blue-500 h-14 rounded-xl font-bold text-lg shadow-lg shadow-blue-900/30">
+                    {submitting ? <><Loader2 className="animate-spin h-5 w-5 mr-2" /> Saving...</> : <><Save className="h-5 w-5 mr-2" /> Register Profile</>}
+                  </Button>
                 </form>
               </CardContent>
             </Card>
@@ -537,28 +545,27 @@ export function StaffDashboard() {
 
           {/* OPTION 2: SUBMIT CATCH REPORT */}
           <TabsContent value="report" className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <Card className="border-green-100 shadow-md">
-              <CardHeader className="bg-green-50/50 border-b border-green-100">
-                <CardTitle className="text-green-900">Transactional Catch Report</CardTitle>
-                <CardDescription>
-                  Select an existing fisherman from the registry to log their daily catch without duplicating profile data.
-                </CardDescription>
+            <Card className="bg-slate-900/40 backdrop-blur-xl border-slate-800 rounded-3xl overflow-hidden">
+              <CardHeader className="border-b border-slate-800/50 p-6">
+                <CardTitle className="text-xl font-black text-white flex items-center gap-3">
+                  <Scale className="text-cyan-500" /> Submit Daily Catch
+                </CardTitle>
+                <CardDescription className="text-slate-400">Select a fisherman to log their daily catch.</CardDescription>
               </CardHeader>
-              <CardContent className="pt-6">
-                <form onSubmit={handleCatchSubmit} className="space-y-8">
+              <CardContent className="p-6">
+                <form onSubmit={handleCatchSubmit} className="space-y-6">
                   
                   {/* Fisherman Selection */}
                   <div className="space-y-4">
-                    <h3 className="text-lg font-semibold flex items-center gap-2 text-slate-800 border-b pb-2">
-                      <User className="h-5 w-5 text-green-600" />
-                      1. Select Registered Operator
+                    <h3 className="text-sm font-bold text-slate-400 uppercase tracking-widest border-b border-slate-800 pb-2 flex items-center gap-2">
+                      <User className="h-4 w-4" /> 1. Select Fisherman
                     </h3>
                     <div className="space-y-2 relative">
-                      <Label>Search & Select Fisherman *</Label>
+                      <Label className="text-xs font-bold text-slate-300">Search & Select *</Label>
                       <div className="relative">
                         <Input
                           type="text"
-                          className="w-full h-12 bg-slate-50 focus-visible:ring-green-500 pl-10 pr-10 text-sm md:text-base font-medium"
+                          className="w-full h-12 bg-slate-950/50 border-slate-700 rounded-xl pl-10 pr-10 focus:ring-cyan-500"
                           placeholder="Type to search fisherman name or ID..."
                           value={searchFilter}
                           onChange={(e) => {
@@ -567,29 +574,28 @@ export function StaffDashboard() {
                           }}
                           onFocus={() => setDropdownOpen(true)}
                         />
-                        <Search className="absolute left-3 top-3.5 h-5 w-5 text-slate-400" />
+                        <Search className="absolute left-3 top-3.5 h-5 w-5 text-slate-500" />
                         {selectedFishermanId && (
                           <Button
                             type="button"
                             variant="ghost"
                             size="sm"
-                            className="absolute right-2 top-2 h-8 px-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100"
+                            className="absolute right-2 top-2 h-8 w-8 p-0 text-slate-500 hover:text-rose-400"
                             onClick={() => {
                               setSelectedFishermanId("")
                               setSearchFilter("")
                             }}
                           >
-                            Clear
+                            ×
                           </Button>
                         )}
                       </div>
 
                       {dropdownOpen && (
                         <>
-                          {/* Transparent clickaway overlay */}
                           <div className="fixed inset-0 z-20" onClick={() => setDropdownOpen(false)} />
                           
-                          <div className="absolute z-30 w-full mt-1 bg-white border border-slate-200 rounded-lg shadow-lg max-h-[250px] overflow-y-auto animate-in fade-in slide-in-from-top-1 duration-200">
+                          <div className="absolute z-30 w-full mt-1 bg-slate-900 border border-slate-700 rounded-xl shadow-2xl max-h-[250px] overflow-y-auto animate-in fade-in slide-in-from-top-1 duration-200">
                             {(() => {
                               const filtered = fishermen.filter(f => {
                                 const name = `${f.first_name} ${f.last_name}`.toLowerCase()
@@ -606,14 +612,14 @@ export function StaffDashboard() {
                                 <button
                                   key={f.fisherman_id}
                                   type="button"
-                                  className="w-full text-left px-4 py-3 hover:bg-green-50/50 transition-colors text-sm text-slate-700 flex justify-between items-center border-b border-slate-100 last:border-0"
+                                  className="w-full text-left px-4 py-3 hover:bg-slate-800 transition-colors text-sm text-slate-200 flex justify-between items-center border-b border-slate-800 last:border-0"
                                   onClick={() => {
                                     setSelectedFishermanId(f.fisherman_id)
                                     setDropdownOpen(false)
                                   }}
                                 >
-                                  <span className="font-semibold text-slate-800">{f.first_name} {f.last_name}</span>
-                                  <span className="text-xs bg-slate-100 text-slate-600 px-2.5 py-0.5 rounded-full font-semibold">{f.fisherman_id}</span>
+                                  <span className="font-semibold">{f.first_name} {f.last_name}</span>
+                                  <span className="text-xs bg-slate-800 text-slate-400 px-2.5 py-0.5 rounded-full font-mono">{f.fisherman_id}</span>
                                 </button>
                               ))
                             })()}
@@ -622,34 +628,34 @@ export function StaffDashboard() {
                       )}
                     </div>
 
-                    {/* Autofill Display Container */}
+                    {/* Autofill Display */}
                     {selectedFishermanDetails && (
-                      <div className="bg-green-50 border border-green-200 rounded-lg p-4 mt-4 flex flex-wrap gap-6 animate-in fade-in">
+                      <div className="bg-slate-950/50 border border-slate-800 rounded-xl p-4 mt-4 flex flex-wrap gap-4 animate-in fade-in">
                         <div className="flex items-start gap-3">
-                          <div className="bg-green-100 p-2 rounded-full mt-1">
-                            <User className="h-4 w-4 text-green-700" />
+                          <div className="bg-blue-500/20 p-2 rounded-lg">
+                            <User className="h-4 w-4 text-blue-400" />
                           </div>
                           <div>
-                            <p className="text-xs font-semibold text-green-700 uppercase tracking-wide">Operator Profile</p>
-                            <p className="font-medium text-slate-800">{selectedFishermanDetails.first_name} {selectedFishermanDetails.last_name}</p>
+                            <p className="text-[10px] font-bold text-slate-500 uppercase">Operator</p>
+                            <p className="font-semibold text-slate-200">{selectedFishermanDetails.first_name} {selectedFishermanDetails.last_name}</p>
                           </div>
                         </div>
                         <div className="flex items-start gap-3">
-                          <div className="bg-green-100 p-2 rounded-full mt-1">
-                            <Anchor className="h-4 w-4 text-green-700" />
+                          <div className="bg-cyan-500/20 p-2 rounded-lg">
+                            <Anchor className="h-4 w-4 text-cyan-400" />
                           </div>
                           <div>
-                            <p className="text-xs font-semibold text-green-700 uppercase tracking-wide">Vessel Name</p>
-                            <p className="font-medium text-slate-800">{selectedFishermanDetails.boat_name || "No vessel recorded"}</p>
+                            <p className="text-[10px] font-bold text-slate-500 uppercase">Vessel</p>
+                            <p className="font-semibold text-slate-200">{selectedFishermanDetails.boat_name || "N/A"}</p>
                           </div>
                         </div>
                         <div className="flex items-start gap-3">
-                          <div className="bg-green-100 p-2 rounded-full mt-1">
-                            <MapPin className="h-4 w-4 text-green-700" />
+                          <div className="bg-emerald-500/20 p-2 rounded-lg">
+                            <MapPin className="h-4 w-4 text-emerald-400" />
                           </div>
                           <div>
-                            <p className="text-xs font-semibold text-green-700 uppercase tracking-wide">Registered Location / Home Port</p>
-                            <p className="font-medium text-slate-800">{selectedFishermanDetails.location || "No location recorded"}</p>
+                            <p className="text-[10px] font-bold text-slate-500 uppercase">Location</p>
+                            <p className="font-semibold text-slate-200">{selectedFishermanDetails.location || "N/A"}</p>
                           </div>
                         </div>
                       </div>
@@ -657,30 +663,26 @@ export function StaffDashboard() {
                   </div>
 
                   {/* Catch Input */}
-                  <div className="space-y-4 opacity-50 transition-opacity" style={{ opacity: selectedFishermanId ? 1 : 0.5 }}>
-                    <h3 className="text-lg font-semibold flex items-center gap-2 text-slate-800 border-b pb-2">
-                      <Scale className="h-5 w-5 text-green-600" />
-                      2. Enter Catch Transaction
+                  <div className={cn("space-y-4 transition-opacity", selectedFishermanId ? "" : "opacity-50")}>
+                    <h3 className="text-sm font-bold text-slate-400 uppercase tracking-widest border-b border-slate-800 pb-2 flex items-center gap-2">
+                      <Scale className="h-4 w-4" /> 2. Enter Catch
                     </h3>
-                    <div className="grid md:grid-cols-3 gap-4">
+                    <div className="grid sm:grid-cols-3 gap-4">
                       <div className="space-y-2">
-                        <Label>Date of Catch *</Label>
-                        <div className="relative">
-                          <Calendar className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
-                          <Input
-                            type="date"
-                            className="pl-9 focus-visible:ring-green-500"
-                            value={catchDate}
-                            onChange={(e) => setCatchDate(e.target.value)}
-                            required
-                            disabled={!selectedFishermanId}
-                          />
-                        </div>
+                        <Label className="text-xs font-bold text-slate-300">Date *</Label>
+                        <Input
+                          type="date"
+                          className="bg-slate-950/50 border-slate-700 rounded-xl h-12 focus:ring-cyan-500"
+                          value={catchDate}
+                          onChange={(e) => setCatchDate(e.target.value)}
+                          required
+                          disabled={!selectedFishermanId}
+                        />
                       </div>
                       <div className="space-y-2">
-                        <Label>Species Caught *</Label>
+                        <Label className="text-xs font-bold text-slate-300">Species *</Label>
                         <Input
-                          className="focus-visible:ring-green-500"
+                          className="bg-slate-950/50 border-slate-700 rounded-xl h-12 focus:ring-cyan-500"
                           placeholder="e.g., Tilapia"
                           value={catchSpecies}
                           onChange={(e) => setCatchSpecies(e.target.value)}
@@ -689,9 +691,9 @@ export function StaffDashboard() {
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label>Total Weight (kg) *</Label>
+                        <Label className="text-xs font-bold text-slate-300">Weight (kg) *</Label>
                         <Input
-                          className="focus-visible:ring-green-500"
+                          className="bg-slate-950/50 border-slate-700 rounded-xl h-12 focus:ring-cyan-500"
                           type="number"
                           step="0.01"
                           placeholder="0.00"
@@ -704,66 +706,68 @@ export function StaffDashboard() {
                     </div>
                   </div>
 
-                  {/* Seasonality Details (Moved from Form A) */}
-                  <div className="space-y-4 opacity-50 transition-opacity" style={{ opacity: selectedFishermanId ? 1 : 0.5 }}>
-                    <h3 className="text-lg font-semibold text-slate-800 border-b pb-2">
-                      3. Seasonality Details (Updates Profile)
+                  {/* Seasonality Details */}
+                  <div className={cn("space-y-4 transition-opacity", selectedFishermanId ? "" : "opacity-50")}>
+                    <h3 className="text-sm font-bold text-slate-400 uppercase tracking-widest border-b border-slate-800 pb-2">
+                      3. Seasonality (Updates Profile)
                     </h3>
-                    <div className="grid md:grid-cols-2 gap-6">
-                      <div className="space-y-4 bg-slate-50 p-4 rounded-lg border border-slate-100">
+                    <div className="grid sm:grid-cols-2 gap-4">
+                      <div className="bg-slate-950/30 p-4 rounded-xl border border-slate-800 space-y-3">
                         <div className="space-y-2">
-                          <Label>Lean Months</Label>
+                          <Label className="text-xs font-bold text-slate-400">Lean Months</Label>
                           <Input
                             value={leanMonths}
                             onChange={(e) => setLeanMonths(e.target.value)}
                             placeholder="e.g., January, February"
                             disabled={!selectedFishermanId}
+                            className="bg-slate-900 border-slate-700 rounded-xl h-10"
                           />
                         </div>
                         <div className="space-y-2">
-                          <Label>Lean Daily Average Catch (kg)</Label>
+                          <Label className="text-xs font-bold text-slate-400">Lean Avg Catch (kg)</Label>
                           <Input
                             type="number" step="0.01"
                             value={leanDailyAvgCatch}
                             onChange={(e) => setLeanDailyAvgCatch(e.target.value)}
                             placeholder="e.g., 50.5"
                             disabled={!selectedFishermanId}
+                            className="bg-slate-900 border-slate-700 rounded-xl h-10"
                           />
                         </div>
                       </div>
-                      <div className="space-y-4 bg-slate-50 p-4 rounded-lg border border-slate-100">
+                      <div className="bg-slate-950/30 p-4 rounded-xl border border-slate-800 space-y-3">
                         <div className="space-y-2">
-                          <Label>Peak Months</Label>
+                          <Label className="text-xs font-bold text-slate-400">Peak Months</Label>
                           <Input
                             value={peakMonths}
                             onChange={(e) => setPeakMonths(e.target.value)}
-                            placeholder="e.g., June, July, August"
+                            placeholder="e.g., June, July"
                             disabled={!selectedFishermanId}
+                            className="bg-slate-900 border-slate-700 rounded-xl h-10"
                           />
                         </div>
                         <div className="space-y-2">
-                          <Label>Peak Daily Average Catch (kg)</Label>
+                          <Label className="text-xs font-bold text-slate-400">Peak Avg Catch (kg)</Label>
                           <Input
                             type="number" step="0.01"
                             value={peakDailyAvgCatch}
                             onChange={(e) => setPeakDailyAvgCatch(e.target.value)}
                             placeholder="e.g., 150.0"
                             disabled={!selectedFishermanId}
+                            className="bg-slate-900 border-slate-700 rounded-xl h-10"
                           />
                         </div>
                       </div>
                     </div>
                   </div>
 
-                  <div className="flex justify-end pt-4">
-                    <Button 
-                      type="submit" 
-                      disabled={submittingCatch || !selectedFishermanId} 
-                      className="bg-green-700 hover:bg-green-800 px-8 text-md h-12 shadow-md shadow-green-200"
-                    >
-                      {submittingCatch ? "Recording Transaction..." : <><CheckCircle2 className="h-5 w-5 mr-2" /> Submit Daily Catch</>}
-                    </Button>
-                  </div>
+                  <Button 
+                    type="submit" 
+                    disabled={submittingCatch || !selectedFishermanId} 
+                    className="w-full bg-cyan-600 hover:bg-cyan-500 h-14 rounded-xl font-bold text-lg shadow-lg shadow-cyan-900/30"
+                  >
+                    {submittingCatch ? <><Loader2 className="animate-spin h-5 w-5 mr-2" /> Submitting...</> : <><CheckCircle2 className="h-5 w-5 mr-2" /> Submit Daily Catch</>}
+                  </Button>
                 </form>
               </CardContent>
             </Card>
@@ -771,57 +775,59 @@ export function StaffDashboard() {
 
           {/* OPTION 3: MY SUBMITTED REPORTS */}
           <TabsContent value="my-reports" className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <Card className="border-slate-200 shadow-md">
-              <CardHeader className="bg-slate-50/50 border-b border-slate-100">
-                <CardTitle className="text-slate-900 flex items-center gap-2">
-                  <ClipboardList className="h-5 w-5 text-slate-600" />
-                  My Submitted Reports
+            <Card className="bg-slate-900/40 backdrop-blur-xl border-slate-800 rounded-3xl overflow-hidden">
+              <CardHeader className="border-b border-slate-800/50 p-6">
+                <CardTitle className="text-xl font-black text-white flex items-center gap-3">
+                  <ClipboardList className="text-slate-400" /> My Reports
                 </CardTitle>
-                <CardDescription>
-                  Reports you submitted on behalf of fishermen. Pending reports can be edited.
-                </CardDescription>
+                <CardDescription className="text-slate-400">Reports you submitted. Pending reports can be edited.</CardDescription>
               </CardHeader>
-              <CardContent className="pt-4">
+              <CardContent className="p-6">
                 {loadingReports ? (
-                  <div className="text-center py-10 text-slate-500">Loading your reports...</div>
+                  <div className="text-center py-10">
+                    <Loader2 className="h-8 w-8 animate-spin mx-auto text-slate-500 mb-3" />
+                    <p className="text-slate-500">Loading reports...</p>
+                  </div>
                 ) : myReports.length === 0 ? (
-                  <div className="text-center py-10 text-slate-400">
-                    <ClipboardList className="h-10 w-10 mx-auto mb-3 opacity-30" />
-                    <p className="font-medium">No reports submitted yet.</p>
-                    <p className="text-sm">Submit a daily catch in Option 2 to see them here.</p>
+                  <div className="text-center py-10">
+                    <ClipboardList className="h-10 w-10 mx-auto mb-3 text-slate-600" />
+                    <p className="text-slate-500 font-medium">No reports submitted yet.</p>
+                    <p className="text-sm text-slate-600">Submit a daily catch in Option 2 to see them here.</p>
                   </div>
                 ) : (
                   <div className="overflow-x-auto">
                     <Table className="min-w-[700px]">
-                      <TableHeader className="bg-slate-50">
-                        <TableRow>
-                          <TableHead>Date</TableHead>
-                          <TableHead>Fisherman ID</TableHead>
-                          <TableHead>Species</TableHead>
-                          <TableHead>Weight</TableHead>
-                          <TableHead>Location</TableHead>
-                          <TableHead>Status</TableHead>
-                          <TableHead className="text-right">Actions</TableHead>
+                      <TableHeader className="bg-slate-950/50">
+                        <TableRow className="border-slate-800">
+                          <TableHead className="text-slate-400 font-bold uppercase text-xs">Date</TableHead>
+                          <TableHead className="text-slate-400 font-bold uppercase text-xs">Fisherman ID</TableHead>
+                          <TableHead className="text-slate-400 font-bold uppercase text-xs">Species</TableHead>
+                          <TableHead className="text-slate-400 font-bold uppercase text-xs">Weight</TableHead>
+                          <TableHead className="text-slate-400 font-bold uppercase text-xs">Location</TableHead>
+                          <TableHead className="text-slate-400 font-bold uppercase text-xs">Status</TableHead>
+                          <TableHead className="text-right text-slate-400 font-bold uppercase text-xs">Actions</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
                         {myReports.map((report) => (
-                          <TableRow key={report.id}>
-                            <TableCell className="whitespace-nowrap text-sm">{new Date(report.created_at).toLocaleDateString()}</TableCell>
-                            <TableCell className="font-medium text-blue-700">{report.fisherman_id || '—'}</TableCell>
-                            <TableCell className="capitalize">{report.species}</TableCell>
-                            <TableCell>{report.weight_kg} kg</TableCell>
-                            <TableCell>{report.location}</TableCell>
+                          <TableRow key={report.id} className="border-slate-800/50 hover:bg-slate-800/30">
+                            <TableCell className="text-slate-300">{new Date(report.created_at).toLocaleDateString()}</TableCell>
+                            <TableCell className="font-mono text-blue-400">{report.fisherman_id || '—'}</TableCell>
+                            <TableCell className="text-slate-300">{report.species}</TableCell>
+                            <TableCell className="text-white font-bold">{report.weight_kg} kg</TableCell>
+                            <TableCell className="text-slate-400 text-sm">{report.location}</TableCell>
                             <TableCell>
-                              <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold uppercase tracking-wide ${
-                                report.status === 'approved' ? 'bg-green-100 text-green-700' :
-                                report.status === 'rejected' ? 'bg-red-100 text-red-700' :
-                                'bg-amber-100 text-amber-700'
-                              }`}>
-                                <span className={`h-1.5 w-1.5 rounded-full ${
-                                  report.status === 'approved' ? 'bg-green-500' : report.status === 'rejected' ? 'bg-red-500' : 'bg-amber-500 animate-pulse'
-                                }`} />
-                                {report.status}
+                              <span className={cn(
+                                "inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider",
+                                report.status === 'approved' ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20" :
+                                report.status === 'not_approved' ? "bg-rose-500/10 text-rose-400 border border-rose-500/20" :
+                                "bg-amber-500/10 text-amber-400 border border-amber-500/20"
+                              )}>
+                                <span className={cn("h-1.5 w-1.5 rounded-full",
+                                  report.status === 'approved' ? "bg-emerald-400" :
+                                  report.status === 'not_approved' ? "bg-rose-400" : "bg-amber-400 animate-pulse"
+                                )} />
+                                {report.status === 'not_approved' ? 'Not Approved' : report.status}
                               </span>
                             </TableCell>
                             <TableCell className="text-right">
@@ -829,14 +835,14 @@ export function StaffDashboard() {
                                 <Button
                                   size="sm"
                                   variant="outline"
-                                  className="h-8 px-3 text-xs border-slate-300 hover:bg-slate-50"
+                                  className="h-8 bg-slate-900 border-slate-700 hover:bg-slate-800 text-slate-300"
                                   onClick={() => handleOpenEdit(report)}
                                 >
                                   <Pencil className="h-3 w-3 mr-1" />
                                   Edit
                                 </Button>
                               ) : (
-                                <span className="text-xs text-slate-400 flex items-center justify-end gap-1">
+                                <span className="text-xs text-slate-500 flex items-center justify-end gap-1">
                                   <Lock className="h-3 w-3" /> Locked
                                 </span>
                               )}
@@ -854,56 +860,57 @@ export function StaffDashboard() {
 
         {/* Edit Report Dialog */}
         <Dialog open={!!editingReport} onOpenChange={(open) => { if (!open) setEditingReport(null) }}>
-          <DialogContent className="sm:max-w-md">
+          <DialogContent className="bg-slate-900 border-slate-800 text-slate-100 max-w-md">
             <DialogHeader>
               <DialogTitle className="flex items-center gap-2">
-                <Pencil className="h-5 w-5 text-slate-600" />
+                <Pencil className="h-5 w-5 text-slate-400" />
                 Edit Pending Report
               </DialogTitle>
-              <DialogDescription>
-                Only pending reports can be edited. Changes will be reviewed by admin.
-              </DialogDescription>
             </DialogHeader>
-            <div className="space-y-4 py-2">
+            <div className="space-y-4 py-4">
               <div className="space-y-2">
-                <Label>Species</Label>
+                <Label className="text-xs font-bold text-slate-400">Species</Label>
                 <Input
                   value={editForm.species}
                   onChange={(e) => setEditForm({ ...editForm, species: e.target.value })}
                   placeholder="e.g. Tilapia"
+                  className="bg-slate-950 border-slate-700 rounded-xl"
                 />
               </div>
               <div className="space-y-2">
-                <Label>Weight (kg)</Label>
+                <Label className="text-xs font-bold text-slate-400">Weight (kg)</Label>
                 <Input
                   type="number"
                   step="0.01"
                   value={editForm.weight_kg}
                   onChange={(e) => setEditForm({ ...editForm, weight_kg: e.target.value })}
                   placeholder="0.00"
+                  className="bg-slate-950 border-slate-700 rounded-xl"
                 />
               </div>
               <div className="space-y-2">
-                <Label>Location</Label>
+                <Label className="text-xs font-bold text-slate-400">Location</Label>
                 <Input
                   value={editForm.location}
                   onChange={(e) => setEditForm({ ...editForm, location: e.target.value })}
                   placeholder="e.g. Banicain"
+                  className="bg-slate-950 border-slate-700 rounded-xl"
                 />
               </div>
               <div className="space-y-2">
-                <Label>Processing Method</Label>
+                <Label className="text-xs font-bold text-slate-400">Processing Method</Label>
                 <Input
                   value={editForm.processing_method}
                   onChange={(e) => setEditForm({ ...editForm, processing_method: e.target.value })}
                   placeholder="e.g. fresh, dried"
+                  className="bg-slate-950 border-slate-700 rounded-xl"
                 />
               </div>
             </div>
             <DialogFooter className="gap-2">
-              <Button variant="outline" onClick={() => setEditingReport(null)}>Cancel</Button>
-              <Button onClick={handleSaveEdit} disabled={savingEdit} className="bg-slate-700 hover:bg-slate-800">
-                {savingEdit ? "Saving..." : <><Save className="h-4 w-4 mr-1" />Save Changes</>}
+              <Button variant="outline" onClick={() => setEditingReport(null)} className="bg-slate-800 border-slate-700">Cancel</Button>
+              <Button onClick={handleSaveEdit} disabled={savingEdit} className="bg-blue-600 hover:bg-blue-500">
+                {savingEdit ? <><Loader2 className="animate-spin h-4 w-4 mr-1" /> Saving...</> : <><Save className="h-4 w-4 mr-1" /> Save</>}
               </Button>
             </DialogFooter>
           </DialogContent>

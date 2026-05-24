@@ -609,6 +609,7 @@ export function FishermanDashboard() {
                                                         <TableHead className="px-8 h-14 font-extrabold text-slate-400 uppercase tracking-wider text-[11px]">Date</TableHead>
                                                         <TableHead className="px-8 h-14 font-extrabold text-slate-400 uppercase tracking-wider text-[11px]">Fish Species</TableHead>
                                                         <TableHead className="px-8 h-14 font-extrabold text-slate-400 uppercase tracking-wider text-[11px]">Total Weight</TableHead>
+                                                        <TableHead className="px-8 h-14 font-extrabold text-slate-400 uppercase tracking-wider text-[11px]">Breakdown (kg)</TableHead>
                                                         <TableHead className="px-8 h-14 font-extrabold text-slate-400 uppercase tracking-wider text-[11px]">Location</TableHead>
                                                         <TableHead className="px-8 h-14 font-extrabold text-slate-400 uppercase tracking-wider text-[11px]">Approval Status</TableHead>
                                                     </TableRow>
@@ -616,7 +617,7 @@ export function FishermanDashboard() {
                                                 <TableBody>
                                                     {reports.length === 0 ? (
                                                         <TableRow>
-                                                            <TableCell colSpan={5} className="text-center py-24">
+                                                            <TableCell colSpan={6} className="text-center py-24">
                                                                 <div className="flex flex-col items-center gap-4 text-slate-400">
                                                                     <div className="bg-slate-900 p-6 rounded-full border border-slate-800">
                                                                         <History className="h-12 w-12 opacity-20 text-blue-500" />
@@ -648,23 +649,48 @@ export function FishermanDashboard() {
                                                                     <span className="text-slate-500 text-xs font-bold ml-1 tracking-tighter uppercase">KG</span>
                                                                 </TableCell>
                                                                 <TableCell className="px-8 py-5">
+                                                                    <div className="grid grid-cols-2 gap-x-2 gap-y-0.5 text-xs">
+                                                                        <div className="flex items-center gap-1">
+                                                                            <span className="text-[8px] text-slate-500 font-bold uppercase w-7">Sold</span>
+                                                                            <span className="font-semibold text-emerald-400">{report.sold_kg ?? '—'}</span>
+                                                                        </div>
+                                                                        <div className="flex items-center gap-1">
+                                                                            <span className="text-[8px] text-slate-500 font-bold uppercase w-7">Proc</span>
+                                                                            <span className="font-semibold text-blue-400">{report.processed_kg ?? '—'}</span>
+                                                                        </div>
+                                                                        <div className="flex items-center gap-1">
+                                                                            <span className="text-[8px] text-slate-500 font-bold uppercase w-7">Cons</span>
+                                                                            <span className="font-semibold text-amber-400">{report.consumed_kg ?? '—'}</span>
+                                                                        </div>
+                                                                        <div className="flex items-center gap-1">
+                                                                            <span className="text-[8px] text-slate-500 font-bold uppercase w-7">NM</span>
+                                                                            <span className="font-semibold text-rose-400">{report.not_marketable_kg ?? '—'}</span>
+                                                                        </div>
+                                                                    </div>
+                                                                </TableCell>
+                                                                <TableCell className="px-8 py-5">
                                                                     <div className="text-slate-400 font-medium">{report.location}</div>
                                                                 </TableCell>
                                                                 <TableCell className="px-8 py-5">
-                                                                    <span className={cn(
-                                                                        "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-extrabold uppercase tracking-widest ring-1 ring-inset shadow-sm transition-all",
-                                                                        report.status === 'approved'
-                                                                            ? "bg-emerald-950/50 text-emerald-400 ring-emerald-500/20"
-                                                                            : report.status === 'rejected'
-                                                                                ? "bg-rose-950/50 text-rose-400 ring-rose-500/20"
-                                                                                : "bg-amber-950/50 text-amber-400 ring-amber-500/20"
-                                                                    )}>
-                                                                        <div className={cn(
-                                                                            "h-1.5 w-1.5 rounded-full shadow-sm",
-                                                                            report.status === 'approved' ? "bg-emerald-400 shadow-emerald-400/50" : report.status === 'rejected' ? "bg-rose-400 shadow-rose-400/50" : "bg-amber-400 shadow-amber-400/50 animate-pulse"
-                                                                        )} />
-                                                                        {report.status}
-                                                                    </span>
+                                                                    <div className="flex flex-col gap-1">
+                                                                        <span className={cn(
+                                                                            "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-extrabold uppercase tracking-widest ring-1 ring-inset shadow-sm transition-all",
+                                                                            report.status === 'approved'
+                                                                                ? "bg-emerald-950/50 text-emerald-400 ring-emerald-500/20"
+                                                                                : report.status === 'rejected'
+                                                                                    ? "bg-rose-950/50 text-rose-400 ring-rose-500/20"
+                                                                                    : "bg-amber-950/50 text-amber-400 ring-amber-500/20"
+                                                                        )}>
+                                                                            <div className={cn(
+                                                                                "h-1.5 w-1.5 rounded-full shadow-sm",
+                                                                                report.status === 'approved' ? "bg-emerald-400 shadow-emerald-400/50" : report.status === 'rejected' ? "bg-rose-400 shadow-rose-400/50" : "bg-amber-400 shadow-amber-400/50 animate-pulse"
+                                                                            )} />
+                                                                            {report.status}
+                                                                        </span>
+                                                                        {report.status === 'approved' && report.approved_by_name && (
+                                                                            <span className="text-[9px] text-slate-500 font-medium">by {report.approved_by_name}</span>
+                                                                        )}
+                                                                    </div>
                                                                 </TableCell>
                                                             </TableRow>
                                                         ))

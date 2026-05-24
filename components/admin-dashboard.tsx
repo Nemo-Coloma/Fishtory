@@ -961,6 +961,7 @@ export function AdminDashboard() {
                                                 <TableHead className="px-6 h-14 text-slate-400 font-bold uppercase tracking-wider text-[10px] cursor-pointer hover:text-white transition-colors" onClick={() => toggleSort('weight_kg')}>
                                                     <div className="flex items-center gap-2">Weight {sortConfig.key === 'weight_kg' && (sortConfig.direction === 'asc' ? '↑' : '↓')}</div>
                                                 </TableHead>
+                                                <TableHead className="px-6 h-14 text-slate-400 font-bold uppercase tracking-wider text-[10px]">Breakdown (kg)</TableHead>
                                                 <TableHead className="px-6 h-14 text-slate-400 font-bold uppercase tracking-wider text-[10px]">Lean / Peak Catch</TableHead>
                                                 <TableHead className="px-6 h-14 text-slate-400 font-bold uppercase tracking-wider text-[10px]">Status</TableHead>
                                                 <TableHead className="px-6 h-14 text-slate-400 font-bold uppercase tracking-wider text-[10px]">Action</TableHead>
@@ -1009,6 +1010,26 @@ export function AdminDashboard() {
                                                                 <span className="text-[10px] ml-1 font-bold opacity-40">KG</span>
                                                             </TableCell>
                                                             <TableCell className="px-6 py-4">
+                                                                <div className="grid grid-cols-2 gap-x-3 gap-y-0.5">
+                                                                    <div className="flex items-center gap-1">
+                                                                        <span className="text-[8px] text-slate-500 font-bold uppercase w-8">Sold</span>
+                                                                        <span className="font-semibold text-emerald-400 text-xs">{report.sold_kg ?? '—'}</span>
+                                                                    </div>
+                                                                    <div className="flex items-center gap-1">
+                                                                        <span className="text-[8px] text-slate-500 font-bold uppercase w-8">Proc</span>
+                                                                        <span className="font-semibold text-blue-400 text-xs">{report.processed_kg ?? '—'}</span>
+                                                                    </div>
+                                                                    <div className="flex items-center gap-1">
+                                                                        <span className="text-[8px] text-slate-500 font-bold uppercase w-8">Cons</span>
+                                                                        <span className="font-semibold text-amber-400 text-xs">{report.consumed_kg ?? '—'}</span>
+                                                                    </div>
+                                                                    <div className="flex items-center gap-1">
+                                                                        <span className="text-[8px] text-slate-500 font-bold uppercase w-8">NM</span>
+                                                                        <span className="font-semibold text-rose-400 text-xs">{report.not_marketable_kg ?? '—'}</span>
+                                                                    </div>
+                                                                </div>
+                                                            </TableCell>
+                                                            <TableCell className="px-6 py-4">
                                                                 <div className="flex flex-col gap-0.5">
                                                                     <div className="flex items-center gap-1">
                                                                         <span className="text-[9px] text-slate-500 font-bold uppercase w-9">Lean</span>
@@ -1025,14 +1046,14 @@ export function AdminDashboard() {
                                                                     <span className={cn(
                                                                         "inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider w-fit",
                                                                         report.status === 'approved' ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20" :
-                                                                            report.status === 'rejected' ? "bg-rose-500/10 text-rose-400 border border-rose-500/20" :
+                                                                            report.status === 'not_approved' ? "bg-rose-500/10 text-rose-400 border border-rose-500/20" :
                                                                                 "bg-amber-500/10 text-amber-400 border border-amber-500/20"
                                                                     )}>
                                                                         <div className={cn("h-1.5 w-1.5 rounded-full",
                                                                             report.status === 'approved' ? "bg-emerald-400" :
-                                                                                report.status === 'rejected' ? "bg-rose-400" : "bg-amber-400 animate-pulse"
+                                                                                report.status === 'not_approved' ? "bg-rose-400" : "bg-amber-400 animate-pulse"
                                                                         )} />
-                                                                        {report.status}
+                                                                        {report.status === 'not_approved' ? 'Not Approved' : report.status}
                                                                     </span>
                                                                     {report.status === 'approved' && report.approved_by_name && (
                                                                         <span className="text-[9px] text-slate-500 font-bold pl-1">by {report.approved_by_name}</span>
@@ -1044,7 +1065,7 @@ export function AdminDashboard() {
                                                                     {report.status === 'pending' && (
                                                                         <>
                                                                             <Button size="sm" className="bg-blue-600 hover:bg-blue-500 h-8 font-bold px-4 rounded-lg" onClick={() => handleUpdateStatus(report.id, 'approved')}>Approve</Button>
-                                                                            <Button size="sm" variant="ghost" className="h-8 text-rose-400 hover:bg-rose-500/10 font-bold px-4 rounded-lg" onClick={() => handleUpdateStatus(report.id, 'rejected')}>Reject</Button>
+                                                                    <Button size="sm" variant="ghost" className="h-8 text-rose-400 hover:bg-rose-500/10 font-bold px-4 rounded-lg" onClick={() => handleUpdateStatus(report.id, 'not_approved')}>Not Approved</Button>
                                                                         </>
                                                                     )}
                                                                     <Button size="sm" variant="ghost" className="h-8 w-8 p-0 text-slate-500 hover:text-rose-500" onClick={() => setReportToDelete(report.id)}><Trash2 className="h-4 w-4" /></Button>
