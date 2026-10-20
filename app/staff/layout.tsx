@@ -61,10 +61,10 @@ export default function StaffLayout({ children }: { children: React.ReactNode })
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50">
+      <div className="min-h-screen flex items-center justify-center bg-[radial-gradient(circle_at_top,_rgba(191,219,254,0.8),_rgba(239,246,255,0.95)_40%,_#ffffff_100%)]">
         <div className="flex flex-col items-center gap-4">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-4 border-slate-800"></div>
-          <p className="text-slate-600 font-medium animate-pulse">Verifying staff credentials...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-4 border-blue-700"></div>
+          <p className="text-blue-700 font-medium animate-pulse">Verifying staff credentials...</p>
         </div>
       </div>
     )

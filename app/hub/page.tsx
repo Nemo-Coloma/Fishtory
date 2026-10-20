@@ -29,22 +29,22 @@ export default async function HubDashboard() {
         <div className="container mx-auto px-4 py-12 space-y-16">
             {/* Market Watch Section */}
             <section className="space-y-8">
-                <div className="flex items-center justify-between border-b border-slate-900 pb-6">
+                <div className="flex items-center justify-between border-b border-blue-100 pb-6">
                     <div className="space-y-2">
-                        <h2 className="text-2xl font-black text-white flex items-center gap-3">
-                            <Fish className="text-blue-500 h-6 w-6" /> Market Watch
+                        <h2 className="text-2xl font-black text-blue-900 flex items-center gap-3">
+                            <Fish className="text-blue-600 h-6 w-6" /> Market Watch
                         </h2>
-                        <p className="text-slate-500 text-sm">Daily fish price monitor.</p>
+                        <p className="text-blue-700/70 text-sm">Daily fish price monitor.</p>
                     </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                     {data.fishPrices.map((item: any) => (
-                        <Card key={item.species} className="bg-slate-900/50 border-slate-800 p-6 rounded-2xl">
+                        <Card key={item.species} className="bg-white/80 border-blue-100 p-6 rounded-2xl shadow-[0_12px_30px_rgba(59,130,246,0.08)]">
                             <div className="space-y-4">
                                 <div className="flex justify-between items-start">
-                                    <div className="p-2 bg-slate-950 rounded-xl border border-slate-800">
-                                        <Fish className="h-5 w-5 text-slate-400" />
+                                    <div className="p-2 bg-blue-50 rounded-xl border border-blue-100">
+                                        <Fish className="h-5 w-5 text-blue-600" />
                                     </div>
                                     {item.trend === "up" ? (
                                         <div className="flex items-center gap-1 text-rose-500 font-bold text-xs">
@@ -55,12 +55,12 @@ export default async function HubDashboard() {
                                             <ArrowDownRight className="h-3 w-3" /> {item.change}
                                         </div>
                                     ) : (
-                                        <div className="text-slate-500 font-bold text-xs">Stable</div>
+                                        <div className="text-blue-700/70 font-bold text-xs">Stable</div>
                                     )}
                                 </div>
                                 <div className="space-y-1">
-                                    <h3 className="text-base font-bold text-white">{item.species}</h3>
-                                    <p className="text-2xl font-black text-white">₱{item.price}<span className="text-xs text-slate-500 ml-1">/kg</span></p>
+                                    <h3 className="text-base font-bold text-blue-900">{item.species}</h3>
+                                    <p className="text-2xl font-black text-blue-900">₱{item.price}<span className="text-xs text-blue-700/70 ml-1">/kg</span></p>
                                 </div>
                             </div>
                         </Card>
@@ -70,49 +70,49 @@ export default async function HubDashboard() {
 
             {/* Announcements Section */}
             <section className="space-y-8">
-                <div className="flex items-center justify-between border-b border-slate-900 pb-6">
+                <div className="flex items-center justify-between border-b border-blue-100 pb-6">
                     <div className="space-y-2">
-                        <h2 className="text-2xl font-black text-white flex items-center gap-3">
+                        <h2 className="text-2xl font-black text-blue-900 flex items-center gap-3">
                             <Bell className="text-amber-500 h-6 w-6" /> Announcements
                         </h2>
-                        <p className="text-slate-500 text-sm">Public updates and advisories.</p>
+                        <p className="text-blue-700/70 text-sm">Public updates and advisories.</p>
                     </div>
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     {/* Admin Orders */}
                     <div className="space-y-4">
-                        <div className="flex items-center gap-2 px-3 py-1.5 bg-blue-500/10 rounded-lg w-fit border border-blue-500/20">
-                            <span className="text-xs font-bold text-blue-500 uppercase">Admin Orders</span>
+                        <div className="flex items-center gap-2 px-3 py-1.5 bg-blue-100 rounded-lg w-fit border border-blue-200">
+                            <span className="text-xs font-bold text-blue-700 uppercase">Admin Orders</span>
                         </div>
                         <div className="space-y-3">
                             {adminOrders.length > 0 ? adminOrders.map((a: any) => (
                                 <AnnouncementCard key={a.id} title={a.title} date={a.event_date} description={a.description} variant="blue" />
-                            )) : <p className="text-slate-600 text-xs p-6 text-center bg-slate-900/30 rounded-xl">No orders.</p>}
+                            )) : <p className="text-blue-700/70 text-xs p-6 text-center bg-white/80 border border-blue-100 rounded-xl">No orders.</p>}
                         </div>
                     </div>
 
                     {/* Weather Alerts */}
                     <div className="space-y-4">
-                        <div className="flex items-center gap-2 px-3 py-1.5 bg-rose-500/10 rounded-lg w-fit border border-rose-500/20">
-                            <span className="text-xs font-bold text-rose-500 uppercase">Weather</span>
+                        <div className="flex items-center gap-2 px-3 py-1.5 bg-rose-100 rounded-lg w-fit border border-rose-200">
+                            <span className="text-xs font-bold text-rose-600 uppercase">Weather</span>
                         </div>
                         <div className="space-y-3">
                             {weatherAlerts.length > 0 ? weatherAlerts.map((a: any) => (
                                 <AnnouncementCard key={a.id} title={a.title} date={a.event_date} description={a.description} variant="rose" />
-                            )) : <p className="text-slate-600 text-xs p-6 text-center bg-slate-900/30 rounded-xl">No alerts.</p>}
+                            )) : <p className="text-blue-700/70 text-xs p-6 text-center bg-white/80 border border-blue-100 rounded-xl">No alerts.</p>}
                         </div>
                     </div>
 
                     {/* General Announcements */}
                     <div className="space-y-4">
-                        <div className="flex items-center gap-2 px-3 py-1.5 bg-amber-500/10 rounded-lg w-fit border border-amber-500/20">
-                            <span className="text-xs font-bold text-amber-500 uppercase">General</span>
+                        <div className="flex items-center gap-2 px-3 py-1.5 bg-amber-100 rounded-lg w-fit border border-amber-200">
+                            <span className="text-xs font-bold text-amber-700 uppercase">General</span>
                         </div>
                         <div className="space-y-3">
                             {regularAnnouncements.length > 0 ? regularAnnouncements.map((a: any) => (
                                 <AnnouncementCard key={a.id} title={a.title} date={a.event_date} description={a.description} variant="amber" />
-                            )) : <p className="text-slate-600 text-xs p-6 text-center bg-slate-900/30 rounded-xl">No updates.</p>}
+                            )) : <p className="text-blue-700/70 text-xs p-6 text-center bg-white/80 border border-blue-100 rounded-xl">No updates.</p>}
                         </div>
                     </div>
                 </div>
@@ -120,19 +120,19 @@ export default async function HubDashboard() {
 
             {/* Programs Section */}
             <section className="space-y-8">
-                <div className="flex items-center justify-between border-b border-slate-900 pb-6">
+                <div className="flex items-center justify-between border-b border-blue-100 pb-6">
                     <div className="space-y-2">
-                        <h2 className="text-2xl font-black text-white flex items-center gap-3">
-                            <Info className="text-emerald-500 h-6 w-6" /> Programs
+                        <h2 className="text-2xl font-black text-blue-900 flex items-center gap-3">
+                            <Info className="text-cyan-600 h-6 w-6" /> Programs
                         </h2>
-                        <p className="text-slate-500 text-sm">Active support initiatives.</p>
+                        <p className="text-blue-700/70 text-sm">Active support initiatives.</p>
                     </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     {data.programs.slice(0, 3).map((p: any) => (
-                        <Card key={p.id} className="bg-slate-950 border-slate-800 rounded-2xl overflow-hidden">
-                            <div className="aspect-video bg-slate-900 relative flex items-center justify-center p-6">
+                        <Card key={p.id} className="bg-white/80 border-blue-100 rounded-2xl overflow-hidden shadow-[0_12px_30px_rgba(59,130,246,0.08)]">
+                            <div className="aspect-video bg-blue-50 relative flex items-center justify-center p-6">
                                 {p.image_url ? (
                                     <img src={p.image_url} alt={p.title} className="absolute inset-0 w-full h-full object-cover opacity-40" />
                                 ) : null}
@@ -141,8 +141,8 @@ export default async function HubDashboard() {
                                 </div>
                             </div>
                             <CardContent className="p-6 space-y-3">
-                                <h3 className="text-lg font-bold text-white">{p.title}</h3>
-                                <p className="text-slate-500 text-sm line-clamp-2">{p.description}</p>
+                                <h3 className="text-lg font-bold text-blue-900">{p.title}</h3>
+                                <p className="text-blue-700/75 text-sm line-clamp-2">{p.description}</p>
                             </CardContent>
                         </Card>
                     ))}
@@ -160,12 +160,12 @@ function AnnouncementCard({ title, date, description, variant }: { title: string
     }
 
     return (
-        <Card className={`bg-slate-900/50 ${colors[variant]} border rounded-xl p-4 space-y-2`}>
+        <Card className={`bg-white/80 ${colors[variant]} border rounded-xl p-4 space-y-2 shadow-sm`}>
             <div className="flex justify-between items-start gap-2">
-                <h4 className="text-sm font-bold text-white">{title}</h4>
-                <span className="text-[10px] text-slate-500">{date}</span>
+                <h4 className="text-sm font-bold text-blue-900">{title}</h4>
+                <span className="text-[10px] text-blue-700/65">{date}</span>
             </div>
-            <p className="text-xs text-slate-500 line-clamp-2">{description}</p>
+            <p className="text-xs text-blue-700/70 line-clamp-2">{description}</p>
         </Card>
     )
 }

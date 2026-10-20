@@ -62,7 +62,7 @@ export function PublicHubManagement() {
     return (
         <div className="space-y-6">
             <Tabs defaultValue="programs" className="w-full">
-                <TabsList className="bg-slate-900/60 border border-slate-800 p-1 rounded-xl">
+                <TabsList className="bg-white/80 border border-blue-100 p-1 rounded-xl shadow-[0_12px_30px_rgba(59,130,246,0.06)]">
                     <TabsTrigger value="programs" className="rounded-lg px-4 font-bold data-[state=active]:bg-blue-600 data-[state=active]:text-white flex items-center gap-2">
                         <Info className="h-4 w-4" /> Programs
                     </TabsTrigger>
@@ -76,11 +76,11 @@ export function PublicHubManagement() {
 
                 {/* Programs Tab */}
                 <TabsContent value="programs">
-                    <Card className="bg-slate-900/40 border-slate-800 rounded-2xl overflow-hidden">
-                        <CardHeader className="flex flex-row items-center justify-between border-b border-slate-800/50 p-6">
+                    <Card className="bg-white/80 border-blue-100 rounded-2xl overflow-hidden shadow-[0_20px_45px_rgba(59,130,246,0.06)]">
+                        <CardHeader className="flex flex-row items-center justify-between border-b border-blue-100 p-6">
                             <div>
-                                <CardTitle className="text-lg font-bold text-white">Programs</CardTitle>
-                                <CardDescription className="text-slate-400 text-sm">Manage public programs.</CardDescription>
+                                <CardTitle className="text-lg font-bold text-slate-800">Programs</CardTitle>
+                                <CardDescription className="text-slate-600 text-sm">Manage public programs.</CardDescription>
                             </div>
                             <ProgramDialog onSave={fetchData} />
                         </CardHeader>
@@ -97,8 +97,8 @@ export function PublicHubManagement() {
                                         <TableRow><TableCell colSpan={2} className="text-center py-12 text-slate-500">No programs found.</TableCell></TableRow>
                                     ) : (
                                         programs.map((p) => (
-                                            <TableRow key={p.id} className="border-slate-800/50 hover:bg-slate-800/30">
-                                                <TableCell className="px-6 py-3 font-medium text-slate-200">{p.title}</TableCell>
+                                            <TableRow key={p.id} className="border-blue-100 hover:bg-blue-50/40">
+                                                <TableCell className="px-6 py-3 font-medium text-slate-700">{p.title}</TableCell>
                                                 <TableCell className="px-6 py-3 text-right">
                                                     <div className="flex justify-end gap-2">
                                                         <ProgramDialog program={p} onSave={fetchData} />

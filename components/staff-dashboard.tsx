@@ -326,7 +326,7 @@ export function StaffDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100">
+    <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-blue-50 text-slate-800">
       {/* Background Effects */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
         <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-blue-600/10 blur-[120px] mix-blend-screen"></div>
@@ -334,7 +334,7 @@ export function StaffDashboard() {
       </div>
 
       {/* Header */}
-      <header className="relative z-10 bg-slate-900/40 backdrop-blur-xl border-b border-slate-800 sticky top-0">
+      <header className="relative z-10 bg-white/80 backdrop-blur-xl border-b border-blue-100 sticky top-0">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center gap-3">
@@ -342,13 +342,13 @@ export function StaffDashboard() {
                 <FileText className="h-5 w-5" />
               </div>
               <div>
-                <h1 className="text-lg font-black text-white tracking-tighter">Staff Portal</h1>
-                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                <h1 className="text-lg font-black text-slate-900 tracking-tighter">Staff Portal</h1>
+                <p className="text-[10px] font-bold text-slate-600 uppercase tracking-widest">
                   {user?.staff_id || 'STAFF'} • {user?.full_name || 'Staff Member'}
                 </p>
               </div>
             </div>
-            <Button onClick={handleLogout} variant="outline" className="bg-slate-900/50 border-slate-700 hover:bg-rose-900/30 hover:border-rose-500/50 text-slate-300 hover:text-rose-400 rounded-xl">
+            <Button onClick={handleLogout} variant="outline" className="bg-white border-blue-200 hover:bg-blue-50 hover:border-blue-300 text-slate-700 hover:text-blue-700 rounded-xl">
               <LogOut className="h-4 w-4 mr-2" />
               <span className="hidden sm:inline">Logout</span>
             </Button>
@@ -359,17 +359,17 @@ export function StaffDashboard() {
       <main className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <Tabs defaultValue="report" className="w-full space-y-6" onValueChange={(v) => { if (v === 'my-reports') fetchMyReports() }}>
           {/* Tabs Navigation */}
-          <div className="bg-slate-900/60 backdrop-blur-xl p-2 rounded-2xl border border-slate-800 w-full">
+          <div className="bg-white/80 backdrop-blur-xl p-2 rounded-2xl border border-blue-100 w-full shadow-sm">
             <TabsList className="grid w-full grid-cols-3 bg-transparent">
-              <TabsTrigger value="register" className="rounded-xl px-3 py-3 text-xs sm:text-sm font-bold data-[state=active]:bg-blue-600 data-[state=active]:text-white transition-all">
+              <TabsTrigger value="register" className="rounded-xl px-3 py-3 text-xs sm:text-sm font-bold data-[state=active]:bg-blue-600 data-[state=active]:text-white transition-all text-slate-700 hover:bg-blue-50">
                 <span className="hidden sm:inline">Register Fisherman</span>
                 <span className="sm:hidden">Register</span>
               </TabsTrigger>
-              <TabsTrigger value="report" className="rounded-xl px-3 py-3 text-xs sm:text-sm font-bold data-[state=active]:bg-cyan-600 data-[state=active]:text-white transition-all">
+              <TabsTrigger value="report" className="rounded-xl px-3 py-3 text-xs sm:text-sm font-bold data-[state=active]:bg-blue-600 data-[state=active]:text-white transition-all text-slate-700 hover:bg-blue-50">
                 <span className="hidden sm:inline">Submit Daily Catch</span>
                 <span className="sm:hidden">Submit Catch</span>
               </TabsTrigger>
-              <TabsTrigger value="my-reports" className="rounded-xl px-3 py-3 text-xs sm:text-sm font-bold data-[state=active]:bg-slate-700 data-[state=active]:text-white transition-all">
+              <TabsTrigger value="my-reports" className="rounded-xl px-3 py-3 text-xs sm:text-sm font-bold data-[state=active]:bg-blue-600 data-[state=active]:text-white transition-all text-slate-700 hover:bg-blue-50">
                 <span className="hidden sm:inline">My Reports</span>
                 <span className="sm:hidden">Reports</span>
               </TabsTrigger>
@@ -378,38 +378,38 @@ export function StaffDashboard() {
 
           {/* OPTION 1: REGISTER FISHERMAN */}
           <TabsContent value="register" className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <Card className="bg-slate-900/40 backdrop-blur-xl border-slate-800 rounded-3xl overflow-hidden">
-              <CardHeader className="border-b border-slate-800/50 p-6">
-                <CardTitle className="text-xl font-black text-white flex items-center gap-3">
-                  <User className="text-blue-500" /> Fisherman Registration
+            <Card className="bg-white/80 backdrop-blur-xl border-blue-100 rounded-3xl overflow-hidden shadow-[0_18px_45px_rgba(59,130,246,0.08)]">
+              <CardHeader className="border-b border-blue-100 bg-blue-50/50 p-6">
+                <CardTitle className="text-xl font-black text-slate-800 flex items-center gap-3">
+                  <User className="text-blue-600" /> Fisherman Registration
                 </CardTitle>
-                <CardDescription className="text-slate-400">Enter the fisherman's details to register them in the master registry.</CardDescription>
+                <CardDescription className="text-slate-600">Enter the fisherman's details to register them in the master registry.</CardDescription>
               </CardHeader>
               <CardContent className="p-6">
                 {createdCredentials && (
-                  <div className="bg-blue-500/10 border border-blue-500/30 rounded-2xl p-5 mb-6 space-y-3 animate-in zoom-in duration-300">
-                    <div className="flex items-center gap-2 text-blue-400 font-bold">
+                  <div className="bg-blue-50 border border-blue-200 rounded-2xl p-5 mb-6 space-y-3 animate-in zoom-in duration-300">
+                    <div className="flex items-center gap-2 text-blue-700 font-bold">
                       <CheckCircle2 className="h-5 w-5" />
                       Account Created Successfully!
                     </div>
-                    <div className="bg-slate-950/50 p-4 rounded-xl border border-slate-800 space-y-2 font-mono text-sm">
-                      <div className="flex justify-between items-center py-1 border-b border-slate-800">
+                    <div className="bg-white p-4 rounded-xl border border-blue-100 space-y-2 font-mono text-sm text-slate-700">
+                      <div className="flex justify-between items-center py-1 border-b border-blue-100">
                         <span className="text-slate-500">Fisherman ID:</span>
-                        <span className="text-blue-400 font-bold">{createdCredentials.id}</span>
+                        <span className="text-blue-700 font-bold">{createdCredentials.id}</span>
                       </div>
-                      <div className="flex justify-between items-center py-1 border-b border-slate-800">
+                      <div className="flex justify-between items-center py-1 border-b border-blue-100">
                         <span className="text-slate-500">Email:</span>
-                        <span className="text-slate-200 font-bold select-all">{createdCredentials.email}</span>
+                        <span className="text-slate-800 font-bold select-all">{createdCredentials.email}</span>
                       </div>
                       <div className="flex justify-between items-center py-1">
                         <span className="text-slate-500">Password:</span>
-                        <span className="text-slate-200 font-bold select-all">{createdCredentials.pass}</span>
+                        <span className="text-slate-800 font-bold select-all">{createdCredentials.pass}</span>
                       </div>
                     </div>
                     <Button 
                       variant="outline" 
                       size="sm"
-                      className="w-full bg-slate-900 border-slate-700 hover:bg-blue-900/30 text-blue-400"
+                      className="w-full bg-white border-blue-200 hover:bg-blue-50 text-blue-700"
                       onClick={() => {
                         navigator.clipboard.writeText(
                           `Fisherman ID: ${createdCredentials.id}\nEmail: ${createdCredentials.email}\nPassword: ${createdCredentials.pass}`
@@ -425,39 +425,39 @@ export function StaffDashboard() {
                 <form onSubmit={handleRegisterSubmit} className="space-y-6">
                   {/* Fisherman Details */}
                   <div className="space-y-4">
-                    <h3 className="text-sm font-bold text-slate-400 uppercase tracking-widest border-b border-slate-800 pb-2">Fisherman Details</h3>
+                    <h3 className="text-sm font-bold text-slate-700 uppercase tracking-widest border-b border-blue-100 pb-2">Fisherman Details</h3>
                     <div className="grid sm:grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <Label className="text-xs font-bold text-slate-300">First Name *</Label>
+                        <Label className="text-xs font-bold text-slate-700">First Name *</Label>
                         <Input
                           value={formData.firstName}
                           onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
                           required placeholder="e.g., Juan"
-                          className="bg-slate-950/50 border-slate-700 rounded-xl h-12 focus:ring-blue-600"
+                          className="bg-blue-50/60 border-blue-200 rounded-xl h-12 focus:ring-blue-600 text-slate-800 placeholder:text-slate-500"
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label className="text-xs font-bold text-slate-300">Last Name *</Label>
+                        <Label className="text-xs font-bold text-slate-700">Last Name *</Label>
                         <Input
                           value={formData.lastName}
                           onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
                           required placeholder="e.g., Dela Cruz"
-                          className="bg-slate-950/50 border-slate-700 rounded-xl h-12 focus:ring-blue-600"
+                          className="bg-blue-50/60 border-blue-200 rounded-xl h-12 focus:ring-blue-600 text-slate-800 placeholder:text-slate-500"
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label className="text-xs font-bold text-slate-300">Location *</Label>
+                        <Label className="text-xs font-bold text-slate-700">Location *</Label>
                         {loadingData ? (
                           <div className="flex items-center gap-2">
-                            <Loader2 className="h-4 w-4 animate-spin" />
+                            <Loader2 className="h-4 w-4 animate-spin text-blue-600" />
                             <span className="text-sm text-slate-500">Loading...</span>
                           </div>
                         ) : (
                           <Select value={formData.location} onValueChange={(value) => setFormData({ ...formData, location: value })} required>
-                            <SelectTrigger className="bg-slate-950/50 border-slate-700 rounded-xl h-12">
+                            <SelectTrigger className="bg-blue-50/60 border-blue-200 rounded-xl h-12 text-slate-800">
                               <SelectValue placeholder="Select location" />
                             </SelectTrigger>
-                            <SelectContent className="bg-slate-900 border-slate-700">
+                            <SelectContent className="bg-white border-blue-100 text-slate-800">
                               {landingCenters.map((center) => (
                                 <SelectItem key={center.id} value={center.name}>
                                   {center.name}{center.location ? ` - ${center.location}` : ''}
@@ -468,32 +468,32 @@ export function StaffDashboard() {
                         )}
                       </div>
                       <div className="space-y-2">
-                        <Label className="text-xs font-bold text-slate-300">Phone Number *</Label>
+                        <Label className="text-xs font-bold text-slate-700">Phone Number *</Label>
                         <Input
                           value={formData.phoneNumber}
                           onChange={(e) => setFormData({ ...formData, phoneNumber: e.target.value })}
                           required placeholder="Enter contact number"
-                          className="bg-slate-950/50 border-slate-700 rounded-xl h-12 focus:ring-blue-600"
+                          className="bg-blue-50/60 border-blue-200 rounded-xl h-12 focus:ring-blue-600 text-slate-800 placeholder:text-slate-500"
                         />
                       </div>
                       <div className="space-y-2 sm:col-span-2">
-                        <Label className="text-xs font-bold text-slate-300">Email Address (For Login) *</Label>
+                        <Label className="text-xs font-bold text-slate-700">Email Address (For Login) *</Label>
                         <Input
                           type="email"
                           value={formData.email}
                           onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                           required placeholder="juan.delacruz@email.com"
-                          className="bg-slate-950/50 border-slate-700 rounded-xl h-12 focus:ring-blue-600"
+                          className="bg-blue-50/60 border-blue-200 rounded-xl h-12 focus:ring-blue-600 text-slate-800 placeholder:text-slate-500"
                         />
                       </div>
                       <div className="space-y-2 sm:col-span-2">
-                        <Label className="text-xs font-bold text-slate-300">Temporary Password (Optional)</Label>
+                        <Label className="text-xs font-bold text-slate-700">Temporary Password (Optional)</Label>
                         <Input
                           type="text"
                           value={formData.password}
                           onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                           placeholder="Leave blank to auto-generate"
-                          className="bg-slate-950/50 border-slate-700 rounded-xl h-12 focus:ring-blue-600"
+                          className="bg-blue-50/60 border-blue-200 rounded-xl h-12 focus:ring-blue-600 text-slate-800 placeholder:text-slate-500"
                         />
                       </div>
                     </div>
@@ -501,41 +501,41 @@ export function StaffDashboard() {
 
                   {/* Vessel Details */}
                   <div className="space-y-4">
-                    <h3 className="text-sm font-bold text-slate-400 uppercase tracking-widest border-b border-slate-800 pb-2">Vessel Details</h3>
+                    <h3 className="text-sm font-bold text-slate-700 uppercase tracking-widest border-b border-blue-100 pb-2">Vessel Details</h3>
                     <div className="grid sm:grid-cols-2 gap-4">
                       <div className="space-y-2 sm:col-span-2">
-                        <Label className="text-xs font-bold text-slate-300">Vessel Name *</Label>
+                        <Label className="text-xs font-bold text-slate-700">Vessel Name *</Label>
                         <Input
                           value={formData.vesselName}
                           onChange={(e) => setFormData({ ...formData, vesselName: e.target.value })}
                           required placeholder="Enter vessel name"
-                          className="bg-slate-950/50 border-slate-700 rounded-xl h-12 focus:ring-blue-600"
+                          className="bg-blue-50/60 border-blue-200 rounded-xl h-12 focus:ring-blue-600 text-slate-800 placeholder:text-slate-500"
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label className="text-xs font-bold text-slate-300">Total Boats *</Label>
+                        <Label className="text-xs font-bold text-slate-700">Total Boats *</Label>
                         <Input
                           type="number" min="1"
                           value={formData.totalBoatsOperated}
                           onChange={(e) => setFormData({ ...formData, totalBoatsOperated: parseInt(e.target.value) })}
                           required
-                          className="bg-slate-950/50 border-slate-700 rounded-xl h-12 focus:ring-blue-600"
+                          className="bg-blue-50/60 border-blue-200 rounded-xl h-12 focus:ring-blue-600 text-slate-800 placeholder:text-slate-500"
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label className="text-xs font-bold text-slate-300">Total Crew *</Label>
+                        <Label className="text-xs font-bold text-slate-700">Total Crew *</Label>
                         <Input
                           type="number" min="1"
                           value={formData.totalCrew}
                           onChange={(e) => setFormData({ ...formData, totalCrew: parseInt(e.target.value) })}
                           required
-                          className="bg-slate-950/50 border-slate-700 rounded-xl h-12 focus:ring-blue-600"
+                          className="bg-blue-50/60 border-blue-200 rounded-xl h-12 focus:ring-blue-600 text-slate-800 placeholder:text-slate-500"
                         />
                       </div>
                     </div>
                   </div>
 
-                  <Button type="submit" disabled={submitting} className="w-full bg-blue-600 hover:bg-blue-500 h-14 rounded-xl font-bold text-lg shadow-lg shadow-blue-900/30">
+                  <Button type="submit" disabled={submitting} className="w-full bg-blue-600 hover:bg-blue-500 h-14 rounded-xl font-bold text-lg shadow-lg shadow-blue-900/30 text-white">
                     {submitting ? <><Loader2 className="animate-spin h-5 w-5 mr-2" /> Saving...</> : <><Save className="h-5 w-5 mr-2" /> Register Profile</>}
                   </Button>
                 </form>
@@ -545,27 +545,27 @@ export function StaffDashboard() {
 
           {/* OPTION 2: SUBMIT CATCH REPORT */}
           <TabsContent value="report" className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <Card className="bg-slate-900/40 backdrop-blur-xl border-slate-800 rounded-3xl overflow-hidden">
-              <CardHeader className="border-b border-slate-800/50 p-6">
-                <CardTitle className="text-xl font-black text-white flex items-center gap-3">
-                  <Scale className="text-cyan-500" /> Submit Daily Catch
+            <Card className="bg-white/80 backdrop-blur-xl border-blue-100 rounded-3xl overflow-hidden shadow-[0_18px_45px_rgba(59,130,246,0.08)]">
+              <CardHeader className="border-b border-blue-100 bg-blue-50/50 p-6">
+                <CardTitle className="text-xl font-black text-slate-800 flex items-center gap-3">
+                  <Scale className="text-blue-600" /> Submit Daily Catch
                 </CardTitle>
-                <CardDescription className="text-slate-400">Select a fisherman to log their daily catch.</CardDescription>
+                <CardDescription className="text-slate-600">Select a fisherman to log their daily catch.</CardDescription>
               </CardHeader>
               <CardContent className="p-6">
                 <form onSubmit={handleCatchSubmit} className="space-y-6">
                   
                   {/* Fisherman Selection */}
                   <div className="space-y-4">
-                    <h3 className="text-sm font-bold text-slate-400 uppercase tracking-widest border-b border-slate-800 pb-2 flex items-center gap-2">
-                      <User className="h-4 w-4" /> 1. Select Fisherman
+                    <h3 className="text-sm font-bold text-slate-700 uppercase tracking-widest border-b border-blue-100 pb-2 flex items-center gap-2">
+                      <User className="h-4 w-4 text-blue-600" /> 1. Select Fisherman
                     </h3>
                     <div className="space-y-2 relative">
-                      <Label className="text-xs font-bold text-slate-300">Search & Select *</Label>
+                      <Label className="text-xs font-bold text-slate-700">Search & Select *</Label>
                       <div className="relative">
                         <Input
                           type="text"
-                          className="w-full h-12 bg-slate-950/50 border-slate-700 rounded-xl pl-10 pr-10 focus:ring-cyan-500"
+                          className="w-full h-12 bg-blue-50/60 border-blue-200 rounded-xl pl-10 pr-10 focus:ring-blue-600 text-slate-800 placeholder:text-slate-500"
                           placeholder="Type to search fisherman name or ID..."
                           value={searchFilter}
                           onChange={(e) => {
@@ -595,7 +595,7 @@ export function StaffDashboard() {
                         <>
                           <div className="fixed inset-0 z-20" onClick={() => setDropdownOpen(false)} />
                           
-                          <div className="absolute z-30 w-full mt-1 bg-slate-900 border border-slate-700 rounded-xl shadow-2xl max-h-[250px] overflow-y-auto animate-in fade-in slide-in-from-top-1 duration-200">
+                          <div className="absolute z-30 w-full mt-1 bg-white border border-blue-100 rounded-xl shadow-2xl max-h-[250px] overflow-y-auto animate-in fade-in slide-in-from-top-1 duration-200">
                             {(() => {
                               const filtered = fishermen.filter(f => {
                                 const name = `${f.first_name} ${f.last_name}`.toLowerCase()
@@ -612,14 +612,14 @@ export function StaffDashboard() {
                                 <button
                                   key={f.fisherman_id}
                                   type="button"
-                                  className="w-full text-left px-4 py-3 hover:bg-slate-800 transition-colors text-sm text-slate-200 flex justify-between items-center border-b border-slate-800 last:border-0"
+                                  className="w-full text-left px-4 py-3 hover:bg-blue-50 transition-colors text-sm text-slate-700 flex justify-between items-center border-b border-blue-100 last:border-0"
                                   onClick={() => {
                                     setSelectedFishermanId(f.fisherman_id)
                                     setDropdownOpen(false)
                                   }}
                                 >
                                   <span className="font-semibold">{f.first_name} {f.last_name}</span>
-                                  <span className="text-xs bg-slate-800 text-slate-400 px-2.5 py-0.5 rounded-full font-mono">{f.fisherman_id}</span>
+                                  <span className="text-xs bg-blue-50 text-blue-700 px-2.5 py-0.5 rounded-full font-mono">{f.fisherman_id}</span>
                                 </button>
                               ))
                             })()}
@@ -630,32 +630,32 @@ export function StaffDashboard() {
 
                     {/* Autofill Display */}
                     {selectedFishermanDetails && (
-                      <div className="bg-slate-950/50 border border-slate-800 rounded-xl p-4 mt-4 flex flex-wrap gap-4 animate-in fade-in">
+                      <div className="bg-blue-50/60 border border-blue-100 rounded-xl p-4 mt-4 flex flex-wrap gap-4 animate-in fade-in">
                         <div className="flex items-start gap-3">
-                          <div className="bg-blue-500/20 p-2 rounded-lg">
-                            <User className="h-4 w-4 text-blue-400" />
+                          <div className="bg-blue-100 p-2 rounded-lg">
+                            <User className="h-4 w-4 text-blue-700" />
                           </div>
                           <div>
                             <p className="text-[10px] font-bold text-slate-500 uppercase">Operator</p>
-                            <p className="font-semibold text-slate-200">{selectedFishermanDetails.first_name} {selectedFishermanDetails.last_name}</p>
+                            <p className="font-semibold text-slate-800">{selectedFishermanDetails.first_name} {selectedFishermanDetails.last_name}</p>
                           </div>
                         </div>
                         <div className="flex items-start gap-3">
-                          <div className="bg-cyan-500/20 p-2 rounded-lg">
-                            <Anchor className="h-4 w-4 text-cyan-400" />
+                          <div className="bg-cyan-100 p-2 rounded-lg">
+                            <Anchor className="h-4 w-4 text-cyan-700" />
                           </div>
                           <div>
                             <p className="text-[10px] font-bold text-slate-500 uppercase">Vessel</p>
-                            <p className="font-semibold text-slate-200">{selectedFishermanDetails.boat_name || "N/A"}</p>
+                            <p className="font-semibold text-slate-800">{selectedFishermanDetails.boat_name || "N/A"}</p>
                           </div>
                         </div>
                         <div className="flex items-start gap-3">
-                          <div className="bg-emerald-500/20 p-2 rounded-lg">
-                            <MapPin className="h-4 w-4 text-emerald-400" />
+                          <div className="bg-emerald-100 p-2 rounded-lg">
+                            <MapPin className="h-4 w-4 text-emerald-700" />
                           </div>
                           <div>
                             <p className="text-[10px] font-bold text-slate-500 uppercase">Location</p>
-                            <p className="font-semibold text-slate-200">{selectedFishermanDetails.location || "N/A"}</p>
+                            <p className="font-semibold text-slate-800">{selectedFishermanDetails.location || "N/A"}</p>
                           </div>
                         </div>
                       </div>
@@ -664,15 +664,15 @@ export function StaffDashboard() {
 
                   {/* Catch Input */}
                   <div className={cn("space-y-4 transition-opacity", selectedFishermanId ? "" : "opacity-50")}>
-                    <h3 className="text-sm font-bold text-slate-400 uppercase tracking-widest border-b border-slate-800 pb-2 flex items-center gap-2">
-                      <Scale className="h-4 w-4" /> 2. Enter Catch
+                    <h3 className="text-sm font-bold text-slate-700 uppercase tracking-widest border-b border-blue-100 pb-2 flex items-center gap-2">
+                      <Scale className="h-4 w-4 text-blue-600" /> 2. Enter Catch
                     </h3>
                     <div className="grid sm:grid-cols-3 gap-4">
                       <div className="space-y-2">
-                        <Label className="text-xs font-bold text-slate-300">Date *</Label>
+                        <Label className="text-xs font-bold text-slate-700">Date *</Label>
                         <Input
                           type="date"
-                          className="bg-slate-950/50 border-slate-700 rounded-xl h-12 focus:ring-cyan-500"
+                          className="bg-blue-50/60 border-blue-200 rounded-xl h-12 focus:ring-blue-600 text-slate-800"
                           value={catchDate}
                           onChange={(e) => setCatchDate(e.target.value)}
                           required
@@ -680,9 +680,9 @@ export function StaffDashboard() {
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label className="text-xs font-bold text-slate-300">Species *</Label>
+                        <Label className="text-xs font-bold text-slate-700">Species *</Label>
                         <Input
-                          className="bg-slate-950/50 border-slate-700 rounded-xl h-12 focus:ring-cyan-500"
+                          className="bg-blue-50/60 border-blue-200 rounded-xl h-12 focus:ring-blue-600 text-slate-800 placeholder:text-slate-500"
                           placeholder="e.g., Tilapia"
                           value={catchSpecies}
                           onChange={(e) => setCatchSpecies(e.target.value)}
@@ -691,9 +691,9 @@ export function StaffDashboard() {
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label className="text-xs font-bold text-slate-300">Weight (kg) *</Label>
+                        <Label className="text-xs font-bold text-slate-700">Weight (kg) *</Label>
                         <Input
-                          className="bg-slate-950/50 border-slate-700 rounded-xl h-12 focus:ring-cyan-500"
+                          className="bg-blue-50/60 border-blue-200 rounded-xl h-12 focus:ring-blue-600 text-slate-800 placeholder:text-slate-500"
                           type="number"
                           step="0.01"
                           placeholder="0.00"
@@ -708,53 +708,53 @@ export function StaffDashboard() {
 
                   {/* Seasonality Details */}
                   <div className={cn("space-y-4 transition-opacity", selectedFishermanId ? "" : "opacity-50")}>
-                    <h3 className="text-sm font-bold text-slate-400 uppercase tracking-widest border-b border-slate-800 pb-2">
+                    <h3 className="text-sm font-bold text-slate-700 uppercase tracking-widest border-b border-blue-100 pb-2">
                       3. Seasonality (Updates Profile)
                     </h3>
                     <div className="grid sm:grid-cols-2 gap-4">
-                      <div className="bg-slate-950/30 p-4 rounded-xl border border-slate-800 space-y-3">
+                      <div className="bg-blue-50/60 p-4 rounded-xl border border-blue-100 space-y-3">
                         <div className="space-y-2">
-                          <Label className="text-xs font-bold text-slate-400">Lean Months</Label>
+                          <Label className="text-xs font-bold text-slate-600">Lean Months</Label>
                           <Input
                             value={leanMonths}
                             onChange={(e) => setLeanMonths(e.target.value)}
                             placeholder="e.g., January, February"
                             disabled={!selectedFishermanId}
-                            className="bg-slate-900 border-slate-700 rounded-xl h-10"
+                            className="bg-white border-blue-200 rounded-xl h-10 text-slate-800 placeholder:text-slate-500"
                           />
                         </div>
                         <div className="space-y-2">
-                          <Label className="text-xs font-bold text-slate-400">Lean Avg Catch (kg)</Label>
+                          <Label className="text-xs font-bold text-slate-600">Lean Avg Catch (kg)</Label>
                           <Input
                             type="number" step="0.01"
                             value={leanDailyAvgCatch}
                             onChange={(e) => setLeanDailyAvgCatch(e.target.value)}
                             placeholder="e.g., 50.5"
                             disabled={!selectedFishermanId}
-                            className="bg-slate-900 border-slate-700 rounded-xl h-10"
+                            className="bg-white border-blue-200 rounded-xl h-10 text-slate-800 placeholder:text-slate-500"
                           />
                         </div>
                       </div>
-                      <div className="bg-slate-950/30 p-4 rounded-xl border border-slate-800 space-y-3">
+                      <div className="bg-blue-50/60 p-4 rounded-xl border border-blue-100 space-y-3">
                         <div className="space-y-2">
-                          <Label className="text-xs font-bold text-slate-400">Peak Months</Label>
+                          <Label className="text-xs font-bold text-slate-600">Peak Months</Label>
                           <Input
                             value={peakMonths}
                             onChange={(e) => setPeakMonths(e.target.value)}
                             placeholder="e.g., June, July"
                             disabled={!selectedFishermanId}
-                            className="bg-slate-900 border-slate-700 rounded-xl h-10"
+                            className="bg-white border-blue-200 rounded-xl h-10 text-slate-800 placeholder:text-slate-500"
                           />
                         </div>
                         <div className="space-y-2">
-                          <Label className="text-xs font-bold text-slate-400">Peak Avg Catch (kg)</Label>
+                          <Label className="text-xs font-bold text-slate-600">Peak Avg Catch (kg)</Label>
                           <Input
                             type="number" step="0.01"
                             value={peakDailyAvgCatch}
                             onChange={(e) => setPeakDailyAvgCatch(e.target.value)}
                             placeholder="e.g., 150.0"
                             disabled={!selectedFishermanId}
-                            className="bg-slate-900 border-slate-700 rounded-xl h-10"
+                            className="bg-white border-blue-200 rounded-xl h-10 text-slate-800 placeholder:text-slate-500"
                           />
                         </div>
                       </div>
@@ -764,7 +764,7 @@ export function StaffDashboard() {
                   <Button 
                     type="submit" 
                     disabled={submittingCatch || !selectedFishermanId} 
-                    className="w-full bg-cyan-600 hover:bg-cyan-500 h-14 rounded-xl font-bold text-lg shadow-lg shadow-cyan-900/30"
+                    className="w-full bg-blue-600 hover:bg-blue-500 h-14 rounded-xl font-bold text-lg shadow-lg shadow-blue-900/30 text-white"
                   >
                     {submittingCatch ? <><Loader2 className="animate-spin h-5 w-5 mr-2" /> Submitting...</> : <><CheckCircle2 className="h-5 w-5 mr-2" /> Submit Daily Catch</>}
                   </Button>
@@ -775,57 +775,57 @@ export function StaffDashboard() {
 
           {/* OPTION 3: MY SUBMITTED REPORTS */}
           <TabsContent value="my-reports" className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <Card className="bg-slate-900/40 backdrop-blur-xl border-slate-800 rounded-3xl overflow-hidden">
-              <CardHeader className="border-b border-slate-800/50 p-6">
-                <CardTitle className="text-xl font-black text-white flex items-center gap-3">
-                  <ClipboardList className="text-slate-400" /> My Reports
+            <Card className="bg-white/80 backdrop-blur-xl border-blue-100 rounded-3xl overflow-hidden shadow-[0_18px_45px_rgba(59,130,246,0.08)]">
+              <CardHeader className="border-b border-blue-100 bg-blue-50/50 p-6">
+                <CardTitle className="text-xl font-black text-slate-800 flex items-center gap-3">
+                  <ClipboardList className="text-blue-600" /> My Reports
                 </CardTitle>
-                <CardDescription className="text-slate-400">Reports you submitted. Pending reports can be edited.</CardDescription>
+                <CardDescription className="text-slate-600">Reports you submitted. Pending reports can be edited.</CardDescription>
               </CardHeader>
               <CardContent className="p-6">
                 {loadingReports ? (
                   <div className="text-center py-10">
-                    <Loader2 className="h-8 w-8 animate-spin mx-auto text-slate-500 mb-3" />
-                    <p className="text-slate-500">Loading reports...</p>
+                    <Loader2 className="h-8 w-8 animate-spin mx-auto text-blue-600 mb-3" />
+                    <p className="text-slate-600">Loading reports...</p>
                   </div>
                 ) : myReports.length === 0 ? (
                   <div className="text-center py-10">
-                    <ClipboardList className="h-10 w-10 mx-auto mb-3 text-slate-600" />
-                    <p className="text-slate-500 font-medium">No reports submitted yet.</p>
+                    <ClipboardList className="h-10 w-10 mx-auto mb-3 text-blue-600" />
+                    <p className="text-slate-700 font-medium">No reports submitted yet.</p>
                     <p className="text-sm text-slate-600">Submit a daily catch in Option 2 to see them here.</p>
                   </div>
                 ) : (
                   <div className="overflow-x-auto">
                     <Table className="min-w-[700px]">
-                      <TableHeader className="bg-slate-950/50">
-                        <TableRow className="border-slate-800">
-                          <TableHead className="text-slate-400 font-bold uppercase text-xs">Date</TableHead>
-                          <TableHead className="text-slate-400 font-bold uppercase text-xs">Fisherman ID</TableHead>
-                          <TableHead className="text-slate-400 font-bold uppercase text-xs">Species</TableHead>
-                          <TableHead className="text-slate-400 font-bold uppercase text-xs">Weight</TableHead>
-                          <TableHead className="text-slate-400 font-bold uppercase text-xs">Location</TableHead>
-                          <TableHead className="text-slate-400 font-bold uppercase text-xs">Status</TableHead>
-                          <TableHead className="text-right text-slate-400 font-bold uppercase text-xs">Actions</TableHead>
+                      <TableHeader className="bg-blue-50">
+                        <TableRow className="border-blue-100">
+                          <TableHead className="text-slate-700 font-bold uppercase text-xs">Date</TableHead>
+                          <TableHead className="text-slate-700 font-bold uppercase text-xs">Fisherman ID</TableHead>
+                          <TableHead className="text-slate-700 font-bold uppercase text-xs">Species</TableHead>
+                          <TableHead className="text-slate-700 font-bold uppercase text-xs">Weight</TableHead>
+                          <TableHead className="text-slate-700 font-bold uppercase text-xs">Location</TableHead>
+                          <TableHead className="text-slate-700 font-bold uppercase text-xs">Status</TableHead>
+                          <TableHead className="text-right text-slate-700 font-bold uppercase text-xs">Actions</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
                         {myReports.map((report) => (
-                          <TableRow key={report.id} className="border-slate-800/50 hover:bg-slate-800/30">
-                            <TableCell className="text-slate-300">{new Date(report.created_at).toLocaleDateString()}</TableCell>
-                            <TableCell className="font-mono text-blue-400">{report.fisherman_id || '—'}</TableCell>
-                            <TableCell className="text-slate-300">{report.species}</TableCell>
-                            <TableCell className="text-white font-bold">{report.weight_kg} kg</TableCell>
-                            <TableCell className="text-slate-400 text-sm">{report.location}</TableCell>
+                          <TableRow key={report.id} className="border-blue-100 hover:bg-blue-50/50">
+                            <TableCell className="text-slate-700">{new Date(report.created_at).toLocaleDateString()}</TableCell>
+                            <TableCell className="font-mono text-blue-700">{report.fisherman_id || '—'}</TableCell>
+                            <TableCell className="text-slate-700">{report.species}</TableCell>
+                            <TableCell className="text-slate-800 font-bold">{report.weight_kg} kg</TableCell>
+                            <TableCell className="text-slate-600 text-sm">{report.location}</TableCell>
                             <TableCell>
                               <span className={cn(
                                 "inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider",
-                                report.status === 'approved' ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20" :
-                                report.status === 'not_approved' ? "bg-rose-500/10 text-rose-400 border border-rose-500/20" :
-                                "bg-amber-500/10 text-amber-400 border border-amber-500/20"
+                                report.status === 'approved' ? "bg-emerald-100 text-emerald-700 border border-emerald-200" :
+                                report.status === 'not_approved' ? "bg-rose-100 text-rose-700 border border-rose-200" :
+                                "bg-amber-100 text-amber-700 border border-amber-200"
                               )}>
                                 <span className={cn("h-1.5 w-1.5 rounded-full",
-                                  report.status === 'approved' ? "bg-emerald-400" :
-                                  report.status === 'not_approved' ? "bg-rose-400" : "bg-amber-400 animate-pulse"
+                                  report.status === 'approved' ? "bg-emerald-500" :
+                                  report.status === 'not_approved' ? "bg-rose-500" : "bg-amber-500 animate-pulse"
                                 )} />
                                 {report.status === 'not_approved' ? 'Not Approved' : report.status}
                               </span>
@@ -835,7 +835,7 @@ export function StaffDashboard() {
                                 <Button
                                   size="sm"
                                   variant="outline"
-                                  className="h-8 bg-slate-900 border-slate-700 hover:bg-slate-800 text-slate-300"
+                                  className="h-8 bg-white border-blue-200 hover:bg-blue-50 text-slate-700"
                                   onClick={() => handleOpenEdit(report)}
                                 >
                                   <Pencil className="h-3 w-3 mr-1" />

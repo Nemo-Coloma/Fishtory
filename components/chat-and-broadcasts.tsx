@@ -131,7 +131,7 @@ export function ChatAndBroadcasts({ currentUser, role }: { currentUser: UserInfo
         <div className="flex flex-col gap-6 w-full h-[calc(100vh-180px)] min-h-[600px] animate-in fade-in slide-in-from-bottom-4 duration-1000">
             {/* --- INSTAGRAM STYLE STORIES (BROADCASTS) --- */}
             <div className="flex flex-col gap-3">
-                <Label className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] px-4 flex items-center gap-2">
+                <Label className="text-[10px] font-black text-slate-600 uppercase tracking-[0.3em] px-4 flex items-center gap-2">
                     <Megaphone className="w-3 h-3 text-amber-500" /> Official Broadcasts
                 </Label>
                 <div className="flex items-center gap-4 overflow-x-auto pb-4 pt-1 px-2 no-scrollbar scroll-smooth">
@@ -140,29 +140,29 @@ export function ChatAndBroadcasts({ currentUser, role }: { currentUser: UserInfo
                         <Dialog>
                             <DialogTrigger asChild>
                                 <button className="flex-none flex flex-col items-center gap-2 group outline-none">
-                                    <div className="p-[3px] rounded-full bg-slate-800 group-hover:bg-gradient-to-tr group-hover:from-blue-600 group-hover:via-cyan-400 group-hover:to-blue-600 transition-all duration-500">
-                                        <div className="bg-slate-950 p-1 rounded-full">
-                                            <div className="w-16 h-16 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center group-hover:border-blue-500/30 transition-all group-hover:scale-105 active:scale-95 shadow-xl">
-                                                <Plus className="w-6 h-6 text-slate-500 group-hover:text-blue-500" />
+                                    <div className="p-[3px] rounded-full bg-blue-100 group-hover:bg-gradient-to-tr group-hover:from-blue-600 group-hover:via-cyan-400 group-hover:to-blue-600 transition-all duration-500">
+                                        <div className="bg-white p-1 rounded-full">
+                                            <div className="w-16 h-16 rounded-full bg-blue-50 border border-blue-200 flex items-center justify-center group-hover:border-blue-500/30 transition-all group-hover:scale-105 active:scale-95 shadow-xl">
+                                                <Plus className="w-6 h-6 text-blue-600 group-hover:text-blue-500" />
                                             </div>
                                         </div>
                                     </div>
-                                    <span className="text-[10px] font-black text-slate-500 uppercase tracking-tighter group-hover:text-blue-400 transition-colors">Post News</span>
+                                    <span className="text-[10px] font-black text-slate-600 uppercase tracking-tighter group-hover:text-blue-500 transition-colors">Post News</span>
                                 </button>
                             </DialogTrigger>
-                            <DialogContent className="bg-slate-900 border-slate-800 text-slate-100 rounded-3xl sm:max-w-md">
+                            <DialogContent className="bg-white border-blue-200 text-slate-800 rounded-3xl sm:max-w-md">
                                 <DialogHeader>
                                     <DialogTitle>Broadcast Announcement</DialogTitle>
-                                    <DialogDescription>Your message will appear at the top of everyone's feed.</DialogDescription>
+                                    <DialogDescription className="text-slate-600">Your message will appear at the top of everyone's feed.</DialogDescription>
                                 </DialogHeader>
                                 <form onSubmit={sendBroadcast} className="space-y-4 mt-2">
                                     <Input 
                                         placeholder="What's happening?..."
                                         value={newBroadcast}
                                         onChange={(e) => setNewBroadcast(e.target.value)}
-                                        className="bg-slate-950 border-slate-800 h-14 rounded-2xl"
+                                        className="bg-blue-50 border-blue-200 h-14 rounded-2xl text-slate-800 placeholder:text-slate-500"
                                     />
-                                    <Button type="submit" disabled={loading} className="w-full h-12 bg-amber-600 hover:bg-amber-500 font-bold rounded-xl">
+                                    <Button type="submit" disabled={loading} className="w-full h-12 bg-amber-600 hover:bg-amber-500 font-bold rounded-xl text-white">
                                         {loading ? <Loader2 className="animate-spin h-5 w-5" /> : "Post Broadcast"}
                                     </Button>
                                 </form>
@@ -183,13 +183,13 @@ export function ChatAndBroadcasts({ currentUser, role }: { currentUser: UserInfo
                         >
                             <div className={cn(
                                 "w-16 h-16 rounded-full p-[2px] bg-gradient-to-tr from-blue-600 via-cyan-400 to-indigo-500 group-hover:scale-110 group-hover:rotate-6 transition-all shadow-xl shadow-blue-900/10",
-                                selectedBroadcast?.id === b.id && "scale-110 rotate-6 ring-2 ring-blue-500 ring-offset-2 ring-offset-slate-950"
+                                selectedBroadcast?.id === b.id && "scale-110 rotate-6 ring-2 ring-blue-500 ring-offset-2 ring-offset-white"
                             )}>
-                                <div className="w-full h-full rounded-full bg-slate-950 border-2 border-slate-950 flex items-center justify-center overflow-hidden">
-                                    <Megaphone className="w-6 h-6 text-blue-400" />
+                                <div className="w-full h-full rounded-full bg-white border-2 border-white flex items-center justify-center overflow-hidden">
+                                    <Megaphone className="w-6 h-6 text-blue-500" />
                                 </div>
                             </div>
-                            <span className="text-[10px] font-bold text-slate-300 w-16 truncate text-center">
+                            <span className="text-[10px] font-bold text-slate-600 w-16 truncate text-center">
                                 {new Date(b.created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
                             </span>
                         </button>
@@ -199,44 +199,44 @@ export function ChatAndBroadcasts({ currentUser, role }: { currentUser: UserInfo
 
             {/* Selected Broadcast Viewer (Overlay style) */}
             {selectedBroadcast && (
-                <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-md p-4 animate-in fade-in duration-300" onClick={() => setSelectedBroadcast(null)}>
-                    <div className="bg-slate-900 border border-slate-800 w-full max-w-lg rounded-[2.5rem] overflow-hidden shadow-2xl animate-in zoom-in-95 duration-300" onClick={e => e.stopPropagation()}>
+                <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 backdrop-blur-md p-4 animate-in fade-in duration-300" onClick={() => setSelectedBroadcast(null)}>
+                    <div className="bg-white border border-blue-100 w-full max-w-lg rounded-[2.5rem] overflow-hidden shadow-2xl animate-in zoom-in-95 duration-300" onClick={e => e.stopPropagation()}>
                         <div className="h-1 bg-gradient-to-r from-amber-600 via-orange-500 to-yellow-400 w-full" />
                         <div className="p-8 space-y-6">
                             <div className="flex justify-between items-center">
                                 <div className="flex items-center gap-3">
-                                    <div className="w-10 h-10 rounded-full bg-amber-500/10 flex items-center justify-center">
-                                        <Megaphone className="w-5 h-5 text-amber-500" />
+                                    <div className="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center">
+                                        <Megaphone className="w-5 h-5 text-amber-600" />
                                     </div>
                                     <div>
-                                        <h3 className="font-black text-white uppercase tracking-widest text-xs">Official Broadcast</h3>
+                                        <h3 className="font-black text-slate-800 uppercase tracking-widest text-xs">Official Broadcast</h3>
                                         <p className="text-[10px] text-slate-500 font-bold">{new Date(selectedBroadcast.created_at).toLocaleString()}</p>
                                     </div>
                                 </div>
                                 <div className="flex items-center gap-2">
                                     {role === 'admin' && (
-                                        <Button variant="ghost" size="sm" onClick={() => { deleteBroadcast(selectedBroadcast.id); setSelectedBroadcast(null); }} className="text-rose-500 hover:bg-rose-500/10 group">
+                                        <Button variant="ghost" size="sm" onClick={() => { deleteBroadcast(selectedBroadcast.id); setSelectedBroadcast(null); }} className="text-rose-600 hover:bg-rose-100 group">
                                             <Trash2 className="w-4 h-4 transition-transform group-hover:scale-110" />
                                         </Button>
                                     )}
-                                    <Button variant="ghost" size="sm" onClick={() => setSelectedBroadcast(null)} className="text-slate-400 hover:text-white">
+                                    <Button variant="ghost" size="sm" onClick={() => setSelectedBroadcast(null)} className="text-slate-500 hover:text-slate-800">
                                         <X className="w-5 h-5" />
                                     </Button>
                                 </div>
                             </div>
-                            <div className="bg-slate-950/50 p-8 rounded-3xl border border-slate-800/50">
-                                <p className="text-lg font-medium text-slate-100 leading-relaxed italic text-center">"{selectedBroadcast.content}"</p>
+                            <div className="bg-blue-50 p-8 rounded-3xl border border-blue-100">
+                                <p className="text-lg font-medium text-slate-700 leading-relaxed italic text-center">"{selectedBroadcast.content}"</p>
                             </div>
-                            <Button className="w-full h-12 bg-slate-800 hover:bg-slate-700 text-white rounded-xl font-bold" onClick={() => setSelectedBroadcast(null)}>Dismiss</Button>
+                            <Button className="w-full h-12 bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-bold" onClick={() => setSelectedBroadcast(null)}>Dismiss</Button>
                         </div>
                     </div>
                 </div>
             )}
 
             {/* --- MAIN CHAT FEED --- */}
-            <Card className="flex-1 flex flex-col shadow-[0_32px_64px_-16px_rgba(0,0,0,0.5)] rounded-[2.5rem] overflow-hidden bg-slate-900/40 backdrop-blur-3xl border border-slate-800/40 ring-1 ring-white/5 relative group/chat">
-                <CardHeader className="bg-slate-950/30 pb-4 border-b border-slate-800/50 p-6 flex flex-row items-center justify-between">
-                    <CardTitle className="flex items-center text-white text-xl font-black tracking-tighter">
+            <Card className="flex-1 flex flex-col shadow-[0_32px_64px_-16px_rgba(59,130,246,0.12)] rounded-[2.5rem] overflow-hidden bg-white/90 backdrop-blur-3xl border border-blue-100 ring-1 ring-blue-50 relative group/chat">
+                <CardHeader className="bg-blue-50/70 pb-4 border-b border-blue-100 p-6 flex flex-row items-center justify-between">
+                    <CardTitle className="flex items-center text-slate-800 text-xl font-black tracking-tighter">
                         <div className="w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center mr-4 group-hover/chat:scale-110 transition-transform">
                             <MessageCircle className="w-5 h-5 text-blue-500" />
                         </div>
@@ -244,14 +244,14 @@ export function ChatAndBroadcasts({ currentUser, role }: { currentUser: UserInfo
                     </CardTitle>
                     <div className="flex -space-x-3">
                         {[1, 2, 3].map(i => (
-                            <div key={i} className="w-8 h-8 rounded-full border-2 border-slate-900 bg-slate-800 flex items-center justify-center text-[10px] font-bold text-slate-500">
+                            <div key={i} className="w-8 h-8 rounded-full border-2 border-white bg-slate-200 flex items-center justify-center text-[10px] font-bold text-slate-600">
                                 <User className="w-4 h-4" />
                             </div>
                         ))}
                     </div>
                 </CardHeader>
                 
-                <div className="flex-1 overflow-y-auto p-8 space-y-8 bg-transparent scrollbar-none hover:scrollbar-thin scrollbar-thumb-slate-800 scrollbar-track-transparent" ref={scrollRef}>
+                <div className="flex-1 overflow-y-auto p-8 space-y-8 bg-transparent scrollbar-none hover:scrollbar-thin scrollbar-thumb-blue-200 scrollbar-track-transparent" ref={scrollRef}>
                     {messages.length === 0 ? (
                         <div className="h-full flex flex-col items-center justify-center gap-4 text-slate-600 opacity-50">
                             <MessageCircle className="w-12 h-12" />
@@ -271,8 +271,8 @@ export function ChatAndBroadcasts({ currentUser, role }: { currentUser: UserInfo
                                         isMe ? "flex-row-reverse" : "flex-row"
                                     )}>
                                         {!isMe && showAvatar && (
-                                            <div className="flex-none w-8 h-8 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center self-end mb-1">
-                                                <User className="w-4 h-4 text-slate-500" />
+                                            <div className="flex-none w-8 h-8 rounded-full bg-slate-200 border border-slate-300 flex items-center justify-center self-end mb-1">
+                                                <User className="w-4 h-4 text-slate-600" />
                                             </div>
                                         )}
                                         {!isMe && !showAvatar && <div className="w-8" />}
@@ -281,7 +281,7 @@ export function ChatAndBroadcasts({ currentUser, role }: { currentUser: UserInfo
                                             {!isMe && showAvatar && (
                                                 <span className={cn(
                                                     "text-[10px] font-black uppercase tracking-widest px-1",
-                                                    isAdmin ? "text-amber-500" : "text-slate-500"
+                                                    isAdmin ? "text-amber-600" : "text-slate-500"
                                                 )}>
                                                     {msg.sender_name} {isAdmin && "(MUNICIPAL)"}
                                                 </span>
@@ -289,8 +289,8 @@ export function ChatAndBroadcasts({ currentUser, role }: { currentUser: UserInfo
                                             <div className={cn(
                                                 "rounded-3xl px-6 py-4 relative group/msg shadow-lg",
                                                 isMe ? "bg-gradient-to-tr from-blue-600 to-cyan-500 text-white rounded-br-lg" : 
-                                                isAdmin ? "bg-amber-900/20 text-amber-50 border border-amber-900/30 rounded-bl-lg backdrop-blur-sm" :
-                                                "bg-slate-800/40 border border-slate-800/50 text-slate-200 rounded-bl-lg"
+                                                isAdmin ? "bg-amber-50 text-amber-900 border border-amber-200 rounded-bl-lg backdrop-blur-sm" :
+                                                "bg-slate-100 border border-slate-200 text-slate-700 rounded-bl-lg"
                                             )}>
                                                 <p className="text-sm font-medium leading-relaxed">{msg.content}</p>
                                                 <span className={cn(
@@ -308,13 +308,13 @@ export function ChatAndBroadcasts({ currentUser, role }: { currentUser: UserInfo
                     )}
                 </div>
 
-                <div className="p-6 bg-slate-950/40 border-t border-slate-800/50">
-                    <form onSubmit={sendMessage} className="flex items-center gap-4 bg-slate-900/50 p-2 rounded-[2rem] border border-slate-800/80 focus-within:border-blue-500/50 transition-all shadow-inner">
+                <div className="p-6 bg-slate-50 border-t border-blue-100">
+                    <form onSubmit={sendMessage} className="flex items-center gap-4 bg-blue-50 p-2 rounded-[2rem] border border-blue-200 focus-within:border-blue-500/50 transition-all shadow-inner">
                         <Input
                             value={newMessage}
                             onChange={(e) => setNewMessage(e.target.value)}
                             placeholder="Message the community..."
-                            className="flex-1 bg-transparent border-none text-slate-100 placeholder:text-slate-600 focus-visible:ring-0 h-14 px-6 text-sm font-bold"
+                            className="flex-1 bg-transparent border-none text-slate-700 placeholder:text-slate-500 focus-visible:ring-0 h-14 px-6 text-sm font-bold"
                         />
                         <Button type="submit" disabled={!newMessage.trim()} className="bg-blue-600 hover:bg-blue-500 h-12 w-12 rounded-full shadow-lg shadow-blue-900/20 transition-all active:scale-95 flex-none p-0">
                             <Send className="w-5 h-5 text-white" />

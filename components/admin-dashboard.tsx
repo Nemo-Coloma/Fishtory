@@ -644,38 +644,38 @@ export function AdminDashboard() {
     if (!isMounted) return null
 
     return (
-        <div className="flex h-screen bg-slate-950 overflow-hidden font-sans text-slate-100 selection:bg-blue-500/30 relative">
+        <div className="flex h-screen bg-[radial-gradient(circle_at_top_left,_rgba(96,165,250,0.18),_transparent_35%),radial-gradient(circle_at_bottom_right,_rgba(34,211,238,0.12),_transparent_30%),linear-gradient(180deg,#f8fbff_0%,#edf6ff_42%,#f5f9ff_100%)] overflow-hidden font-sans text-slate-800 selection:bg-blue-500/30 relative">
             {/* Background Effects */}
             <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
-                <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-blue-600/10 blur-[120px] mix-blend-screen animate-pulse duration-10000"></div>
-                <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-cyan-500/10 blur-[120px] mix-blend-screen"></div>
-                <div className="absolute inset-0 bg-[linear-gradient(to_right,#1e293b_1px,transparent_1px),linear-gradient(to_bottom,#1e293b_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)] opacity-20"></div>
+                <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-blue-400/20 blur-[120px] mix-blend-screen animate-pulse duration-10000"></div>
+                <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-cyan-400/20 blur-[120px] mix-blend-screen"></div>
+                <div className="absolute inset-0 bg-[linear-gradient(to_right,#bfdbfe_1px,transparent_1px),linear-gradient(to_bottom,#bfdbfe_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)] opacity-25"></div>
             </div>
 
             {/* --- SIDEBAR (Fixed Position Layer) --- */}
             <aside
                 className={cn(
-                    "fixed inset-y-0 left-0 z-50 flex flex-col border-r border-slate-800 bg-slate-900/40 backdrop-blur-xl transition-all duration-300 transform",
+                    "fixed inset-y-0 left-0 z-50 flex flex-col border-r border-blue-100 bg-white/75 backdrop-blur-xl transition-all duration-300 transform shadow-[0_20px_60px_rgba(59,130,246,0.08)]",
                     isMobileMenuOpen ? "translate-x-0 w-80" : "-translate-x-full lg:translate-x-0 shadow-2xl lg:shadow-none",
                     isSidebarCollapsed ? "lg:w-20" : "lg:w-80"
                 )}
             >
                 {/* Mobile Drawer Header */}
-                <div className="lg:hidden flex items-center justify-between p-6 border-b border-slate-800/50">
-                    <span className="font-bold text-slate-400 uppercase tracking-widest text-[10px]">Navigation Hub</span>
-                    <Button variant="ghost" size="icon" onClick={() => setIsMobileMenuOpen(false)} className="rounded-xl hover:bg-slate-800">
-                        <X className="h-6 w-6 text-slate-400" />
+                <div className="lg:hidden flex items-center justify-between p-6 border-b border-blue-100/80">
+                    <span className="font-bold text-blue-700 uppercase tracking-widest text-[10px]">Navigation Hub</span>
+                    <Button variant="ghost" size="icon" onClick={() => setIsMobileMenuOpen(false)} className="rounded-xl hover:bg-blue-50 text-blue-700">
+                        <X className="h-6 w-6" />
                     </Button>
                 </div>
 
-                <div className={cn("hidden lg:flex items-center border-b border-slate-800/50 h-24 overflow-hidden", isSidebarCollapsed ? "justify-center p-0" : "p-8 gap-4")}>
+                <div className={cn("hidden lg:flex items-center border-b border-blue-100/80 h-24 overflow-hidden", isSidebarCollapsed ? "justify-center p-0" : "p-8 gap-4")}>
                     <div className="bg-gradient-to-tr from-blue-600 to-cyan-400 p-2.5 rounded-2xl text-white shadow-[0_0_20px_rgba(37,99,235,0.3)] ring-1 ring-white/10 shrink-0">
                         <Anchor className="h-6 w-6" />
                     </div>
                     {!isSidebarCollapsed && (
                         <div className="flex flex-col animate-in fade-in slide-in-from-left-4 duration-500">
-                            <span className="font-black text-2xl text-white tracking-tighter leading-none">Fish<span className="text-blue-500">tory</span></span>
-                            <span className="text-[10px] uppercase tracking-[0.2em] font-bold text-slate-400 mt-1">Admin Dashboard</span>
+                            <span className="font-black text-2xl text-slate-800 tracking-tighter leading-none">Fish<span className="text-blue-600">tory</span></span>
+                            <span className="text-[10px] uppercase tracking-[0.2em] font-bold text-blue-600 mt-1">Admin Dashboard</span>
                         </div>
                     )}
                 </div>
@@ -692,8 +692,8 @@ export function AdminDashboard() {
                                 "w-full flex items-center rounded-2xl transition-all group relative overflow-hidden",
                                 isSidebarCollapsed ? "lg:justify-center p-3" : "gap-3 p-3.5",
                                 activeTab === item.id
-                                    ? "bg-blue-600 text-white shadow-[0_0_20px_rgba(37,99,235,0.3)] scale-[1.02] border border-blue-500/50"
-                                    : "text-slate-400 hover:bg-slate-800/50 hover:text-white"
+                                    ? "bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-[0_0_25px_rgba(59,130,246,0.25)] scale-[1.02] border border-blue-500/50"
+                                    : "text-slate-600 hover:bg-blue-50 hover:text-blue-700 border border-transparent"
                             )}
                         >
                             <item.icon className={cn(
@@ -714,11 +714,11 @@ export function AdminDashboard() {
                     ))}
                 </nav>
 
-                <div className={cn("p-4 border-t border-slate-800/50 space-y-4 bg-slate-950/40 shrink-0", isSidebarCollapsed ? "lg:px-2" : "lg:p-6")}>
+                <div className={cn("p-4 border-t border-blue-100/80 space-y-4 bg-slate-50/80 shrink-0", isSidebarCollapsed ? "lg:px-2" : "lg:p-6")}>
                     <button
                         onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
                         className={cn(
-                            "hidden lg:flex w-full items-center rounded-2xl text-slate-400 hover:bg-slate-800 hover:text-white transition-all group border border-transparent hover:border-slate-700",
+                            "hidden lg:flex w-full items-center rounded-2xl text-slate-600 hover:bg-blue-50 hover:text-blue-700 transition-all group border border-transparent hover:border-blue-200",
                             isSidebarCollapsed ? "justify-center p-3" : "gap-3 p-3.5"
                         )}
                     >
@@ -735,7 +735,7 @@ export function AdminDashboard() {
                             <UserProfile />
                             {(!isSidebarCollapsed || isMobileMenuOpen) && (
                                 <div className="flex flex-col animate-in fade-in slide-in-from-bottom-2 overflow-hidden truncate">
-                                    <span className="text-sm font-bold text-white leading-none truncate underline decoration-blue-500/20 underline-offset-4">Admin Profile</span>
+                                    <span className="text-sm font-bold text-slate-800 leading-none truncate underline decoration-blue-500/20 underline-offset-4">Admin Profile</span>
                                     <span className="text-[10px] text-slate-500 mt-1 uppercase tracking-widest font-black truncate">SETTINGS HUB</span>
                                 </div>
                             )}
@@ -747,7 +747,7 @@ export function AdminDashboard() {
                                 "w-full rounded-2xl font-bold flex items-center justify-center transition-all group overflow-hidden",
                                 isSidebarCollapsed && !isMobileMenuOpen
                                     ? "h-11 w-11 mx-auto text-red-500 hover:bg-red-500/10 p-0"
-                                    : "h-12 gap-2 border-red-900/20 bg-red-950/30 text-red-400 hover:bg-red-900/50 hover:text-red-300 px-4"
+                                    : "h-12 gap-2 border-red-200 bg-red-50 text-red-600 hover:bg-red-100 hover:text-red-700 px-4"
                             )}
                             onClick={async () => {
                                 try {
@@ -775,14 +775,14 @@ export function AdminDashboard() {
             )}
 
             {/* --- MOBILE NAV --- */}
-            <div className="lg:hidden fixed top-0 left-0 right-0 h-20 bg-slate-950/80 backdrop-blur-md border-b border-slate-800 z-40 flex items-center justify-between px-6">
+            <div className="lg:hidden fixed top-0 left-0 right-0 h-20 bg-white/80 backdrop-blur-md border-b border-blue-100 z-40 flex items-center justify-between px-6">
                 <div className="flex items-center gap-3">
                     <div className="bg-gradient-to-tr from-blue-600 to-cyan-400 p-2.5 rounded-2xl text-white shadow-lg">
                         <Anchor className="h-5 w-5" />
                     </div>
-                    <span className="font-black text-xl text-white tracking-tighter leading-none">Fish<span className="text-blue-500">tory</span></span>
+                    <span className="font-black text-xl text-slate-800 tracking-tighter leading-none">Fish<span className="text-blue-600">tory</span></span>
                 </div>
-                <Button variant="ghost" size="icon" onClick={() => setIsMobileMenuOpen(true)} className="rounded-xl hover:bg-slate-800 text-slate-300">
+                <Button variant="ghost" size="icon" onClick={() => setIsMobileMenuOpen(true)} className="rounded-xl hover:bg-blue-50 text-blue-700">
                     <Menu className="h-6 w-6" />
                 </Button>
             </div>
@@ -801,10 +801,10 @@ export function AdminDashboard() {
                     <div className="flex flex-col gap-8">
                         <div className="flex flex-col md:flex-row justify-between items-end gap-6">
                             <div className="space-y-2">
-                                <h1 className="text-4xl md:text-5xl font-black text-white tracking-tighter">
+                                <h1 className="text-4xl md:text-5xl font-black text-slate-800 tracking-tighter">
                                     {navItems.find(i => i.id === activeTab)?.label}
                                 </h1>
-                                <p className="text-slate-400 font-medium italic opacity-70 border-l-2 border-blue-500/30 pl-4">
+                                <p className="text-slate-600 font-medium italic opacity-80 border-l-2 border-blue-500/40 pl-4">
                                     {navItems.find(i => i.id === activeTab)?.description}
                                 </p>
                             </div>
@@ -829,7 +829,7 @@ export function AdminDashboard() {
                             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                                 <Dialog>
                                     <DialogTrigger asChild>
-                                        <Card className="bg-slate-900/60 backdrop-blur-xl border-slate-800 hover:border-blue-500 transition-all cursor-pointer group shadow-xl">
+                                        <Card className="bg-white/80 backdrop-blur-xl border-blue-100 hover:border-blue-300 transition-all cursor-pointer group shadow-[0_20px_50px_rgba(59,130,246,0.08)]">
                                             <CardHeader className="pb-2">
                                                 <CardDescription className="text-slate-400 font-bold uppercase tracking-widest text-[10px]">Total Catch</CardDescription>
                                                 <CardTitle className="text-3xl font-black text-blue-500 group-hover:scale-105 transition-transform">{totalCatch.toLocaleString()} kg</CardTitle>
@@ -839,23 +839,23 @@ export function AdminDashboard() {
                                             </CardContent>
                                         </Card>
                                     </DialogTrigger>
-                                    <DialogContent className="max-w-md bg-slate-900 border-slate-800 text-slate-100">
+                                    <DialogContent className="max-w-md bg-white border-blue-100 text-slate-800">
                                         <DialogHeader>
                                             <DialogTitle className="flex items-center gap-2 text-2xl font-black"><Fish className="text-blue-500" /> Species Breakdown</DialogTitle>
                                         </DialogHeader>
-                                        <div className="mt-4 border border-slate-800 rounded-2xl overflow-hidden bg-slate-950/50">
+                                        <div className="mt-4 border border-blue-100 rounded-2xl overflow-hidden bg-blue-50/30">
                                             <Table>
-                                                <TableHeader className="bg-slate-900/50">
-                                                    <TableRow className="border-slate-800">
-                                                        <TableHead className="text-slate-400 uppercase font-bold text-[10px]">Species</TableHead>
-                                                        <TableHead className="text-right text-slate-400 uppercase font-bold text-[10px]">Weight</TableHead>
+                                                <TableHeader className="bg-blue-50/60">
+                                                    <TableRow className="border-blue-100">
+                                                        <TableHead className="text-slate-500 uppercase font-bold text-[10px]">Species</TableHead>
+                                                        <TableHead className="text-right text-slate-500 uppercase font-bold text-[10px]">Weight</TableHead>
                                                     </TableRow>
                                                 </TableHeader>
                                                 <TableBody>
                                                     {speciesBreakdown.map((item) => (
-                                                        <TableRow key={item.species} className="border-slate-800 hover:bg-slate-900/30">
-                                                            <TableCell className="capitalize font-bold text-slate-300">{item.species}</TableCell>
-                                                            <TableCell className="text-right font-black text-blue-400">{item.weight} kg</TableCell>
+                                                        <TableRow key={item.species} className="border-blue-100 hover:bg-blue-50/40">
+                                                            <TableCell className="capitalize font-bold text-slate-700">{item.species}</TableCell>
+                                                            <TableCell className="text-right font-black text-blue-600">{item.weight} kg</TableCell>
                                                         </TableRow>
                                                     ))}
                                                 </TableBody>
@@ -864,36 +864,36 @@ export function AdminDashboard() {
                                     </DialogContent>
                                 </Dialog>
 
-                                <Card className="bg-slate-900/60 backdrop-blur-xl border-slate-800 shadow-xl">
+                                <Card className="bg-white/80 backdrop-blur-xl border-blue-100 shadow-[0_18px_45px_rgba(59,130,246,0.08)]">
                                     <CardHeader className="pb-2">
-                                        <CardDescription className="text-slate-400 font-bold uppercase tracking-widest text-[10px]">Fishermen</CardDescription>
-                                        <CardTitle className="text-3xl font-black text-white">{uniqueFishermen}</CardTitle>
+                                        <CardDescription className="text-slate-500 font-bold uppercase tracking-widest text-[10px]">Fishermen</CardDescription>
+                                        <CardTitle className="text-3xl font-black text-slate-800">{uniqueFishermen}</CardTitle>
                                     </CardHeader>
                                     <CardContent><p className="text-[10px] text-slate-500 font-bold italic">ACTIVE CONTRIBUTORS</p></CardContent>
                                 </Card>
 
-                                <Card className="bg-slate-900/60 backdrop-blur-xl border-slate-800 shadow-xl border-amber-900/30">
+                                <Card className="bg-white/80 backdrop-blur-xl border-amber-200 shadow-[0_18px_45px_rgba(59,130,246,0.08)]">
                                     <CardHeader className="pb-2">
-                                        <CardDescription className="text-amber-500 font-bold uppercase tracking-widest text-[10px]">Pending</CardDescription>
-                                        <CardTitle className="text-3xl font-black text-amber-500">{pendingCount}</CardTitle>
+                                        <CardDescription className="text-amber-600 font-bold uppercase tracking-widest text-[10px]">Pending</CardDescription>
+                                        <CardTitle className="text-3xl font-black text-amber-600">{pendingCount}</CardTitle>
                                     </CardHeader>
-                                    <CardContent><p className="text-[10px] text-amber-600 font-bold italic">AWAITING REVIEW</p></CardContent>
+                                    <CardContent><p className="text-[10px] text-amber-700 font-bold italic">AWAITING REVIEW</p></CardContent>
                                 </Card>
 
-                                <Card className="bg-slate-900/60 backdrop-blur-xl border-slate-800 shadow-xl border-emerald-900/30">
+                                <Card className="bg-white/80 backdrop-blur-xl border-emerald-200 shadow-[0_18px_45px_rgba(59,130,246,0.08)]">
                                     <CardHeader className="pb-2">
-                                        <CardDescription className="text-emerald-500 font-bold uppercase tracking-widest text-[10px]">Integrity</CardDescription>
-                                        <CardTitle className="text-3xl font-black text-emerald-500">100%</CardTitle>
+                                        <CardDescription className="text-emerald-600 font-bold uppercase tracking-widest text-[10px]">Integrity</CardDescription>
+                                        <CardTitle className="text-3xl font-black text-emerald-600">100%</CardTitle>
                                     </CardHeader>
-                                    <CardContent><p className="text-[10px] text-emerald-600 font-bold italic">DATA VALIDATED</p></CardContent>
+                                    <CardContent><p className="text-[10px] text-emerald-700 font-bold italic">DATA VALIDATED</p></CardContent>
                                 </Card>
                             </div>
                         )}
 
                         {activeTab === "reports" && (
-                            <div className="bg-slate-900/40 backdrop-blur-3xl p-2 rounded-[2rem] border border-slate-800/40 flex flex-wrap items-stretch gap-1.5 animate-in slide-in-from-top-8 duration-1000 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.5)] w-full overflow-hidden group/toolbar hover:border-slate-700/50 transition-all">
+                            <div className="bg-white/75 backdrop-blur-3xl p-2 rounded-[2rem] border border-blue-100/80 flex flex-wrap items-stretch gap-1.5 animate-in slide-in-from-top-8 duration-1000 shadow-[0_32px_64px_-16px_rgba(59,130,246,0.12)] w-full overflow-hidden group/toolbar hover:border-blue-200 transition-all">
                                 {/* Search Section */}
-                                <div className="flex-1 min-w-[280px] grid gap-1 px-5 py-2.5 bg-slate-950/20 rounded-[1.5rem] border border-transparent hover:border-slate-800/50 transition-all">
+                                <div className="flex-1 min-w-[280px] grid gap-1 px-5 py-2.5 bg-blue-50/50 rounded-[1.5rem] border border-transparent hover:border-blue-200 transition-all">
                                     <Label className="text-[9px] uppercase font-black text-slate-500 flex items-center gap-2 tracking-[0.2em] opacity-80">
                                         <Search className="w-3 h-3 text-blue-500" /> SEARCH ENGINE
                                     </Label>
@@ -908,7 +908,7 @@ export function AdminDashboard() {
                                 <div className="h-12 w-[1px] bg-slate-800/20 hidden xl:block self-center"></div>
 
                                 {/* Month Section */}
-                                <div className="grid gap-1 px-5 py-2.5 bg-slate-950/20 rounded-[1.5rem] border border-transparent hover:border-slate-800/50 transition-all min-w-[180px]">
+                                <div className="grid gap-1 px-5 py-2.5 bg-blue-50/50 rounded-[1.5rem] border border-transparent hover:border-blue-200 transition-all min-w-[180px]">
                                     <Label className="text-[9px] uppercase font-black text-slate-500 flex items-center gap-2 tracking-[0.2em] opacity-80">
                                         <Calendar className="w-3 h-3 text-blue-500" /> TEMPORAL FILTER
                                     </Label>
@@ -937,107 +937,107 @@ export function AdminDashboard() {
                     {/* Tab Content Rendering */}
                     <div className="w-full">
                         {activeTab === "reports" && (
-                            <Card className="border-none bg-slate-900/60 backdrop-blur-xl border border-slate-800 shadow-2xl rounded-3xl overflow-hidden">
-                                <CardHeader className="p-10 border-b border-slate-800/50 bg-slate-950/20">
-                                    <CardTitle className="text-3xl font-black text-white tracking-tight">Incoming Submissions</CardTitle>
-                                    <CardDescription className="text-slate-300 font-medium">Live feed of catch reports from the field.</CardDescription>
+                            <Card className="border-none bg-white/80 backdrop-blur-xl border border-blue-100 shadow-[0_24px_70px_rgba(59,130,246,0.08)] rounded-3xl overflow-hidden">
+                                <CardHeader className="p-10 border-b border-blue-100 bg-blue-50/50">
+                                    <CardTitle className="text-3xl font-black text-slate-800 tracking-tight">Incoming Submissions</CardTitle>
+                                    <CardDescription className="text-slate-600 font-medium">Live feed of catch reports from the field.</CardDescription>
                                 </CardHeader>
                                 <CardContent className="p-0 overflow-x-auto">
                                     <Table>
-                                        <TableHeader className="bg-slate-950/50 border-b border-slate-800">
-                                            <TableRow className="hover:bg-transparent border-slate-800">
-                                                <TableHead className="px-6 h-14 text-slate-400 font-bold uppercase tracking-wider text-[10px] cursor-pointer hover:text-white transition-colors" onClick={() => toggleSort('created_at')}>
+                                        <TableHeader className="bg-slate-100/90 border-b border-blue-100">
+                                            <TableRow className="hover:bg-transparent border-blue-100">
+                                                <TableHead className="px-6 h-14 text-slate-900 font-black uppercase tracking-wider text-[10px] cursor-pointer hover:text-blue-700 transition-colors" onClick={() => toggleSort('created_at')}>
                                                     <div className="flex items-center gap-2">Date {sortConfig.key === 'created_at' && (sortConfig.direction === 'asc' ? '↑' : '↓')}</div>
                                                 </TableHead>
-                                                <TableHead className="px-6 h-14 text-slate-400 font-bold uppercase tracking-wider text-[10px] cursor-pointer hover:text-white transition-colors" onClick={() => toggleSort('fisherman')}>
+                                                <TableHead className="px-6 h-14 text-slate-900 font-black uppercase tracking-wider text-[10px] cursor-pointer hover:text-blue-700 transition-colors" onClick={() => toggleSort('fisherman')}>
                                                     <div className="flex items-center gap-2">Fisherman {sortConfig.key === 'fisherman' && (sortConfig.direction === 'asc' ? '↑' : '↓')}</div>
                                                 </TableHead>
-                                                <TableHead className="px-6 h-14 text-slate-400 font-bold uppercase tracking-wider text-[10px]">Phone</TableHead>
-                                                <TableHead className="px-6 h-14 text-slate-400 font-bold uppercase tracking-wider text-[10px]">Boat</TableHead>
-                                                <TableHead className="px-6 h-14 text-slate-400 font-bold uppercase tracking-wider text-[10px]">Boats / Crew</TableHead>
-                                                <TableHead className="px-6 h-14 text-slate-400 font-bold uppercase tracking-wider text-[10px] cursor-pointer hover:text-white transition-colors" onClick={() => toggleSort('species')}>
+                                                <TableHead className="px-6 h-14 text-slate-900 font-black uppercase tracking-wider text-[10px]">Phone</TableHead>
+                                                <TableHead className="px-6 h-14 text-slate-900 font-black uppercase tracking-wider text-[10px]">Boat</TableHead>
+                                                <TableHead className="px-6 h-14 text-slate-900 font-black uppercase tracking-wider text-[10px]">Boats / Crew</TableHead>
+                                                <TableHead className="px-6 h-14 text-slate-900 font-black uppercase tracking-wider text-[10px] cursor-pointer hover:text-blue-700 transition-colors" onClick={() => toggleSort('species')}>
                                                     <div className="flex items-center gap-2">Species {sortConfig.key === 'species' && (sortConfig.direction === 'asc' ? '↑' : '↓')}</div>
                                                 </TableHead>
-                                                <TableHead className="px-6 h-14 text-slate-400 font-bold uppercase tracking-wider text-[10px] cursor-pointer hover:text-white transition-colors" onClick={() => toggleSort('weight_kg')}>
+                                                <TableHead className="px-6 h-14 text-slate-900 font-black uppercase tracking-wider text-[10px] cursor-pointer hover:text-blue-700 transition-colors" onClick={() => toggleSort('weight_kg')}>
                                                     <div className="flex items-center gap-2">Weight {sortConfig.key === 'weight_kg' && (sortConfig.direction === 'asc' ? '↑' : '↓')}</div>
                                                 </TableHead>
-                                                <TableHead className="px-6 h-14 text-slate-400 font-bold uppercase tracking-wider text-[10px]">Breakdown (kg)</TableHead>
-                                                <TableHead className="px-6 h-14 text-slate-400 font-bold uppercase tracking-wider text-[10px]">Lean / Peak Catch</TableHead>
-                                                <TableHead className="px-6 h-14 text-slate-400 font-bold uppercase tracking-wider text-[10px]">Status</TableHead>
-                                                <TableHead className="px-6 h-14 text-slate-400 font-bold uppercase tracking-wider text-[10px]">Action</TableHead>
+                                                <TableHead className="px-6 h-14 text-slate-900 font-black uppercase tracking-wider text-[10px]">Breakdown (kg)</TableHead>
+                                                <TableHead className="px-6 h-14 text-slate-900 font-black uppercase tracking-wider text-[10px]">Lean / Peak Catch</TableHead>
+                                                <TableHead className="px-6 h-14 text-slate-900 font-black uppercase tracking-wider text-[10px]">Status</TableHead>
+                                                <TableHead className="px-6 h-14 text-slate-900 font-black uppercase tracking-wider text-[10px]">Action</TableHead>
                                             </TableRow>
                                         </TableHeader>
                                         <TableBody>
                                             {loading ? (
-                                                <TableRow><TableCell colSpan={6} className="text-center py-20 text-slate-500 italic">Synchronizing reports...</TableCell></TableRow>
+                                                <TableRow><TableCell colSpan={6} className="text-center py-20 text-slate-600 italic">Synchronizing reports...</TableCell></TableRow>
                                             ) : sortedAndFilteredReports.length === 0 ? (
-                                                <TableRow><TableCell colSpan={10} className="text-center py-20 text-slate-500">No records found matching your filters.</TableCell></TableRow>
+                                                <TableRow><TableCell colSpan={10} className="text-center py-20 text-slate-600">No records found matching your filters.</TableCell></TableRow>
                                             ) : (
                                                 sortedAndFilteredReports.map((report) => {
                                                     const reg = fishermenByIdMap[report.fisherman_id] || fishermenByIdMap[report.user_id] || null
                                                     return (
-                                                        <TableRow key={report.id} className="border-slate-800/50 group hover:bg-slate-800/30 transition-all">
-                                                            <TableCell className="px-6 py-4 text-sm font-medium text-slate-400 whitespace-nowrap">
+                                                        <TableRow key={report.id} className="border-blue-100 group hover:bg-blue-50/40 transition-all">
+                                                            <TableCell className="px-6 py-4 text-sm font-medium text-slate-700 whitespace-nowrap">
                                                                 {new Date(report.created_at).toLocaleDateString()}
                                                             </TableCell>
                                                             <TableCell className="px-6 py-4">
-                                                                <div className="font-bold text-white">
+                                                                <div className="font-bold text-slate-800">
                                                                     {reg ? `${reg.first_name} ${reg.last_name}` : (report.fisherman_id || '—')}
                                                                 </div>
-                                                                <div className="text-[10px] text-slate-500 font-mono mt-0.5">{report.fisherman_id}</div>
+                                                                <div className="text-[10px] text-slate-600 font-mono mt-0.5">{report.fisherman_id}</div>
                                                             </TableCell>
-                                                            <TableCell className="px-6 py-4 text-slate-300 text-sm whitespace-nowrap">
+                                                            <TableCell className="px-6 py-4 text-slate-700 text-sm whitespace-nowrap">
                                                                 {reg?.phone_number || '—'}
                                                             </TableCell>
                                                             <TableCell className="px-6 py-4">
-                                                                <div className="font-semibold text-slate-200">{reg?.boat_name || report.boat_name || '—'}</div>
+                                                                <div className="font-semibold text-slate-700">{reg?.boat_name || report.boat_name || '—'}</div>
                                                             </TableCell>
                                                             <TableCell className="px-6 py-4 text-center">
                                                                 <div className="flex flex-col items-center gap-0.5">
-                                                                    <span className="font-black text-blue-400 text-sm">{reg?.total_boats_operated ?? '—'}</span>
+                                                                    <span className="font-black text-blue-600 text-sm">{reg?.total_boats_operated ?? '—'}</span>
                                                                     <span className="text-[9px] text-slate-600 font-bold uppercase">boats</span>
-                                                                    <span className="font-black text-cyan-400 text-sm">{reg?.total_crew ?? '—'}</span>
+                                                                    <span className="font-black text-cyan-600 text-sm">{reg?.total_crew ?? '—'}</span>
                                                                     <span className="text-[9px] text-slate-600 font-bold uppercase">crew</span>
                                                                 </div>
                                                             </TableCell>
-                                                            <TableCell className="px-6 py-4 capitalize text-slate-300 font-semibold">
+                                                            <TableCell className="px-6 py-4 capitalize text-slate-700 font-semibold">
                                                                 {report.species_id
                                                                     ? (fishSpeciesMap[report.species_id] || report.species || '—')
                                                                     : (report.species || '—')}
                                                             </TableCell>
                                                             <TableCell className="px-6 py-4">
-                                                                <span className="font-black text-blue-400">{report.weight_kg}</span>
-                                                                <span className="text-[10px] ml-1 font-bold opacity-40">KG</span>
+                                                                <span className="font-black text-blue-600">{report.weight_kg}</span>
+                                                                <span className="text-[10px] ml-1 font-bold text-slate-500">KG</span>
                                                             </TableCell>
                                                             <TableCell className="px-6 py-4">
                                                                 <div className="grid grid-cols-2 gap-x-3 gap-y-0.5">
                                                                     <div className="flex items-center gap-1">
-                                                                        <span className="text-[8px] text-slate-500 font-bold uppercase w-8">Sold</span>
-                                                                        <span className="font-semibold text-emerald-400 text-xs">{report.sold_kg ?? '—'}</span>
+                                                                        <span className="text-[8px] text-slate-700 font-bold uppercase w-8">Sold</span>
+                                                                        <span className="font-semibold text-emerald-600 text-xs">{report.sold_kg ?? '—'}</span>
                                                                     </div>
                                                                     <div className="flex items-center gap-1">
-                                                                        <span className="text-[8px] text-slate-500 font-bold uppercase w-8">Proc</span>
-                                                                        <span className="font-semibold text-blue-400 text-xs">{report.processed_kg ?? '—'}</span>
+                                                                        <span className="text-[8px] text-slate-700 font-bold uppercase w-8">Proc</span>
+                                                                        <span className="font-semibold text-blue-600 text-xs">{report.processed_kg ?? '—'}</span>
                                                                     </div>
                                                                     <div className="flex items-center gap-1">
-                                                                        <span className="text-[8px] text-slate-500 font-bold uppercase w-8">Cons</span>
-                                                                        <span className="font-semibold text-amber-400 text-xs">{report.consumed_kg ?? '—'}</span>
+                                                                        <span className="text-[8px] text-slate-700 font-bold uppercase w-8">Cons</span>
+                                                                        <span className="font-semibold text-amber-600 text-xs">{report.consumed_kg ?? '—'}</span>
                                                                     </div>
                                                                     <div className="flex items-center gap-1">
-                                                                        <span className="text-[8px] text-slate-500 font-bold uppercase w-8">NM</span>
-                                                                        <span className="font-semibold text-rose-400 text-xs">{report.not_marketable_kg ?? '—'}</span>
+                                                                        <span className="text-[8px] text-slate-700 font-bold uppercase w-8">NM</span>
+                                                                        <span className="font-semibold text-rose-600 text-xs">{report.not_marketable_kg ?? '—'}</span>
                                                                     </div>
                                                                 </div>
                                                             </TableCell>
                                                             <TableCell className="px-6 py-4">
                                                                 <div className="flex flex-col gap-0.5">
                                                                     <div className="flex items-center gap-1">
-                                                                        <span className="text-[9px] text-slate-500 font-bold uppercase w-9">Lean</span>
-                                                                        <span className="font-black text-amber-400 text-sm">{reg?.lean_daily_avg_catch != null ? `${reg.lean_daily_avg_catch} kg` : '—'}</span>
+                                                                        <span className="text-[9px] text-slate-700 font-bold uppercase w-9">Lean</span>
+                                                                        <span className="font-black text-amber-600 text-sm">{reg?.lean_daily_avg_catch != null ? `${reg.lean_daily_avg_catch} kg` : '—'}</span>
                                                                     </div>
                                                                     <div className="flex items-center gap-1">
-                                                                        <span className="text-[9px] text-slate-500 font-bold uppercase w-9">Peak</span>
-                                                                        <span className="font-black text-emerald-400 text-sm">{reg?.peak_daily_avg_catch != null ? `${reg.peak_daily_avg_catch} kg` : '—'}</span>
+                                                                        <span className="text-[9px] text-slate-700 font-bold uppercase w-9">Peak</span>
+                                                                        <span className="font-black text-emerald-600 text-sm">{reg?.peak_daily_avg_catch != null ? `${reg.peak_daily_avg_catch} kg` : '—'}</span>
                                                                     </div>
                                                                 </div>
                                                             </TableCell>
@@ -1045,18 +1045,18 @@ export function AdminDashboard() {
                                                                 <div className="flex flex-col gap-1">
                                                                     <span className={cn(
                                                                         "inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider w-fit",
-                                                                        report.status === 'approved' ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20" :
-                                                                            report.status === 'not_approved' ? "bg-rose-500/10 text-rose-400 border border-rose-500/20" :
-                                                                                "bg-amber-500/10 text-amber-400 border border-amber-500/20"
+                                                                        report.status === 'approved' ? "bg-emerald-500/10 text-emerald-600 border border-emerald-500/20" :
+                                                                            report.status === 'not_approved' ? "bg-rose-500/10 text-rose-600 border border-rose-500/20" :
+                                                                                "bg-amber-500/10 text-amber-600 border border-amber-500/20"
                                                                     )}>
                                                                         <div className={cn("h-1.5 w-1.5 rounded-full",
-                                                                            report.status === 'approved' ? "bg-emerald-400" :
-                                                                                report.status === 'not_approved' ? "bg-rose-400" : "bg-amber-400 animate-pulse"
+                                                                            report.status === 'approved' ? "bg-emerald-500" :
+                                                                                report.status === 'not_approved' ? "bg-rose-500" : "bg-amber-500 animate-pulse"
                                                                         )} />
                                                                         {report.status === 'not_approved' ? 'Not Approved' : report.status}
                                                                     </span>
                                                                     {report.status === 'approved' && report.approved_by_name && (
-                                                                        <span className="text-[9px] text-slate-500 font-bold pl-1">by {report.approved_by_name}</span>
+                                                                        <span className="text-[9px] text-slate-600 font-bold pl-1">by {report.approved_by_name}</span>
                                                                     )}
                                                                 </div>
                                                             </TableCell>
@@ -1065,10 +1065,10 @@ export function AdminDashboard() {
                                                                     {report.status === 'pending' && (
                                                                         <>
                                                                             <Button size="sm" className="bg-blue-600 hover:bg-blue-500 h-8 font-bold px-4 rounded-lg" onClick={() => handleUpdateStatus(report.id, 'approved')}>Approve</Button>
-                                                                    <Button size="sm" variant="ghost" className="h-8 text-rose-400 hover:bg-rose-500/10 font-bold px-4 rounded-lg" onClick={() => handleUpdateStatus(report.id, 'not_approved')}>Not Approved</Button>
+                                                                    <Button size="sm" variant="ghost" className="h-8 text-rose-600 hover:bg-rose-500/10 font-bold px-4 rounded-lg" onClick={() => handleUpdateStatus(report.id, 'not_approved')}>Not Approved</Button>
                                                                         </>
                                                                     )}
-                                                                    <Button size="sm" variant="ghost" className="h-8 w-8 p-0 text-slate-500 hover:text-rose-500" onClick={() => setReportToDelete(report.id)}><Trash2 className="h-4 w-4" /></Button>
+                                                                    <Button size="sm" variant="ghost" className="h-8 w-8 p-0 text-slate-600 hover:text-rose-500" onClick={() => setReportToDelete(report.id)}><Trash2 className="h-4 w-4" /></Button>
                                                                 </div>
                                                             </TableCell>
                                                         </TableRow>
@@ -1103,23 +1103,23 @@ export function AdminDashboard() {
                                 <div className="grid lg:grid-cols-12 gap-8">
                                     {/* Provision Form */}
                                     <div className="lg:col-span-5">
-                                        <Card className="bg-slate-900/60 backdrop-blur-xl border-slate-800 shadow-2xl rounded-3xl overflow-hidden">
-                                            <CardHeader className="p-8 border-b border-slate-800/50 bg-slate-950/20">
-                                                <CardTitle className="text-2xl font-black text-white flex items-center gap-3">
-                                                    <UserPlus className="text-blue-500" /> Provision Staff
+                                        <Card className="bg-white/80 backdrop-blur-xl border-blue-100 shadow-[0_18px_45px_rgba(59,130,246,0.08)] rounded-3xl overflow-hidden">
+                                            <CardHeader className="p-8 border-b border-blue-100 bg-blue-50/60">
+                                                <CardTitle className="text-2xl font-black text-slate-800 flex items-center gap-3">
+                                                    <UserPlus className="text-blue-600" /> Provision Staff
                                                 </CardTitle>
-                                                <CardDescription className="text-slate-300 font-medium">Grant field access to municipal data collectors.</CardDescription>
+                                                <CardDescription className="text-slate-600 font-medium">Grant field access to municipal data collectors.</CardDescription>
                                             </CardHeader>
-                                            <CardContent>
+                                            <CardContent className="p-6">
                                                 {createdStaffCreds && (
-                                                    <div className="bg-blue-500/10 border border-blue-500/30 rounded-2xl p-6 mb-6 animate-in zoom-in space-y-4">
-                                                        <div className="flex items-center gap-2 text-blue-400 font-black text-sm uppercase"><CheckCircle2 className="h-5 w-5" /> Account Ready</div>
-                                                        <div className="space-y-2 font-mono text-[11px] bg-slate-950/50 p-4 rounded-xl border border-slate-800">
-                                                            <div className="flex justify-between border-b border-white/5 pb-2"><span className="opacity-50 uppercase">Email:</span> <span>{createdStaffCreds.email}</span></div>
-                                                            <div className="flex justify-between border-b border-white/5 py-2"><span className="opacity-50 uppercase">Password:</span> <span className="font-bold text-white">{createdStaffCreds.pass}</span></div>
-                                                            <div className="flex justify-between pt-2"><span className="opacity-50 uppercase">Staff ID:</span> <span>{createdStaffCreds.id}</span></div>
+                                                    <div className="bg-blue-50 border border-blue-200 rounded-2xl p-6 mb-6 animate-in zoom-in space-y-4">
+                                                        <div className="flex items-center gap-2 text-blue-700 font-black text-sm uppercase"><CheckCircle2 className="h-5 w-5" /> Account Ready</div>
+                                                        <div className="space-y-2 font-mono text-[11px] bg-white p-4 rounded-xl border border-blue-100 text-slate-700">
+                                                            <div className="flex justify-between border-b border-blue-100 pb-2"><span className="text-slate-500 uppercase">Email:</span> <span>{createdStaffCreds.email}</span></div>
+                                                            <div className="flex justify-between border-b border-blue-100 py-2"><span className="text-slate-500 uppercase">Password:</span> <span className="font-bold text-slate-800">{createdStaffCreds.pass}</span></div>
+                                                            <div className="flex justify-between pt-2"><span className="text-slate-500 uppercase">Staff ID:</span> <span>{createdStaffCreds.id}</span></div>
                                                         </div>
-                                                        <Button className="w-full bg-blue-600 hover:bg-blue-500 font-bold" onClick={() => {
+                                                        <Button className="w-full bg-blue-600 hover:bg-blue-500 font-bold text-white" onClick={() => {
                                                             navigator.clipboard.writeText(`Email: ${createdStaffCreds.email}\nPass: ${createdStaffCreds.pass}\nID: ${createdStaffCreds.id}`)
                                                             toast.success("Credentials Copied")
                                                         }}>Copy Information</Button>
@@ -1128,29 +1128,29 @@ export function AdminDashboard() {
                                                 <form onSubmit={handleCreateStaff} className="space-y-4">
                                                     <div className="grid grid-cols-2 gap-4">
                                                         <div className="space-y-2">
-                                                            <Label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest px-1">First Name</Label>
-                                                            <Input className="bg-slate-950/50 border-slate-800 rounded-xl h-12 focus:ring-blue-600 focus:ring-offset-0" placeholder="Maria" value={staffForm.firstName} onChange={(e) => setStaffForm({ ...staffForm, firstName: e.target.value })} required />
+                                                            <Label className="text-[10px] font-bold text-slate-700 uppercase tracking-widest px-1">First Name</Label>
+                                                            <Input className="bg-blue-50/70 border-blue-200 rounded-xl h-12 focus:ring-blue-600 focus:ring-offset-0 text-slate-800 placeholder:text-slate-500" placeholder="Maria" value={staffForm.firstName} onChange={(e) => setStaffForm({ ...staffForm, firstName: e.target.value })} required />
                                                         </div>
                                                         <div className="space-y-2">
-                                                            <Label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest px-1">Last Name</Label>
-                                                            <Input className="bg-slate-950/50 border-slate-800 rounded-xl h-12 focus:ring-blue-600 focus:ring-offset-0" placeholder="Clara" value={staffForm.lastName} onChange={(e) => setStaffForm({ ...staffForm, lastName: e.target.value })} required />
+                                                            <Label className="text-[10px] font-bold text-slate-700 uppercase tracking-widest px-1">Last Name</Label>
+                                                            <Input className="bg-blue-50/70 border-blue-200 rounded-xl h-12 focus:ring-blue-600 focus:ring-offset-0 text-slate-800 placeholder:text-slate-500" placeholder="Clara" value={staffForm.lastName} onChange={(e) => setStaffForm({ ...staffForm, lastName: e.target.value })} required />
                                                         </div>
                                                     </div>
                                                     <div className="space-y-2">
-                                                        <Label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest px-1">Registration Email</Label>
-                                                        <Input className="bg-slate-950/50 border-slate-800 rounded-xl h-12" type="email" placeholder="m.clara@office.gov" value={staffForm.email} onChange={(e) => setStaffForm({ ...staffForm, email: e.target.value })} required />
+                                                        <Label className="text-[10px] font-bold text-slate-700 uppercase tracking-widest px-1">Registration Email</Label>
+                                                        <Input className="bg-blue-50/70 border-blue-200 rounded-xl h-12 text-slate-800 placeholder:text-slate-500" type="email" placeholder="m.clara@office.gov" value={staffForm.email} onChange={(e) => setStaffForm({ ...staffForm, email: e.target.value })} required />
                                                     </div>
                                                     <div className="grid grid-cols-2 gap-4">
                                                         <div className="space-y-2">
-                                                            <Label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest px-1">Staff ID</Label>
-                                                            <Input className="bg-slate-950/50 border-slate-800 rounded-xl h-12" placeholder="STAFF01" value={staffForm.staffId} onChange={(e) => setStaffForm({ ...staffForm, staffId: e.target.value })} required />
+                                                            <Label className="text-[10px] font-bold text-slate-700 uppercase tracking-widest px-1">Staff ID</Label>
+                                                            <Input className="bg-blue-50/70 border-blue-200 rounded-xl h-12 text-slate-800 placeholder:text-slate-500" placeholder="STAFF01" value={staffForm.staffId} onChange={(e) => setStaffForm({ ...staffForm, staffId: e.target.value })} required />
                                                         </div>
                                                         <div className="space-y-2">
-                                                            <Label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest px-1">Temp Pass</Label>
-                                                            <Input className="bg-slate-950/50 border-slate-800 rounded-xl h-12" placeholder="Optional" value={staffForm.password} onChange={(e) => setStaffForm({ ...staffForm, password: e.target.value })} />
+                                                            <Label className="text-[10px] font-bold text-slate-700 uppercase tracking-widest px-1">Temp Pass</Label>
+                                                            <Input className="bg-blue-50/70 border-blue-200 rounded-xl h-12 text-slate-800 placeholder:text-slate-500" placeholder="Optional" value={staffForm.password} onChange={(e) => setStaffForm({ ...staffForm, password: e.target.value })} />
                                                         </div>
                                                     </div>
-                                                    <Button type="submit" className="w-full h-14 bg-blue-600 hover:bg-blue-500 font-black rounded-xl shadow-lg shadow-blue-900/20 mt-4 transition-all" disabled={creatingStaff}>
+                                                    <Button type="submit" className="w-full h-14 bg-blue-600 hover:bg-blue-500 font-black rounded-xl shadow-lg shadow-blue-900/20 mt-4 transition-all text-white" disabled={creatingStaff}>
                                                         {creatingStaff ? <Loader2 className="animate-spin h-5 w-5" /> : "Authorize New Staff"}
                                                     </Button>
                                                 </form>
@@ -1161,35 +1161,35 @@ export function AdminDashboard() {
                                     {/* Staff List */}
                                     <div className="lg:col-span-7">
                                         <div className="flex items-center justify-between mb-6">
-                                            <h2 className="text-2xl font-black text-white flex items-center gap-3"><ShieldCheck className="text-emerald-500" /> Active Field Staff</h2>
-                                            <Button variant="outline" size="sm" onClick={exportStaffPDF} disabled={isGeneratingStaffReport} className="bg-slate-900 border-slate-800 hover:bg-slate-800">
+                                            <h2 className="text-2xl font-black text-slate-800 flex items-center gap-3"><ShieldCheck className="text-emerald-500" /> Active Field Staff</h2>
+                                            <Button variant="outline" size="sm" onClick={exportStaffPDF} disabled={isGeneratingStaffReport} className="bg-white border-blue-200 text-slate-700 hover:bg-blue-50">
                                                 {isGeneratingStaffReport ? <Loader2 className="animate-spin h-4 w-4" /> : <Download className="h-4 w-4 mr-2" />}
                                                 Export Performance
                                             </Button>
                                         </div>
-                                        <Card className="bg-slate-900/60 backdrop-blur-xl border-slate-800 shadow-2xl rounded-3xl overflow-hidden">
+                                        <Card className="bg-white/80 backdrop-blur-xl border-blue-100 shadow-[0_18px_45px_rgba(59,130,246,0.08)] rounded-3xl overflow-hidden">
                                             <CardContent className="p-0">
-                                                <div className="flex items-center p-6 border-b border-slate-800 gap-3">
+                                                <div className="flex items-center p-6 border-b border-blue-100 gap-3 bg-blue-50/60">
                                                     <Search className="h-4 w-4 text-slate-500" />
-                                                    <input className="bg-transparent border-none text-sm focus:ring-0 w-full placeholder:text-slate-600 text-slate-200" placeholder="Search staff registry..." value={staffSearchQuery} onChange={(e) => setStaffSearchQuery(e.target.value)} />
+                                                    <input className="bg-transparent border-none text-sm focus:ring-0 w-full placeholder:text-slate-500 text-slate-800" placeholder="Search staff registry..." value={staffSearchQuery} onChange={(e) => setStaffSearchQuery(e.target.value)} />
                                                 </div>
                                                 <Table>
-                                                    <TableHeader className="bg-slate-950/30">
-                                                        <TableRow className="border-slate-800">
-                                                            <TableHead className="px-6 text-[10px] font-bold text-slate-500 uppercase">Identity</TableHead>
-                                                            <TableHead className="px-6 text-[10px] font-bold text-slate-500 uppercase">Email</TableHead>
-                                                            <TableHead className="px-6 text-[10px] font-bold text-slate-500 text-right uppercase">Records</TableHead>
+                                                    <TableHeader className="bg-blue-50">
+                                                        <TableRow className="border-blue-100">
+                                                            <TableHead className="px-6 text-[10px] font-bold text-slate-700 uppercase">Identity</TableHead>
+                                                            <TableHead className="px-6 text-[10px] font-bold text-slate-700 uppercase">Email</TableHead>
+                                                            <TableHead className="px-6 text-[10px] font-bold text-slate-700 text-right uppercase">Records</TableHead>
                                                         </TableRow>
                                                     </TableHeader>
                                                     <TableBody>
                                                         {staffCounts.filter(s => s.fullName.toLowerCase().includes(staffSearchQuery.toLowerCase()) || s.name.toLowerCase().includes(staffSearchQuery.toLowerCase())).map(staff => (
-                                                            <TableRow key={staff.id} className="border-slate-800/40 hover:bg-slate-800/20">
+                                                            <TableRow key={staff.id} className="border-blue-100/80 hover:bg-blue-50/60">
                                                                 <TableCell className="px-6 py-4">
-                                                                    <div className="font-bold text-slate-200">{staff.fullName}</div>
-                                                                    <div className="text-[10px] text-blue-500 font-black">{staff.name}</div>
+                                                                    <div className="font-bold text-slate-800">{staff.fullName}</div>
+                                                                    <div className="text-[10px] text-blue-600 font-black">{staff.name}</div>
                                                                 </TableCell>
-                                                                <TableCell className="px-6 py-4 text-xs font-medium text-slate-400">{staff.email}</TableCell>
-                                                                <TableCell className="px-6 py-4 text-right font-black text-white">{staff.count}</TableCell>
+                                                                <TableCell className="px-6 py-4 text-xs font-medium text-slate-600">{staff.email}</TableCell>
+                                                                <TableCell className="px-6 py-4 text-right font-black text-slate-800">{staff.count}</TableCell>
                                                             </TableRow>
                                                         ))}
                                                     </TableBody>
@@ -1206,7 +1206,7 @@ export function AdminDashboard() {
 
             {/* Delete Alert */}
             <AlertDialog open={!!reportToDelete} onOpenChange={(open) => { if (!open) setReportToDelete(null) }}>
-                <AlertDialogContent className="bg-slate-900 border-slate-800 text-slate-100 rounded-3xl">
+                <AlertDialogContent className="bg-white border-blue-100 text-slate-800 rounded-3xl shadow-[0_24px_80px_rgba(59,130,246,0.12)]">
                     <AlertDialogHeader>
                         <AlertDialogTitle>Delete Catch Record?</AlertDialogTitle>
                         <AlertDialogDescription className="text-slate-400">This action is permanent and will remove the fisherman's log from the system.</AlertDialogDescription>

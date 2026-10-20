@@ -157,10 +157,10 @@ export default function AnalyticsView({ reports, socioEconomicData = [] }: { rep
   return (
     <div className="space-y-8 animate-in fade-in duration-700">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-slate-900/60 backdrop-blur-xl p-8 rounded-[2rem] border border-slate-800 shadow-2xl gap-6">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-white/80 backdrop-blur-xl p-8 rounded-[2rem] border border-blue-100 shadow-[0_24px_60px_rgba(59,130,246,0.08)] gap-6">
         <div className="space-y-1">
-          <h3 className="text-xl font-black text-white tracking-tight uppercase italic">Cognitive Analytics Hub</h3>
-          <p className="text-sm text-slate-400 font-medium opacity-70">Unified Catch & Socio-Economic Intelligence</p>
+          <h3 className="text-xl font-black text-slate-800 tracking-tight uppercase italic">Cognitive Analytics Hub</h3>
+          <p className="text-sm text-slate-600 font-medium opacity-80">Unified Catch & Socio-Economic Intelligence</p>
         </div>
         <div className="flex gap-3 print:hidden">
           <Button size="lg" onClick={exportPDF} disabled={isGenerating} className="h-12 bg-blue-600 hover:bg-blue-500 text-white shadow-lg rounded-xl font-black px-8">
@@ -174,10 +174,10 @@ export default function AnalyticsView({ reports, socioEconomicData = [] }: { rep
       <div className="space-y-6">
         <div className="flex items-center gap-4">
             <div className="h-1 bg-emerald-500 w-12 rounded-full" />
-            <h3 className="text-md font-black text-white uppercase tracking-tighter">Harvest Productivity</h3>
+            <h3 className="text-md font-black text-slate-800 uppercase tracking-tighter">Harvest Productivity</h3>
         </div>
         <div className="grid gap-6 md:grid-cols-2">
-            <Card className="bg-slate-900/40 border-slate-800 rounded-3xl p-6">
+            <Card className="bg-white/80 border-blue-100 rounded-3xl p-6 shadow-[0_24px_60px_rgba(59,130,246,0.06)]">
                 <CardTitle className="text-xs font-black text-slate-500 uppercase tracking-widest mb-6">Weekly Momentum (kg)</CardTitle>
                 <div className="h-[250px]">
                     <ResponsiveContainer width="100%" height="100%">
@@ -212,26 +212,26 @@ export default function AnalyticsView({ reports, socioEconomicData = [] }: { rep
       <div className="space-y-6 pt-10">
         <div className="flex items-center gap-4">
             <div className="h-1 bg-amber-500 w-12 rounded-full" />
-            <h3 className="text-md font-black text-white uppercase tracking-tighter">Human Capital & Economic Status</h3>
+            <h3 className="text-md font-black text-slate-800 uppercase tracking-tighter">Human Capital & Economic Status</h3>
         </div>
         
         {/* Economic Key Metrics */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div className="bg-slate-900/40 p-6 rounded-3xl border border-slate-800">
+            <div className="bg-white/80 p-6 rounded-3xl border border-blue-100 shadow-[0_20px_50px_rgba(59,130,246,0.05)]">
                 <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-1">Avg Monthly Income</span>
-                <span className="text-2xl font-black text-emerald-500 italic">₱{Math.round(economicSummary.avgIncome).toLocaleString()}</span>
+                <span className="text-2xl font-black text-emerald-600 italic">₱{Math.round(economicSummary.avgIncome).toLocaleString()}</span>
             </div>
-            <div className="bg-slate-900/40 p-6 rounded-3xl border border-slate-800">
+            <div className="bg-white/80 p-6 rounded-3xl border border-blue-100 shadow-[0_20px_50px_rgba(59,130,246,0.05)]">
                 <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-1">Poverty Threshold</span>
                 <span className="text-2xl font-black text-rose-500 italic">{Math.round(economicSummary.povertyRate)}% <span className="text-xs not-italic font-bold text-slate-600">BELOW</span></span>
             </div>
-            <div className="bg-slate-900/40 p-6 rounded-3xl border border-slate-800">
+            <div className="bg-white/80 p-6 rounded-3xl border border-blue-100 shadow-[0_20px_50px_rgba(59,130,246,0.05)]">
                 <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-1">Active Profiles</span>
-                <span className="text-2xl font-black text-blue-500 italic">{socioEconomicData.length}</span>
+                <span className="text-2xl font-black text-blue-600 italic">{socioEconomicData.length}</span>
             </div>
-            <div className="bg-slate-900/40 p-6 rounded-3xl border border-slate-800">
+            <div className="bg-white/80 p-6 rounded-3xl border border-blue-100 shadow-[0_20px_50px_rgba(59,130,246,0.05)]">
                 <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-1">Motorized Ratio</span>
-                <span className="text-2xl font-black text-amber-500 italic">
+                <span className="text-2xl font-black text-amber-600 italic">
                     {socioEconomicData.length > 0 
                         ? Math.round((socioEconomicData.filter(p => p.boat_type_motorized).length / socioEconomicData.length) * 100) 
                         : 0}%
@@ -241,7 +241,7 @@ export default function AnalyticsView({ reports, socioEconomicData = [] }: { rep
 
         <div className="grid gap-6 md:grid-cols-3">
             {/* Age Distribution */}
-            <Card className="bg-slate-900/40 border-slate-800 rounded-3xl p-6 md:col-span-1">
+            <Card className="bg-white/80 border-blue-100 rounded-3xl p-6 md:col-span-1 shadow-[0_20px_50px_rgba(59,130,246,0.05)]">
                 <CardTitle className="text-xs font-black text-slate-500 uppercase tracking-widest mb-6 px-1">Age Demographics</CardTitle>
                 <div className="h-[200px]">
                     <ResponsiveContainer width="100%" height="100%">

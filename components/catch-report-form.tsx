@@ -314,12 +314,12 @@ export function CatchReportForm({ user, onSubmit }: CatchReportFormProps) {
   const isRemainingNegative = remainingWeight < 0
 
   return (
-    <Card className="w-full max-w-2xl mx-auto shadow-2xl border-slate-800 bg-slate-900/60 backdrop-blur-xl ring-1 ring-white/5">
+    <Card className="w-full max-w-2xl mx-auto shadow-[0_24px_70px_rgba(59,130,246,0.08)] border border-blue-100 bg-white/80 backdrop-blur-xl ring-1 ring-blue-100">
       <CardHeader>
         <div className="flex items-center justify-between">
           <div>
-            <CardTitle className="text-2xl font-bold">Catch Report</CardTitle>
-            <CardDescription>Submit your catch in under 1 minute</CardDescription>
+            <CardTitle className="text-2xl font-bold text-slate-800">Catch Report</CardTitle>
+            <CardDescription className="text-slate-600">Submit your catch in under 1 minute</CardDescription>
           </div>
           <div className="flex items-center gap-2 text-sm">
             {isOnline ? (

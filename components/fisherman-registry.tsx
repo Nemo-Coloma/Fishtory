@@ -276,91 +276,91 @@ export function FishermanRegistry() {
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-slate-400" />
           <Input
             placeholder="Search by name, ID or boat..."
-            className="pl-9 w-full bg-slate-950/50 border-slate-800 rounded-xl focus:ring-blue-600 focus:ring-offset-0 text-slate-100 placeholder:text-slate-600"
+            className="pl-9 w-full bg-white border-blue-200 rounded-xl focus:ring-blue-600 focus:ring-offset-0 text-slate-800 placeholder:text-slate-500 shadow-sm"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
-            <Button onClick={openAddDialog} className="w-full sm:w-auto bg-blue-700 hover:bg-blue-800 flex gap-2">
+            <Button onClick={openAddDialog} className="w-full sm:w-auto bg-blue-700 hover:bg-blue-800 flex gap-2 text-white">
               <Plus className="h-4 w-4" />
               Add Fisherman
             </Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-[425px] bg-slate-900 border-slate-800 text-slate-100">
+          <DialogContent className="sm:max-w-[425px] bg-white border-blue-200 text-slate-800">
             <DialogHeader>
-              <DialogTitle className="text-2xl font-black text-white tracking-tight">
+              <DialogTitle className="text-2xl font-black text-slate-900 tracking-tight">
                 {editingFisherman ? 'Edit Fisherman Profile' : 'Register New Fisherman'}
               </DialogTitle>
-              <DialogDescription className="text-slate-300 font-medium">
+              <DialogDescription className="text-slate-600 font-medium">
                 Update municipal registry information.
               </DialogDescription>
             </DialogHeader>
             <div className="grid gap-4 py-6">
               <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="fid" className="text-right text-[10px] font-bold uppercase text-slate-500">FM ID</Label>
+                <Label htmlFor="fid" className="text-right text-[10px] font-bold uppercase text-slate-600">FM ID</Label>
                 <Input
                   id="fid"
                   placeholder="FM-2024-XXX"
-                  className="col-span-3 bg-slate-950/50 border-slate-800 rounded-xl"
+                  className="col-span-3 bg-blue-50 border-blue-200 rounded-xl text-slate-800"
                   value={formState.fisherman_id}
                   onChange={(e) => setFormState({...formState, fisherman_id: e.target.value})}
                 />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="lastname" className="text-right text-[10px] font-bold uppercase text-slate-500">Surname</Label>
+                <Label htmlFor="lastname" className="text-right text-[10px] font-bold uppercase text-slate-600">Surname</Label>
                 <Input
                   id="lastname"
                   placeholder="Last Name"
-                  className="col-span-3 bg-slate-950/50 border-slate-800 rounded-xl"
+                  className="col-span-3 bg-blue-50 border-blue-200 rounded-xl text-slate-800"
                   value={formState.last_name}
                   onChange={(e) => setFormState({...formState, last_name: e.target.value})}
                 />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="firstname" className="text-right text-[10px] font-bold uppercase text-slate-500">Given Name</Label>
+                <Label htmlFor="firstname" className="text-right text-[10px] font-bold uppercase text-slate-600">Given Name</Label>
                 <Input
                   id="firstname"
                   placeholder="First Name"
-                  className="col-span-3 bg-slate-950/50 border-slate-800 rounded-xl"
+                  className="col-span-3 bg-blue-50 border-blue-200 rounded-xl text-slate-800"
                   value={formState.first_name}
                   onChange={(e) => setFormState({...formState, first_name: e.target.value})}
                 />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="boat" className="text-right text-[10px] font-bold uppercase text-slate-500">Vessel</Label>
+                <Label htmlFor="boat" className="text-right text-[10px] font-bold uppercase text-slate-600">Vessel</Label>
                 <Input
                   id="boat"
                   placeholder="Vessel Name"
-                  className="col-span-3 bg-slate-950/50 border-slate-800 rounded-xl"
+                  className="col-span-3 bg-blue-50 border-blue-200 rounded-xl text-slate-800"
                   value={formState.boat_name}
                   onChange={(e) => setFormState({...formState, boat_name: e.target.value})}
                 />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="location" className="text-right text-[10px] font-bold uppercase text-slate-500">Port</Label>
+                <Label htmlFor="location" className="text-right text-[10px] font-bold uppercase text-slate-600">Port</Label>
                 <Input
                   id="location"
                   placeholder="Home Port"
-                  className="col-span-3 bg-slate-950/50 border-slate-800 rounded-xl"
+                  className="col-span-3 bg-blue-50 border-blue-200 rounded-xl text-slate-800"
                   value={formState.location}
                   onChange={(e) => setFormState({...formState, location: e.target.value})}
                 />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="contact" className="text-right text-[10px] font-bold uppercase text-slate-500">Contact</Label>
+                <Label htmlFor="contact" className="text-right text-[10px] font-bold uppercase text-slate-600">Contact</Label>
                 <Input
                   id="contact"
                   placeholder="Mobile Number"
-                  className="col-span-3 bg-slate-950/50 border-slate-800 rounded-xl"
+                  className="col-span-3 bg-blue-50 border-blue-200 rounded-xl text-slate-800"
                   value={formState.phone_number}
                   onChange={(e) => setFormState({...formState, phone_number: e.target.value})}
                 />
               </div>
             </div>
             <DialogFooter className="pt-2">
-              <Button onClick={handleCreateOrUpdate} disabled={loading} className="w-full bg-blue-600 hover:bg-blue-500 font-bold h-12 rounded-xl">
+              <Button onClick={handleCreateOrUpdate} disabled={loading} className="w-full bg-blue-600 hover:bg-blue-500 font-bold h-12 rounded-xl text-white">
                 {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4 mr-2" />}
                 {editingFisherman ? 'Commit Changes' : 'Register Entry'}
               </Button>
@@ -369,17 +369,17 @@ export function FishermanRegistry() {
         </Dialog>
       </div>
 
-      <div className="rounded-3xl bg-slate-900/60 backdrop-blur-xl border border-slate-800 overflow-x-auto w-full shadow-2xl">
+      <div className="rounded-3xl bg-white/90 backdrop-blur-xl border border-blue-100 overflow-x-auto w-full shadow-2xl">
         <Table className="min-w-[600px]">
-          <TableHeader className="bg-slate-950/50 border-b border-slate-800">
-            <TableRow className="hover:bg-transparent border-slate-800">
-              <TableHead className="px-6 h-14 text-slate-400 font-bold uppercase tracking-wider text-[10px]">Registry ID</TableHead>
-              <TableHead className="px-6 h-14 text-slate-400 font-bold uppercase tracking-wider text-[10px]">Last Name</TableHead>
-              <TableHead className="px-6 h-14 text-slate-400 font-bold uppercase tracking-wider text-[10px]">First Name</TableHead>
-              <TableHead className="px-6 h-14 text-slate-400 font-bold uppercase tracking-wider text-[10px]">Vessel</TableHead>
-              <TableHead className="px-6 h-14 text-slate-400 font-bold uppercase tracking-wider text-[10px]">Port</TableHead>
-              <TableHead className="px-6 h-14 text-slate-400 font-bold uppercase tracking-wider text-[10px]">Contact</TableHead>
-              <TableHead className="px-6 h-14 text-slate-400 font-bold uppercase tracking-wider text-[10px] text-right">Action</TableHead>
+          <TableHeader className="bg-blue-50 border-b border-blue-100">
+            <TableRow className="hover:bg-transparent border-blue-100">
+              <TableHead className="px-6 h-14 text-slate-700 font-bold uppercase tracking-wider text-[10px]">Registry ID</TableHead>
+              <TableHead className="px-6 h-14 text-slate-700 font-bold uppercase tracking-wider text-[10px]">Last Name</TableHead>
+              <TableHead className="px-6 h-14 text-slate-700 font-bold uppercase tracking-wider text-[10px]">First Name</TableHead>
+              <TableHead className="px-6 h-14 text-slate-700 font-bold uppercase tracking-wider text-[10px]">Vessel</TableHead>
+              <TableHead className="px-6 h-14 text-slate-700 font-bold uppercase tracking-wider text-[10px]">Port</TableHead>
+              <TableHead className="px-6 h-14 text-slate-700 font-bold uppercase tracking-wider text-[10px]">Contact</TableHead>
+              <TableHead className="px-6 h-14 text-slate-700 font-bold uppercase tracking-wider text-[10px] text-right">Action</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -397,28 +397,28 @@ export function FishermanRegistry() {
               </TableRow>
             ) : (
               fishermen.map((f: Fisherman) => (
-                <TableRow key={f.id} className="border-slate-800/50 group hover:bg-slate-800/30 transition-all">
-                  <TableCell className="px-6 py-4 font-black text-blue-400">
+                <TableRow key={f.id} className="border-blue-100/80 group hover:bg-blue-50/60 transition-all">
+                  <TableCell className="px-6 py-4 font-black text-blue-700">
                     {f.fisherman_id || "N/A"}
                   </TableCell>
 
-                  <TableCell className="px-6 py-4 font-bold text-slate-200">
+                  <TableCell className="px-6 py-4 font-bold text-slate-800">
                     {f.last_name || "N/A"}
                   </TableCell>
 
-                  <TableCell className="px-6 py-4 font-bold text-slate-200">
+                  <TableCell className="px-6 py-4 font-bold text-slate-800">
                     {f.first_name || "N/A"}
                   </TableCell>
 
-                  <TableCell className="px-6 py-4 text-slate-400 uppercase text-[11px] font-bold">
+                  <TableCell className="px-6 py-4 text-slate-600 uppercase text-[11px] font-bold">
                     {f.boat_name || "—"}
                   </TableCell>
 
-                  <TableCell className="px-6 py-4 text-slate-300 font-medium">
+                  <TableCell className="px-6 py-4 text-slate-700 font-medium">
                     {f.location || "—"}
                   </TableCell>
 
-                  <TableCell className="px-6 py-4 text-slate-400 font-mono text-[11px]">
+                  <TableCell className="px-6 py-4 text-slate-600 font-mono text-[11px]">
                     {f.phone_number || "—"}
                   </TableCell>
                   <TableCell className="px-6 py-4 text-right">
@@ -427,7 +427,7 @@ export function FishermanRegistry() {
                         variant="ghost" 
                         size="icon" 
                         onClick={() => setFishermanToPrint(f)}
-                        className="h-9 w-9 text-slate-500 hover:text-emerald-400 hover:bg-emerald-500/10 rounded-lg"
+                        className="h-9 w-9 text-slate-600 hover:text-emerald-600 hover:bg-emerald-100 rounded-lg"
                         title="Download Analytics PDF"
                       >
                         <Printer className="h-4 w-4" />
@@ -436,7 +436,7 @@ export function FishermanRegistry() {
                         variant="ghost" 
                         size="icon" 
                         onClick={() => openEditDialog(f)}
-                        className="h-9 w-9 text-slate-500 hover:text-blue-400 hover:bg-blue-500/10 rounded-lg"
+                        className="h-9 w-9 text-slate-600 hover:text-blue-600 hover:bg-blue-100 rounded-lg"
                       >
                         <Edit className="h-4 w-4" />
                       </Button>
@@ -444,7 +444,7 @@ export function FishermanRegistry() {
                         variant="ghost" 
                         size="icon" 
                         onClick={() => handleDelete(f.id)}
-                        className="h-9 w-9 text-slate-500 hover:text-rose-400 hover:bg-rose-500/10 rounded-lg"
+                        className="h-9 w-9 text-slate-600 hover:text-rose-600 hover:bg-rose-100 rounded-lg"
                       >
                         <Trash2 className="h-4 w-4" />
                       </Button>

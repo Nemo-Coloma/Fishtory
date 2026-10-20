@@ -33,7 +33,7 @@ async function getDetailedStats() {
 
     return {
         totalFishermen,
-        totalCatch: reports.data?.reduce((sum, r) => sum + Number(r.weight_kg), 0) || 0,
+        totalCatch: reports.data?.reduce((sum: number, r: any) => sum + Number(r.weight_kg), 0) || 0,
         totalAssistance: extraStats.data?.total_assistance || 0,
         totalTrainings: extraStats.data?.total_trainings || 0,
         topBarangays,
@@ -46,11 +46,11 @@ export default async function StatisticsPage() {
 
     return (
         <div className="container mx-auto px-4 py-24 max-w-6xl space-y-16">
-            <div className="space-y-4 text-center border-b border-slate-900 pb-12">
-                <h1 className="text-4xl md:text-5xl font-black tracking-tighter text-white uppercase italic">
-                    Sector Statistics <span className="text-blue-500">2026</span>
+            <div className="space-y-4 text-center border-b border-blue-100 pb-12">
+                <h1 className="text-4xl md:text-5xl font-black tracking-tighter text-blue-900 uppercase italic">
+                    Sector Statistics <span className="text-blue-600">2026</span>
                 </h1>
-                <p className="text-slate-500 max-w-2xl mx-auto font-bold uppercase tracking-widest text-[10px]">
+                <p className="text-blue-700/75 max-w-2xl mx-auto font-bold uppercase tracking-widest text-[10px]">
                     Official Annual Report Data • Municipal Agriculture Office
                 </p>
             </div>
@@ -65,17 +65,17 @@ export default async function StatisticsPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12 pt-12">
                 {/* Top Barangays */}
                 <div className="space-y-6">
-                    <h3 className="text-sm font-black text-slate-400 uppercase tracking-[0.3em] flex items-center gap-2">
-                        <MapPin className="h-4 w-4 text-blue-500" /> Top Participating Barangays
+                    <h3 className="text-sm font-black text-blue-700 uppercase tracking-[0.3em] flex items-center gap-2">
+                        <MapPin className="h-4 w-4 text-blue-600" /> Top Participating Barangays
                     </h3>
-                    <div className="space-y-4 bg-slate-900/20 p-8 rounded-3xl border border-slate-900">
+                    <div className="space-y-4 bg-white/80 p-8 rounded-3xl border border-blue-100 shadow-[0_12px_30px_rgba(59,130,246,0.08)]">
                         {stats.topBarangays.map(([name, count]) => (
                             <div key={name} className="space-y-2">
                                 <div className="flex justify-between text-xs font-bold uppercase tracking-tight">
-                                    <span className="text-slate-300">{name}</span>
-                                    <span className="text-blue-500">{count} Fishermen</span>
+                                    <span className="text-blue-900">{name}</span>
+                                    <span className="text-blue-600">{count} Fishermen</span>
                                 </div>
-                                <div className="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden">
+                                <div className="h-1.5 w-full bg-blue-100 rounded-full overflow-hidden">
                                     <div 
                                         className="h-full bg-blue-600 rounded-full" 
                                         style={{ width: `${(count / stats.totalFishermen) * 100}%` }}
@@ -88,19 +88,19 @@ export default async function StatisticsPage() {
 
                 {/* Top Species */}
                 <div className="space-y-6">
-                    <h3 className="text-sm font-black text-slate-400 uppercase tracking-[0.3em] flex items-center gap-2">
-                        <BarChart3 className="h-4 w-4 text-emerald-500" /> Production by Species (kg)
+                    <h3 className="text-sm font-black text-blue-700 uppercase tracking-[0.3em] flex items-center gap-2">
+                        <BarChart3 className="h-4 w-4 text-cyan-600" /> Production by Species (kg)
                     </h3>
-                    <div className="space-y-4 bg-slate-900/20 p-8 rounded-3xl border border-slate-900">
+                    <div className="space-y-4 bg-white/80 p-8 rounded-3xl border border-blue-100 shadow-[0_12px_30px_rgba(59,130,246,0.08)]">
                         {stats.topSpecies.map(([name, weight]) => (
                             <div key={name} className="space-y-2">
                                 <div className="flex justify-between text-xs font-bold uppercase tracking-tight">
-                                    <span className="text-slate-300">{name}</span>
-                                    <span className="text-emerald-500">{Math.round(weight).toLocaleString()} kg</span>
+                                    <span className="text-blue-900">{name}</span>
+                                    <span className="text-cyan-600">{Math.round(weight).toLocaleString()} kg</span>
                                 </div>
-                                <div className="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden">
-                                    <div 
-                                        className="h-full bg-emerald-600 rounded-full" 
+                                <div className="h-1.5 w-full bg-blue-100 rounded-full overflow-hidden">
+                                    <div
+                                        className="h-full bg-cyan-600 rounded-full"
                                         style={{ width: `${(weight / stats.totalCatch) * 100}%` }}
                                     ></div>
                                 </div>
@@ -110,8 +110,8 @@ export default async function StatisticsPage() {
                 </div>
             </div>
             
-            <div className="p-10 bg-slate-950 border border-slate-900 rounded-[2.5rem] text-center">
-                <p className="text-slate-600 text-[10px] font-medium leading-relaxed max-w-3xl mx-auto">
+            <div className="p-10 bg-white/80 border border-blue-100 rounded-[2.5rem] text-center shadow-[0_12px_30px_rgba(59,130,246,0.08)]">
+                <p className="text-blue-700/75 text-[10px] font-medium leading-relaxed max-w-3xl mx-auto">
                     DATA DISCLAIMER: These statistics are compiled from municipal monitoring reports and are subject to verification. 
                     Calculations are based on the current 2026 reporting period. For official certified copies of agricultural data, 
                     please visit the Municipal Agriculture Office.
@@ -123,11 +123,11 @@ export default async function StatisticsPage() {
 
 function SummaryItem({ label, value, icon: Icon }: { label: string, value: number, icon: any }) {
     return (
-        <div className="bg-slate-900 p-6 rounded-2xl border border-slate-900 space-y-4 flex flex-col items-center text-center shadow-sm">
-            <Icon className="h-5 w-5 text-slate-500" />
+        <div className="bg-white/80 p-6 rounded-2xl border border-blue-100 space-y-4 flex flex-col items-center text-center shadow-[0_12px_30px_rgba(59,130,246,0.08)]">
+            <Icon className="h-5 w-5 text-blue-600" />
             <div className="space-y-1">
-                <p className="text-2xl font-black text-white italic tracking-tighter">{value.toLocaleString()}</p>
-                <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest leading-tight">{label}</p>
+                <p className="text-2xl font-black text-blue-900 italic tracking-tighter">{value.toLocaleString()}</p>
+                <p className="text-[10px] font-black text-blue-700/75 uppercase tracking-widest leading-tight">{label}</p>
             </div>
         </div>
     )

@@ -194,154 +194,154 @@ export function SocioEconomicExcelView() {
     return (
         <div className="space-y-6 animate-in fade-in duration-500">
             {/* Toolbar */}
-            <div className="flex flex-wrap items-center justify-between gap-4 bg-slate-900/40 p-4 rounded-2xl border border-slate-800">
+            <div className="flex flex-wrap items-center justify-between gap-4 bg-white/90 p-4 rounded-2xl border border-blue-100 shadow-sm">
                 <div className="relative w-full max-w-md">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
                     <Input 
                         placeholder="Filter by name, ID, or location..." 
-                        className="pl-10 bg-slate-950/50 border-slate-800 text-slate-200 focus:ring-blue-500"
+                        className="pl-10 bg-blue-50 border-blue-200 text-slate-700 focus:ring-blue-500"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                     />
                 </div>
                 <div className="flex items-center gap-2">
-                    <Button variant="outline" className="border-slate-800 text-slate-300 hover:bg-slate-800 rounded-xl font-bold text-xs gap-2 shrink-0">
+                    <Button variant="outline" className="border-blue-200 text-slate-700 hover:bg-blue-50 rounded-xl font-bold text-xs gap-2 shrink-0">
                         <Download className="h-4 w-4" /> EXPORT CSV
                     </Button>
                 </div>
             </div>
 
             {/* Excel Container */}
-            <div className="relative border border-slate-800 rounded-[2rem] overflow-hidden bg-slate-950/50 shadow-2xl backdrop-blur-md">
+            <div className="relative border border-blue-100 rounded-[2rem] overflow-hidden bg-white/80 shadow-2xl backdrop-blur-md">
                 <div className="overflow-x-auto max-h-[calc(100vh-340px)] custom-scrollbar">
                     <Table className="border-collapse min-w-[2800px]">
-                        <TableHeader className="sticky top-0 z-20 bg-slate-900/95 backdrop-blur-xl border-b-2 border-slate-800 shadow-xl">
+                        <TableHeader className="sticky top-0 z-20 bg-blue-50/95 backdrop-blur-xl border-b-2 border-blue-100 shadow-xl">
                             {/* Group Headers */}
-                            <TableRow className="hover:bg-transparent border-slate-800">
-                                <TableHead colSpan={3} className="border-r border-slate-800 text-center py-2 bg-slate-950/50">
-                                    <span className="text-[10px] font-black tracking-widest text-slate-500 uppercase">BASIC INFO</span>
+                            <TableRow className="hover:bg-transparent border-blue-100">
+                                <TableHead colSpan={3} className="border-r border-blue-100 text-center py-2 bg-sky-50">
+                                    <span className="text-[10px] font-black tracking-widest text-slate-700 uppercase">BASIC INFO</span>
                                 </TableHead>
-                                <TableHead colSpan={4} className="border-r border-slate-800 text-center py-2 bg-blue-500/5">
-                                    <span className="text-[10px] font-black tracking-widest text-blue-400 uppercase flex items-center justify-center gap-2">
+                                <TableHead colSpan={4} className="border-r border-blue-100 text-center py-2 bg-blue-50">
+                                    <span className="text-[10px] font-black tracking-widest text-blue-700 uppercase flex items-center justify-center gap-2">
                                         <Users className="h-3 w-3" /> DEMOGRAPHIC
                                     </span>
                                 </TableHead>
-                                <TableHead colSpan={4} className="border-r border-slate-800 text-center py-2 bg-emerald-500/5">
-                                    <span className="text-[10px] font-black tracking-widest text-emerald-400 uppercase flex items-center justify-center gap-2">
+                                <TableHead colSpan={4} className="border-r border-blue-100 text-center py-2 bg-emerald-50">
+                                    <span className="text-[10px] font-black tracking-widest text-emerald-700 uppercase flex items-center justify-center gap-2">
                                         <TrendingUp className="h-3 w-3" /> ECONOMIC INDICATORS
                                     </span>
                                 </TableHead>
-                                <TableHead colSpan={5} className="border-r border-slate-800 text-center py-2 bg-amber-500/5">
-                                    <span className="text-[10px] font-black tracking-widest text-amber-400 uppercase flex items-center justify-center gap-2">
+                                <TableHead colSpan={5} className="border-r border-blue-100 text-center py-2 bg-amber-50">
+                                    <span className="text-[10px] font-black tracking-widest text-amber-700 uppercase flex items-center justify-center gap-2">
                                         <Anchor className="h-3 w-3" /> OCCUPATIONAL PROFILE
                                     </span>
                                 </TableHead>
-                                <TableHead colSpan={5} className="border-r border-slate-800 text-center py-2 bg-purple-500/5">
-                                    <span className="text-[10px] font-black tracking-widest text-purple-400 uppercase flex items-center justify-center gap-2">
+                                <TableHead colSpan={5} className="border-r border-blue-100 text-center py-2 bg-violet-50">
+                                    <span className="text-[10px] font-black tracking-widest text-violet-700 uppercase flex items-center justify-center gap-2">
                                         <Shield className="h-3 w-3" /> WELFARE & CONDITIONS
                                     </span>
                                 </TableHead>
-                                <TableHead colSpan={5} className="text-center py-2 bg-rose-500/5">
-                                    <span className="text-[10px] font-black tracking-widest text-rose-400 uppercase flex items-center justify-center gap-2">
+                                <TableHead colSpan={5} className="text-center py-2 bg-rose-50">
+                                    <span className="text-[10px] font-black tracking-widest text-rose-700 uppercase flex items-center justify-center gap-2">
                                         <Package className="h-3 w-3" /> SUBSIDIES & PROTECTION
                                     </span>
                                 </TableHead>
                             </TableRow>
                             
                             {/* Detailed Headers */}
-                            <TableRow className="hover:bg-transparent border-slate-800">
-                                <TableHead className="w-[80px] text-slate-400 font-black uppercase text-[9px] border-r border-slate-800 px-4">Action</TableHead>
-                                <TableHead className="w-[120px] text-slate-400 font-black uppercase text-[9px] border-r border-slate-800 px-4">FM ID</TableHead>
-                                <TableHead className="w-[180px] text-slate-400 font-black uppercase text-[9px] border-r border-slate-800 px-4">Full Name</TableHead>
+                            <TableRow className="hover:bg-transparent border-blue-100">
+                                <TableHead className="w-[80px] text-slate-700 font-black uppercase text-[9px] border-r border-blue-100 px-4">Action</TableHead>
+                                <TableHead className="w-[120px] text-slate-700 font-black uppercase text-[9px] border-r border-blue-100 px-4">FM ID</TableHead>
+                                <TableHead className="w-[180px] text-slate-700 font-black uppercase text-[9px] border-r border-blue-100 px-4">Full Name</TableHead>
                                 
                                 {/* Demographics */}
-                                <TableHead className="w-[60px] text-slate-400 font-black uppercase text-[9px] border-r border-slate-800 px-4">Age</TableHead>
-                                <TableHead className="w-[80px] text-slate-400 font-black uppercase text-[9px] border-r border-slate-800 px-4">Gender</TableHead>
-                                <TableHead className="w-[120px] text-slate-400 font-black uppercase text-[9px] border-r border-slate-800 px-4">Education</TableHead>
-                                <TableHead className="w-[100px] text-slate-400 font-black uppercase text-[9px] border-r border-slate-800 px-4">Dep. Ratio</TableHead>
+                                <TableHead className="w-[60px] text-slate-700 font-black uppercase text-[9px] border-r border-blue-100 px-4">Age</TableHead>
+                                <TableHead className="w-[80px] text-slate-700 font-black uppercase text-[9px] border-r border-blue-100 px-4">Gender</TableHead>
+                                <TableHead className="w-[120px] text-slate-700 font-black uppercase text-[9px] border-r border-blue-100 px-4">Education</TableHead>
+                                <TableHead className="w-[100px] text-slate-700 font-black uppercase text-[9px] border-r border-blue-100 px-4">Dep. Ratio</TableHead>
                                 
                                 {/* Economic */}
-                                <TableHead className="w-[120px] text-slate-400 font-black uppercase text-[9px] border-r border-slate-800 px-4">Mo. Income</TableHead>
-                                <TableHead className="w-[80px] text-slate-400 font-black uppercase text-[9px] border-r border-slate-800 px-4">Poverty</TableHead>
-                                <TableHead className="w-[150px] text-slate-400 font-black uppercase text-[9px] border-r border-slate-800 px-4">Secondary Livelihood</TableHead>
-                                <TableHead className="w-[150px] text-slate-400 font-black uppercase text-[9px] border-r border-slate-800 px-4">Life Assessment</TableHead>
+                                <TableHead className="w-[120px] text-slate-700 font-black uppercase text-[9px] border-r border-blue-100 px-4">Mo. Income</TableHead>
+                                <TableHead className="w-[80px] text-slate-700 font-black uppercase text-[9px] border-r border-blue-100 px-4">Poverty</TableHead>
+                                <TableHead className="w-[150px] text-slate-700 font-black uppercase text-[9px] border-r border-blue-100 px-4">Secondary Livelihood</TableHead>
+                                <TableHead className="w-[150px] text-slate-700 font-black uppercase text-[9px] border-r border-blue-100 px-4">Life Assessment</TableHead>
                                 
                                 {/* Occupational */}
-                                <TableHead className="w-[120px] text-slate-400 font-black uppercase text-[9px] border-r border-slate-800 px-4">Gear</TableHead>
-                                <TableHead className="w-[100px] text-slate-400 font-black uppercase text-[9px] border-r border-slate-800 px-4">Boat Owner</TableHead>
-                                <TableHead className="w-[100px] text-slate-400 font-black uppercase text-[9px] border-r border-slate-800 px-4">Motorized</TableHead>
-                                <TableHead className="w-[150px] text-slate-400 font-black uppercase text-[9px] border-r border-slate-800 px-4">Catch Comp.</TableHead>
-                                <TableHead className="w-[150px] text-slate-400 font-black uppercase text-[9px] border-r border-slate-800 px-4">Gears/Tool Needs</TableHead>
+                                <TableHead className="w-[120px] text-slate-700 font-black uppercase text-[9px] border-r border-blue-100 px-4">Gear</TableHead>
+                                <TableHead className="w-[100px] text-slate-700 font-black uppercase text-[9px] border-r border-blue-100 px-4">Boat Owner</TableHead>
+                                <TableHead className="w-[100px] text-slate-700 font-black uppercase text-[9px] border-r border-blue-100 px-4">Motorized</TableHead>
+                                <TableHead className="w-[150px] text-slate-700 font-black uppercase text-[9px] border-r border-blue-100 px-4">Catch Comp.</TableHead>
+                                <TableHead className="w-[150px] text-slate-700 font-black uppercase text-[9px] border-r border-blue-100 px-4">Gears/Tool Needs</TableHead>
                                 
                                 {/* Welfare */}
-                                <TableHead className="w-[120px] text-slate-400 font-black uppercase text-[9px] border-r border-slate-800 px-4">Housing</TableHead>
-                                <TableHead className="w-[60px] text-slate-400 font-black uppercase text-[9px] border-r border-slate-800 px-4">Water</TableHead>
-                                <TableHead className="w-[60px] text-slate-400 font-black uppercase text-[9px] border-r border-slate-800 px-4">Power</TableHead>
-                                <TableHead className="w-[60px] text-slate-400 font-black uppercase text-[9px] border-r border-slate-800 px-4">Toilet</TableHead>
-                                <TableHead className="w-[150px] text-slate-400 font-black uppercase text-[9px] border-r border-slate-800 px-4">Living Status</TableHead>
+                                <TableHead className="w-[120px] text-slate-700 font-black uppercase text-[9px] border-r border-blue-100 px-4">Housing</TableHead>
+                                <TableHead className="w-[60px] text-slate-700 font-black uppercase text-[9px] border-r border-blue-100 px-4">Water</TableHead>
+                                <TableHead className="w-[60px] text-slate-700 font-black uppercase text-[9px] border-r border-blue-100 px-4">Power</TableHead>
+                                <TableHead className="w-[60px] text-slate-700 font-black uppercase text-[9px] border-r border-blue-100 px-4">Toilet</TableHead>
+                                <TableHead className="w-[150px] text-slate-700 font-black uppercase text-[9px] border-r border-blue-100 px-4">Living Status</TableHead>
                                 
                                 {/* Subsidy */}
-                                <TableHead className="w-[80px] text-slate-400 font-black uppercase text-[9px] border-r border-slate-800 px-4">PhilHealth</TableHead>
-                                <TableHead className="w-[80px] text-slate-400 font-black uppercase text-[9px] border-r border-slate-800 px-4">SSS</TableHead>
-                                <TableHead className="w-[80px] text-slate-400 font-black uppercase text-[9px] border-r border-slate-800 px-4">PCIC</TableHead>
-                                <TableHead className="w-[150px] text-slate-400 font-black uppercase text-[9px] border-r border-slate-800 px-4">Active Subsidies</TableHead>
-                                <TableHead className="w-[150px] text-slate-400 font-black uppercase text-[9px] px-4">Requirements Needed</TableHead>
+                                <TableHead className="w-[80px] text-slate-700 font-black uppercase text-[9px] border-r border-blue-100 px-4">PhilHealth</TableHead>
+                                <TableHead className="w-[80px] text-slate-700 font-black uppercase text-[9px] border-r border-blue-100 px-4">SSS</TableHead>
+                                <TableHead className="w-[80px] text-slate-700 font-black uppercase text-[9px] border-r border-blue-100 px-4">PCIC</TableHead>
+                                <TableHead className="w-[150px] text-slate-700 font-black uppercase text-[9px] border-r border-blue-100 px-4">Active Subsidies</TableHead>
+                                <TableHead className="w-[150px] text-slate-700 font-black uppercase text-[9px] px-4">Requirements Needed</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
                             {filteredData.map((row) => (
-                                <TableRow key={row.fisherman_id} className="border-slate-800 hover:bg-slate-900/40 group transition-colors">
-                                    <TableCell className="border-r border-slate-800 px-4">
+                                <TableRow key={row.fisherman_id} className="border-blue-100 hover:bg-blue-50/50 group transition-colors">
+                                    <TableCell className="border-r border-blue-100 px-4">
                                         <Button 
                                             variant="ghost" 
                                             size="icon" 
-                                            className="h-7 w-7 text-blue-500 hover:bg-blue-500/10 rounded-lg"
+                                            className="h-7 w-7 text-blue-600 hover:bg-blue-100 rounded-lg"
                                             onClick={() => setEditingProfile(row)}
                                         >
                                             <Edit3 className="h-4 w-4" />
                                         </Button>
                                     </TableCell>
-                                    <TableCell className="px-4 border-r border-slate-800 font-black text-xs text-slate-400 tracking-tighter truncate">{row.fisherman_id}</TableCell>
-                                    <TableCell className="px-4 border-r border-slate-800 font-bold text-xs truncate bg-slate-950/20">{row.name}</TableCell>
+                                    <TableCell className="px-4 border-r border-blue-100 font-black text-xs text-slate-700 tracking-tighter truncate">{row.fisherman_id}</TableCell>
+                                    <TableCell className="px-4 border-r border-blue-100 font-bold text-xs truncate bg-sky-50 text-slate-800">{row.name}</TableCell>
                                     
                                     {/* Demographics */}
-                                    <TableCell className="px-4 border-r border-slate-800 text-xs font-medium text-slate-300 text-center">{row.age || "-"}</TableCell>
-                                    <TableCell className="px-4 border-r border-slate-800 text-xs font-medium text-slate-300 capitalize">{row.gender || "-"}</TableCell>
-                                    <TableCell className="px-4 border-r border-slate-800 text-[10px] font-bold text-slate-400 truncate">{row.education_attainment || "-"}</TableCell>
-                                    <TableCell className="px-4 border-r border-slate-800 text-xs font-bold text-slate-300 text-center">{row.dependency_ratio || "-"}</TableCell>
+                                    <TableCell className="px-4 border-r border-blue-100 text-xs font-medium text-slate-700 text-center">{row.age || "-"}</TableCell>
+                                    <TableCell className="px-4 border-r border-blue-100 text-xs font-medium text-slate-700 capitalize">{row.gender || "-"}</TableCell>
+                                    <TableCell className="px-4 border-r border-blue-100 text-[10px] font-bold text-slate-600 truncate">{row.education_attainment || "-"}</TableCell>
+                                    <TableCell className="px-4 border-r border-blue-100 text-xs font-bold text-slate-700 text-center">{row.dependency_ratio || "-"}</TableCell>
                                     
                                     {/* Economic */}
-                                    <TableCell className="px-4 border-r border-slate-800 text-xs font-black text-emerald-500 italic">
+                                    <TableCell className="px-4 border-r border-blue-100 text-xs font-black text-emerald-600 italic">
                                         {row.monthly_income ? `₱${Number(row.monthly_income).toLocaleString()}` : "-"}
                                     </TableCell>
-                                    <TableCell className="px-4 border-r border-slate-800 text-center">
-                                        {row.poverty_status ? <CheckCircle2 className="h-4 w-4 text-rose-500 mx-auto" /> : <XCircle className="h-4 w-4 text-emerald-500/30 mx-auto" />}
+                                    <TableCell className="px-4 border-r border-blue-100 text-center">
+                                        {row.poverty_status ? <CheckCircle2 className="h-4 w-4 text-rose-500 mx-auto" /> : <XCircle className="h-4 w-4 text-emerald-500/40 mx-auto" />}
                                     </TableCell>
-                                    <TableCell className="px-4 border-r border-slate-800 text-[10px] font-bold text-slate-400 truncate italic">{row.secondary_livelihood || "-"}</TableCell>
-                                    <TableCell className="px-4 border-r border-slate-800 text-[9px] font-bold text-slate-500 truncate">{row.welfare_status || "-"}</TableCell>
+                                    <TableCell className="px-4 border-r border-blue-100 text-[10px] font-bold text-slate-600 truncate italic">{row.secondary_livelihood || "-"}</TableCell>
+                                    <TableCell className="px-4 border-r border-blue-100 text-[9px] font-bold text-slate-600 truncate">{row.welfare_status || "-"}</TableCell>
                                     
                                     {/* Occupational */}
-                                    <TableCell className="px-4 border-r border-slate-800 text-[10px] font-bold text-slate-300 truncate">{row.fishing_gear || "-"}</TableCell>
-                                    <TableCell className="px-4 border-r border-slate-800 text-xs font-bold text-slate-400 text-center">{row.boat_ownership_status || "-"}</TableCell>
-                                    <TableCell className="px-4 border-r border-slate-800 text-center">
-                                        {row.boat_type_motorized ? <span className="text-[9px] font-black px-2 py-0.5 bg-blue-500/10 text-blue-400 rounded-full border border-blue-500/20">MOTO</span> : <span className="text-[9px] font-black px-2 py-0.5 bg-slate-800 text-slate-500 rounded-full">NON</span>}
+                                    <TableCell className="px-4 border-r border-blue-100 text-[10px] font-bold text-slate-700 truncate">{row.fishing_gear || "-"}</TableCell>
+                                    <TableCell className="px-4 border-r border-blue-100 text-xs font-bold text-slate-600 text-center">{row.boat_ownership_status || "-"}</TableCell>
+                                    <TableCell className="px-4 border-r border-blue-100 text-center">
+                                        {row.boat_type_motorized ? <span className="text-[9px] font-black px-2 py-0.5 bg-blue-100 text-blue-700 rounded-full border border-blue-200">MOTO</span> : <span className="text-[9px] font-black px-2 py-0.5 bg-slate-200 text-slate-600 rounded-full">NON</span>}
                                     </TableCell>
-                                    <TableCell className="px-4 border-r border-slate-800 text-[10px] font-bold text-slate-400 truncate italic">{row.catch_composition || "-"}</TableCell>
-                                    <TableCell className="px-4 border-r border-slate-800 text-[9px] font-bold text-amber-500/80 truncate">{row.fishing_needs || "-"}</TableCell>
+                                    <TableCell className="px-4 border-r border-blue-100 text-[10px] font-bold text-slate-600 truncate italic">{row.catch_composition || "-"}</TableCell>
+                                    <TableCell className="px-4 border-r border-blue-100 text-[9px] font-bold text-amber-700 truncate">{row.fishing_needs || "-"}</TableCell>
                                     
                                     {/* Welfare */}
-                                    <TableCell className="px-4 border-r border-slate-800 text-[10px] font-bold text-slate-300 truncate">{row.housing_condition || "-"}</TableCell>
-                                    <TableCell className="px-4 border-r border-slate-800 text-center">{row.water_access ? <CheckCircle2 className="h-4 w-4 text-blue-500 mx-auto" /> : "-"}</TableCell>
-                                    <TableCell className="px-4 border-r border-slate-800 text-center">{row.electricity_access ? <CheckCircle2 className="h-4 w-4 text-amber-500 mx-auto" /> : "-"}</TableCell>
-                                    <TableCell className="px-4 border-r border-slate-800 text-center">{row.toilet_access ? <CheckCircle2 className="h-4 w-4 text-emerald-500 mx-auto" /> : "-"}</TableCell>
-                                    <TableCell className="px-4 border-r border-slate-800 text-[9px] font-bold text-slate-500 truncate italic">{row.welfare_status || "-"}</TableCell>
+                                    <TableCell className="px-4 border-r border-blue-100 text-[10px] font-bold text-slate-700 truncate">{row.housing_condition || "-"}</TableCell>
+                                    <TableCell className="px-4 border-r border-blue-100 text-center">{row.water_access ? <CheckCircle2 className="h-4 w-4 text-blue-600 mx-auto" /> : "-"}</TableCell>
+                                    <TableCell className="px-4 border-r border-blue-100 text-center">{row.electricity_access ? <CheckCircle2 className="h-4 w-4 text-amber-600 mx-auto" /> : "-"}</TableCell>
+                                    <TableCell className="px-4 border-r border-blue-100 text-center">{row.toilet_access ? <CheckCircle2 className="h-4 w-4 text-emerald-600 mx-auto" /> : "-"}</TableCell>
+                                    <TableCell className="px-4 border-r border-blue-100 text-[9px] font-bold text-slate-600 truncate italic">{row.welfare_status || "-"}</TableCell>
                                     
                                     {/* Subsidy */}
-                                    <TableCell className="px-4 border-r border-slate-800 text-center">{row.philhealth ? <CheckCircle2 className="h-4 w-4 text-blue-500 mx-auto" /> : "-"}</TableCell>
-                                    <TableCell className="px-4 border-r border-slate-800 text-center">{row.sss ? <CheckCircle2 className="h-4 w-4 text-slate-400 mx-auto" /> : "-"}</TableCell>
-                                    <TableCell className="px-4 border-r border-slate-800 text-center">{row.pcic_insurance ? <CheckCircle2 className="h-4 w-4 text-green-500 mx-auto" /> : "-"}</TableCell>
-                                    <TableCell className="px-4 border-r border-slate-800 text-[10px] font-bold text-emerald-500 truncate">{row.subsidies_received || "-"}</TableCell>
-                                    <TableCell className="px-4 text-[10px] font-bold text-rose-400 truncate">{row.subsidy_requirements || "-"}</TableCell>
+                                    <TableCell className="px-4 border-r border-blue-100 text-center">{row.philhealth ? <CheckCircle2 className="h-4 w-4 text-blue-600 mx-auto" /> : "-"}</TableCell>
+                                    <TableCell className="px-4 border-r border-blue-100 text-center">{row.sss ? <CheckCircle2 className="h-4 w-4 text-slate-500 mx-auto" /> : "-"}</TableCell>
+                                    <TableCell className="px-4 border-r border-blue-100 text-center">{row.pcic_insurance ? <CheckCircle2 className="h-4 w-4 text-green-600 mx-auto" /> : "-"}</TableCell>
+                                    <TableCell className="px-4 border-r border-blue-100 text-[10px] font-bold text-emerald-700 truncate">{row.subsidies_received || "-"}</TableCell>
+                                    <TableCell className="px-4 text-[10px] font-bold text-rose-600 truncate">{row.subsidy_requirements || "-"}</TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>
@@ -350,9 +350,9 @@ export function SocioEconomicExcelView() {
             </div>
 
             {/* Pagination / Count */}
-            <div className="flex justify-between items-center px-6 py-4 bg-slate-900/40 rounded-2xl border border-slate-800">
-                <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Showing {filteredData.length} records</span>
-                <p className="text-[9px] font-bold text-slate-600 italic">Sector Socio-Economic Monitoring Portal • 2026 Registry</p>
+            <div className="flex justify-between items-center px-6 py-4 bg-white/90 rounded-2xl border border-blue-100">
+                <span className="text-[10px] font-black text-slate-600 uppercase tracking-widest">Showing {filteredData.length} records</span>
+                <p className="text-[9px] font-bold text-slate-500 italic">Sector Socio-Economic Monitoring Portal • 2026 Registry</p>
             </div>
 
             {/* Edit Dialog */}
